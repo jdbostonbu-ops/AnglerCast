@@ -1,0 +1,40 @@
+// AnglerCast Prisma schema.
+// Entity with a relationship: one User has many SavedSpots; each SavedSpot belongs to one User.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                        String     @id @default(cuid())
+  email                     String     @unique
+  passwordHash              String
+  isVerified                Boolean    @default(false)
+  verificationCodeHash      String?
+  verificationCodeExpiresAt DateTime?
+  createdAt                 DateTime   @default(now())
+
+  savedSpots                SavedSpot[]
+}
+
+model SavedSpot {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name      String
+  // Coordinates stored at full precision — never truncated/rounded.
+  latitude  Float
+  longitude Float
+  species   String
+  waterType String   // "freshwater" | "saltwater"
+  notes     String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
