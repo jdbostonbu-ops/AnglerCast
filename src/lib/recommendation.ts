@@ -17,7 +17,7 @@ type Recommendation = {
   };
   peakMonth: number;
   sampleSize: number;
-  confidence: 'high' | 'low';
+  confidence: RecommendationConfidence;
 };
 
 type SpeciesRecordGroup = {
@@ -25,7 +25,19 @@ type SpeciesRecordGroup = {
   records: OccurrenceRecord[];
 };
 
-const highConfidenceMinimumRecordCount = 10;
+type RecommendationConfidence = 'low' | 'moderate' | 'high';
+
+const getConfidence = (sampleSize: number): RecommendationConfidence => {
+  if (sampleSize >= 30) {
+    return 'high';
+  }
+
+  if (sampleSize >= 10) {
+    return 'moderate';
+  }
+
+  return 'low';
+};
 
 const getEventMonth = (eventDate: string): number => new Date(eventDate).getUTCMonth() + 1;
 
@@ -83,6 +95,6 @@ export const createRecommendation = ({ records }: CreateRecommendationInput): Re
     },
     peakMonth: getPeakMonth(topSpeciesGroup.records),
     sampleSize,
-    confidence: sampleSize >= highConfidenceMinimumRecordCount ? 'high' : 'low',
+    confidence: getConfidence(sampleSize),
   };
 };

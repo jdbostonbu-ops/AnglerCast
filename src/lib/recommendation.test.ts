@@ -48,7 +48,7 @@ describe('createRecommendation', () => {
     });
   });
 
-  it('includes sample size and a confidence flag based on record count', () => {
+  it('returns moderate confidence for a mid-range record count', () => {
     const records = Array.from({ length: 10 }, (_, index) => ({
       scientificName: 'Morone saxatilis',
       decimalLatitude: 41.123456789012 + index,
@@ -64,6 +64,26 @@ describe('createRecommendation', () => {
       },
       peakMonth: 6,
       sampleSize: 10,
+      confidence: 'moderate',
+    });
+  });
+
+  it('returns high confidence for a large record count', () => {
+    const records = Array.from({ length: 30 }, (_, index) => ({
+      scientificName: 'Morone saxatilis',
+      decimalLatitude: 41.123456789012 + index,
+      decimalLongitude: -71.987654321098 - index,
+      eventDate: '2026-06-03T00:00:00.000Z',
+    }));
+
+    expect(createRecommendation({ records })).toEqual({
+      scientificName: 'Morone saxatilis',
+      coordinate: {
+        decimalLatitude: 41.123456789012,
+        decimalLongitude: -71.987654321098,
+      },
+      peakMonth: 6,
+      sampleSize: 30,
       confidence: 'high',
     });
   });
@@ -89,24 +109,24 @@ describe('createRecommendation', () => {
       confidence: 'low',
     });
   });
-});
 
-it('includes sample size and low confidence for a mid-range record count', () => {
-  const records = Array.from({ length: 5 }, (_, index) => ({
-    scientificName: 'Morone saxatilis',
-    decimalLatitude: 41.123456789012 + index,
-    decimalLongitude: -71.987654321098 - index,
-    eventDate: '2026-06-03T00:00:00.000Z',
-  }));
+  it('returns low confidence for a small record count', () => {
+    const records = Array.from({ length: 5 }, (_, index) => ({
+      scientificName: 'Morone saxatilis',
+      decimalLatitude: 41.123456789012 + index,
+      decimalLongitude: -71.987654321098 - index,
+      eventDate: '2026-06-03T00:00:00.000Z',
+    }));
 
-  expect(createRecommendation({ records })).toEqual({
-    scientificName: 'Morone saxatilis',
-    coordinate: {
-      decimalLatitude: 41.123456789012,
-      decimalLongitude: -71.987654321098,
-    },
-    peakMonth: 6,
-    sampleSize: 5,
-    confidence: 'low',
+    expect(createRecommendation({ records })).toEqual({
+      scientificName: 'Morone saxatilis',
+      coordinate: {
+        decimalLatitude: 41.123456789012,
+        decimalLongitude: -71.987654321098,
+      },
+      peakMonth: 6,
+      sampleSize: 5,
+      confidence: 'low',
+    });
   });
 });
