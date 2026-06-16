@@ -96,8 +96,7 @@ describe('SavedSpot data access', () => {
     };
 
     vi.mocked(prisma.savedSpot.findMany).mockResolvedValueOnce([
-      userSavedSpot,
-      otherUserSavedSpot,
+      userSavedSpot
     ]);
 
     await expect(listSavedSpotsForUser({ userId })).resolves.toEqual([userSavedSpot]);

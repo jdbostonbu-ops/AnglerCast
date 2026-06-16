@@ -19,7 +19,7 @@ export const PasswordField = ({ label, name }: PasswordFieldProps) => {
       <label htmlFor={name}>{label}</label>
       <input id={name} name={name} type={isPasswordVisible ? 'text' : 'password'} />
       <button type="button" onClick={togglePasswordVisibility}>
-        Show password
+        {isPasswordVisible ? 'Hide password' : 'Show password'}
       </button>
     </div>
   );

@@ -51,12 +51,10 @@ export const createSavedSpot = async ({
 export const listSavedSpotsForUser = async ({
   userId,
 }: ListSavedSpotsForUserInput): Promise<SavedSpot[]> => {
-  const savedSpots = await prisma.savedSpot.findMany({
-    where: { userId },
-    orderBy: { createdAt: 'desc' },
-  });
-
-  return savedSpots.filter((savedSpot) => savedSpot.userId === userId);
+return prisma.savedSpot.findMany({
+  where: { userId },
+  orderBy: { createdAt: 'desc' },
+});
 };
 
 export const updateSavedSpot = async ({

@@ -21,3 +21,15 @@ describe('PasswordField', () => {
     expect(passwordInput).toHaveAttribute('type', 'text');
   });
 });
+
+it('toggles the button label between Show password and Hide password', async () => {
+  const user = userEvent.setup();
+
+  render(<PasswordField label="Password" name="password" />);
+
+  expect(screen.getByRole('button', { name: 'Show password' })).toBeInTheDocument();
+
+  await user.click(screen.getByRole('button', { name: 'Show password' }));
+
+  expect(screen.getByRole('button', { name: 'Hide password' })).toBeInTheDocument();
+});

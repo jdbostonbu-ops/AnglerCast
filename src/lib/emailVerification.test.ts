@@ -50,7 +50,7 @@ describe('createEmailVerificationCode', () => {
         verificationCodeHash,
         expiresAt,
       }),
-    ).resolves.toBe(true);
+    ).resolves.toEqual({ isVerified: true });
   });
 
   it('rejects an expired email verification code with an expired reason', async () => {

@@ -25,6 +25,15 @@ type VerifyEmailVerificationCodeMismatchResult = {
   reason: 'mismatch';
 };
 
+type VerifyEmailVerificationCodeSuccessResult = {
+  isVerified: true;
+};
+
+type VerifyEmailVerificationCodeResult =
+  | VerifyEmailVerificationCodeSuccessResult
+  | VerifyEmailVerificationCodeExpiredResult
+  | VerifyEmailVerificationCodeMismatchResult;
+
 type VerifyEmailVerificationCodeAndActivateAccountInput = {
   email: string;
   enteredCode: string;
@@ -75,9 +84,7 @@ export const verifyEmailVerificationCode = async ({
   enteredCode,
   verificationCodeHash,
   expiresAt,
-}: VerifyEmailVerificationCodeInput): Promise<
-  boolean | VerifyEmailVerificationCodeExpiredResult | VerifyEmailVerificationCodeMismatchResult
-> => {
+}: VerifyEmailVerificationCodeInput): Promise<VerifyEmailVerificationCodeResult> => {
   if (expiresAt.getTime() <= Date.now()) {
     return {
       isVerified: false,
@@ -94,7 +101,9 @@ export const verifyEmailVerificationCode = async ({
     };
   }
 
-  return true;
+  return {
+    isVerified: true,
+  };
 };
 
 export const verifyEmailVerificationCodeAndActivateAccount = async ({
@@ -132,7 +141,7 @@ export const verifyEmailVerificationCodeAndActivateAccount = async ({
     expiresAt: account.verificationCodeExpiresAt,
   });
 
-  if (verificationResult !== true) {
+  if (!verificationResult.isVerified) {
     return verificationResult;
   }
 
