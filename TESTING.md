@@ -162,6 +162,25 @@ RED 10.3 — Never empty: a recommendation is still returned when data is sparse
 - Why it fails first; expected behavior: no never-empty handling exists yet.
 
 
+## 11 — Rugged visual redesign Expected Behavior
+This is a visual feature. Visual styling is verified by eye.
+
+## 12 — Page background fix Expected Behavior
+This is a visual feature. Visual styling is verified by eye.
+
+## 13 — Distinct map markers per species Expected Behavior
+
+RED 13.1 — Each species maps to a distinct marker style, with a default for unknown species
+
+- What it checks: a getMarkerStyle function takes a species name and returns a distinct marker style (e.g. color + shape). Two different known species return two different styles; an unknown species returns a defined default style (never undefined/crash). The mapping is a shared, reusable lookup.
+
+- Why it fails first; expected behavior: the getMarkerStyle function / the species-to-marker-style map doesn't exist yet.
+Visual part (eyeball-verified, built with the map in Feature 15):
+
+The markers render at real full-precision coordinates on the map, each species visually distinct, with a legend. No 0,0 markers. Verified by eye, not unit-tested.
+
+
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.

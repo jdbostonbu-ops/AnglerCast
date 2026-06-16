@@ -1,4 +1,5 @@
 const navLinks = [
+  { label: 'Home', href: '/' },
   { label: 'Freshwater', href: '/freshwater' },
   { label: 'Saltwater', href: '/saltwater' },
   { label: 'About', href: '/about' },

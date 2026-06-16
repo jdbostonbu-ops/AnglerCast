@@ -326,3 +326,34 @@ a {
     align-items: flex-start;
   }
 }
+
+
+/* ---- Per-page hero backgrounds ---- */
+/* Freshwater page hero image */
+.hero--freshwater {
+  background-image:
+    linear-gradient(180deg, rgba(11, 31, 51, 0.55) 0%, rgba(11, 31, 51, 0.82) 100%),
+    url("https://plus.unsplash.com/premium_photo-1723575688585-d9bf8959f7f7?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZnJlc2h3YXRlciUyMGZpc2hpbmd8ZW58MHx8MHx8fDA%3D");
+}
+ 
+/* Saltwater page hero image */
+.hero--saltwater {
+  background-image:
+    linear-gradient(180deg, rgba(11, 31, 51, 0.55) 0%, rgba(11, 31, 51, 0.82) 100%),
+    url("https://media.istockphoto.com/id/157481615/photo/ocean-fishing-reels-on-a-boat-in-the-ocean.jpg?s=1024x1024&w=is&k=20&c=MYU4UstJ95Ar0Qib-80p5yOsfzbGa1xik-wm0sVff9I=");
+}
+
+
+/* About page hero image */
+.hero--about {
+  background-image:
+    linear-gradient(180deg, rgba(11, 31, 51, 0.55) 0%, rgba(11, 31, 51, 0.82) 100%),
+    url("https://images.unsplash.com/photo-1551131618-3f0a5cf594b4?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+}
+ 
+/* Contact page hero image */
+.hero--contact {
+  background-image:
+    linear-gradient(180deg, rgba(11, 31, 51, 0.55) 0%, rgba(11, 31, 51, 0.82) 100%),
+    url("https://plus.unsplash.com/premium_photo-1708433275670-e431808510ca?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODF8fGZpc2hpbmd8ZW58MHx8MHx8fDA%3D");
+}

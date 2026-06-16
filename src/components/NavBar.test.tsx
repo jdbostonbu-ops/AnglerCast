@@ -3,8 +3,10 @@ import { describe, expect, it } from 'vitest';
 import { NavBar } from '@/components/NavBar';
 
 describe('NavBar', () => {
-  it('renders Freshwater, Saltwater, About, and Contact links', () => {
+  it('renders Home,Freshwater, Saltwater, About, and Contact links', () => {
     render(<NavBar />);
+
+    expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute('href', '/');
 
     expect(screen.getByRole('link', { name: 'Freshwater' })).toHaveAttribute(
       'href',
