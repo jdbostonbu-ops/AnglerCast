@@ -42,6 +42,9 @@ describe('/api/spots route handlers', () => {
       notes: 'Updated notes without changing coordinate precision.',
     };
 
+    const serializedSavedSpot = { ...savedSpot, createdAt: savedSpot.createdAt.toISOString() };
+    const serializedUpdatedSpot = { ...updatedSavedSpot, createdAt: updatedSavedSpot.createdAt.toISOString() };
+
     vi.mocked(prisma.savedSpot.create).mockResolvedValueOnce(savedSpot);
     vi.mocked(prisma.savedSpot.findMany).mockResolvedValueOnce([savedSpot]);
     vi.mocked(prisma.savedSpot.update).mockResolvedValueOnce(updatedSavedSpot);
@@ -65,7 +68,7 @@ describe('/api/spots route handlers', () => {
       }),
     );
 
-    await expect(createResponse.json()).resolves.toEqual({ spot: savedSpot });
+    await expect(createResponse.json()).resolves.toEqual({ spot: serializedSavedSpot })
     expect(createResponse.status).toBe(201);
     expect(prisma.savedSpot.create).toHaveBeenCalledWith({
       data: {
@@ -88,7 +91,7 @@ describe('/api/spots route handlers', () => {
       }),
     );
 
-    await expect(listResponse.json()).resolves.toEqual({ spots: [savedSpot] });
+    await expect(listResponse.json()).resolves.toEqual({ spots: [serializedSavedSpot] })
     expect(listResponse.status).toBe(200);
     expect(prisma.savedSpot.findMany).toHaveBeenCalledWith({
       where: { userId },
@@ -114,7 +117,7 @@ describe('/api/spots route handlers', () => {
       }),
     );
 
-    await expect(updateResponse.json()).resolves.toEqual({ spot: updatedSavedSpot });
+    await expect(updateResponse.json()).resolves.toEqual({ spot: serializedUpdatedSpot })
     expect(updateResponse.status).toBe(200);
     expect(prisma.savedSpot.update).toHaveBeenCalledWith({
       where: {
@@ -144,7 +147,7 @@ describe('/api/spots route handlers', () => {
       }),
     );
 
-    await expect(deleteResponse.json()).resolves.toEqual({ spot: updatedSavedSpot });
+    await expect(deleteResponse.json()).resolves.toEqual({ spot: serializedUpdatedSpot })
     expect(deleteResponse.status).toBe(200);
     expect(prisma.savedSpot.delete).toHaveBeenCalledWith({
       where: {
