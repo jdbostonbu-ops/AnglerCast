@@ -37,7 +37,7 @@ describe('checkLoginCredentials', () => {
     };
 
     vi.mocked(prisma.user.findUnique).mockResolvedValueOnce(verifiedUser);
-    vi.mocked(bcrypt.compare).mockResolvedValueOnce(true);
+    vi.mocked(bcrypt.compare).mockResolvedValueOnce(true as never);
 
     await expect(
       checkLoginCredentials({
@@ -73,7 +73,7 @@ describe('checkLoginCredentials', () => {
     };
 
     vi.mocked(prisma.user.findUnique).mockResolvedValueOnce(verifiedUser);
-    vi.mocked(bcrypt.compare).mockResolvedValueOnce(false);
+    vi.mocked(bcrypt.compare).mockResolvedValueOnce(false as never);
 
     await expect(
       checkLoginCredentials({

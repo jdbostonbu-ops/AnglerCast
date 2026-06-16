@@ -52,7 +52,7 @@ describe('POST /api/auth/signup', () => {
       createdAt: new Date('2026-01-15T12:00:00.000Z'),
     };
 
-    vi.mocked(bcrypt.hash).mockResolvedValueOnce(passwordHash);
+    vi.mocked(bcrypt.hash).mockResolvedValueOnce(passwordHash as never);
     vi.mocked(createEmailVerificationCode).mockResolvedValueOnce(verificationCode);
     vi.mocked(prisma.user.create).mockResolvedValueOnce(createdUser);
     sendVerificationEmailMock.mockResolvedValueOnce({ id: 'email_1' });

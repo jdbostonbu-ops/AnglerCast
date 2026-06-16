@@ -57,7 +57,7 @@ describe('POST /api/search', () => {
       rate: 2 / 3,
       matchingMonthCount: 2,
       totalCount: 3,
-      confidence: 'low',
+      confidence: 'low' as const,
     };
     const fetchMock = vi.fn().mockResolvedValue({
       json: vi.fn().mockResolvedValue({ results: gbifRecords }),
@@ -91,11 +91,11 @@ describe('POST /api/search', () => {
     });
     expect(response.status).toBe(200);
     expect(fetchMock).toHaveBeenCalledOnce();
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining(`decimalLatitude=${latitude}`),
+expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining(`decimalLatitude=${latitude - 0.5}%2C${latitude + 0.5}`),
     );
     expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining(`decimalLongitude=${longitude}`),
+      expect.stringContaining(`decimalLongitude=${longitude - 0.5}%2C${longitude + 0.5}`),
     );
     expect(computeSightingRate).toHaveBeenCalledWith({
       records: mappedRecords,

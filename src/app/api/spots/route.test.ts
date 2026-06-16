@@ -34,7 +34,7 @@ describe('/api/spots route handlers', () => {
       species: 'Striped bass',
       waterType: 'saltwater',
       notes: 'Rocky shoreline near the point.',
-      createdAt,
+      createdAt: new Date('2026-01-01T00:00:00.000Z'),
     };
     const updatedSavedSpot = {
       ...savedSpot,

@@ -1,6 +1,84 @@
+'use client';
+
+import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { NavBar } from '@/components/NavBar';
+import { SightingRateSearch } from '@/components/SightingRateSearch';
+
+// Leaflet needs the browser, so load the map client-side only (no server-side render).
+const OccurrenceMap = dynamic(
+  () => import('@/components/OccurrenceMap').then((module) => module.OccurrenceMap),
+  { ssr: false },
+);
+
+type OccurrenceRecord = {
+  scientificName: string;
+  decimalLatitude: number;
+  decimalLongitude: number;
+};
+
+type SightingRate = {
+  rate: number;
+  matchingMonthCount: number;
+  totalCount: number;
+  confidence: 'low' | 'moderate' | 'high';
+};
+
+type SearchResult = {
+  rate: SightingRate;
+  occurrences: OccurrenceRecord[];
+  explanation: string;
+};
+
+type SearchValues = {
+  species: string;
+  latitude: number;
+  longitude: number;
+  month: number;
+};
+
+const confidencePillClass: Record<SightingRate['confidence'], string> = {
+  low: 'pill pill--low',
+  moderate: 'pill pill--size',
+  high: 'pill pill--high',
+};
 
 const FreshwaterPage = () => {
+  const [result, setResult] = useState<SearchResult | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [searchCenter, setSearchCenter] = useState<{ latitude: number; longitude: number } | null>(
+    null,
+  );
+
+  const handleSearch = async (values: SearchValues) => {
+    setIsLoading(true);
+    setErrorMessage(null);
+    setSearchCenter({ latitude: values.latitude, longitude: values.longitude });
+
+    try {
+      const response = await fetch('/api/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      });
+
+      if (!response.ok) {
+        throw new Error('Search failed');
+      }
+
+      const data = (await response.json()) as SearchResult;
+      setResult(data);
+    } catch {
+      setErrorMessage('Something went wrong running that search. Please try again.');
+      setResult(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const ratePercent = result === null ? 0 : Math.round(result.rate.rate * 100);
+
   return (
     <>
       <NavBar />
@@ -15,11 +93,44 @@ const FreshwaterPage = () => {
       </section>
 
       <main className="section">
-        <h2>Freshwater spots</h2>
+        <h2>Sighting-rate search</h2>
         <p className="section__lead">
-          Enter a latitude and longitude to see real recorded occurrences nearby. The map and rates
-          come from real data; the AI only explains them.
+          Enter a species, a full-precision latitude and longitude, and a month. The rate and the
+          map come from real occurrence records; the AI only explains the numbers.
         </p>
+
+        <SightingRateSearch onSearch={handleSearch} />
+
+        {isLoading ? <p className="section__lead">Searching real records…</p> : null}
+        {errorMessage ? <p className="disclaimer">{errorMessage}</p> : null}
+
+        {result ? (
+          <>
+            <div className="spot-cards" style={{ marginTop: '24px' }}>
+              <article className="spot-card">
+                <div className="spot-card__rate">
+                  {ratePercent}%<small> of records in the selected month</small>
+                </div>
+                <div className="spot-card__meta">
+                  <span className="pill pill--size">{result.rate.totalCount} records</span>
+                  <span className={confidencePillClass[result.rate.confidence]}>
+                    {result.rate.confidence} confidence
+                  </span>
+                </div>
+              </article>
+            </div>
+
+            <p className="disclaimer">{result.explanation}</p>
+
+            {searchCenter ? (
+              <OccurrenceMap
+                records={result.occurrences}
+                centerLatitude={searchCenter.latitude}
+                centerLongitude={searchCenter.longitude}
+              />
+            ) : null}
+          </>
+        ) : null}
       </main>
     </>
   );

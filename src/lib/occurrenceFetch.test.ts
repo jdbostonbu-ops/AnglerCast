@@ -7,6 +7,29 @@ describe('fetchOccurrenceRecords', () => {
     vi.unstubAllGlobals();
   });
 
+  it('queries GBIF with a bounding box around the searched point', async () => {
+    const fetchMock = vi.fn(async () => {
+      return new Response(JSON.stringify({ results: [] }), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await fetchOccurrenceRecords({
+      species: 'Morone saxatilis',
+      latitude: 41,
+      longitude: -71.5,
+    });
+
+    const requestedUrl = (fetchMock.mock.calls[0] as unknown as [string])[0];
+    expect(requestedUrl).toEqual(expect.any(String));
+    expect(String(requestedUrl)).toContain('decimalLatitude=40.5%2C41.5');
+    expect(String(requestedUrl)).toContain('decimalLongitude=-72%2C-71');
+  });
+
   it('parses a mocked real GBIF response into occurrence records', async () => {
     const fetchMock = vi.fn(async () => {
       return new Response(JSON.stringify(gbifSample), {
