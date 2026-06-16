@@ -248,6 +248,50 @@ AI part (assembly only; mocked in tests):
 
 OpenAI receives the already-computed rate, sample size, and confidence and explains them in plain English. It never computes the rate and never invents a location, species, or season.
 
+---
+
+## 16 — Integration (wire tested logic to real APIs + live DB) Expected Behavior
+
+The pattern for every seam: write the integration test with the boundary mocked first (RED → GREEN), then wire the real call and verify manually. Unit tests mock fetch/Prisma; integration tests prove the seams call the right things with the right data.
+
+RED 16.1 — The occurrence fetch parses a real GBIF/OBIS response shape
+
+- What it checks: the occurrence-fetch function, given a captured real GBIF (and OBIS) response as a mocked fetch result, returns records correctly shaped as { scientificName, decimalLatitude, decimalLongitude, eventDate }. Uses a saved real-response fixture so it matches the actual data shape, not an invented one.
+- Why it fails first; expected behavior: the fetch/parse function doesn't exist yet.
+
+RED 16.2 — The signup route creates an inactive user and triggers the verification email
+
+- What it checks: POSTing to the signup route calls the email-verification logic and creates a User (isVerified false) via Prisma with the right data. Prisma and email mocked.
+- Why it fails first; expected behavior: the signup route handler doesn't exist yet.
+
+RED 16.3 — The verify route activates the account with a correct code
+
+- What it checks: POSTing to the verify route calls verifyEmailVerificationCodeAndActivateAccount with the email + code and returns success. Prisma mocked.
+- Why it fails first; expected behavior: the verify route handler doesn't exist yet.
+
+RED 16.4 — The login route authenticates a verified user
+
+- What it checks: POSTing valid credentials to the login route calls checkLoginCredentials and returns success; wrong/unverified is rejected. Prisma and bcrypt mocked.
+- Why it fails first; expected behavior: the login route handler doesn't exist yet.
+
+RED 16.5 — The saved-spot routes create, list, update, and delete scoped to the user
+
+- What it checks: the spot routes call createSavedSpot / listSavedSpotsForUser / updateSavedSpot / delete via Prisma, scoped to the logged-in user, preserving full-precision coordinates. Prisma mocked.
+- Why it fails first; expected behavior: the spot route handlers don't exist yet.
+
+RED 16.6 — The sighting-rate search route ties fetch → rate → confidence together
+
+- What it checks: the search route takes species + full-precision lat/long + month, calls the occurrence fetch, runs computeSightingRate, and returns the rate with sample size and confidence; excludes 0,0 records before mapping. Fetch and AI mocked.
+- Why it fails first; expected behavior: the search route handler doesn't exist yet.
+
+Manual end-to-end verification (eyeball, against live Neon — for the gate):
+
+Sign up → receive code → verify → log in → save a spot → see it persist (visible in Neon/Prisma Studio). Run a sighting-rate search and see the rate + map render. Documented with screenshots as real-user evidence.
+
+AI part (assembly only; mocked in tests):
+
+Where the AI explains the rate or computes the ETA, the AI/fetch is mocked in integration tests; the real call is wired and verified manually. The AI never invents data.
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.
