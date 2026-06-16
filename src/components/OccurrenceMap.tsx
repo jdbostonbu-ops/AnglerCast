@@ -1,6 +1,7 @@
 'use client';
 
-import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { divIcon } from 'leaflet';
 import { getMarkerStyle } from '@/lib/markerStyle';
 import 'leaflet/dist/leaflet.css';
 
@@ -19,6 +20,14 @@ type OccurrenceMapProps = {
 // Drop any record at 0,0 (Null Island) so no marker is placed there.
 const isRealCoordinate = (record: OccurrenceRecord): boolean =>
   !(record.decimalLatitude === 0 && record.decimalLongitude === 0);
+
+// A fish emoji marker — no image files needed.
+const fishIcon = divIcon({
+  html: '<span style="font-size: 20px; line-height: 20px;">🐟</span>',
+  className: 'occurrence-map__fish',
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+});
 
 export const OccurrenceMap = ({
   records,
@@ -43,28 +52,19 @@ export const OccurrenceMap = ({
           attribution='&copy; OpenStreetMap contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {mappableRecords.map((record, index) => {
-          const style = getMarkerStyle(record.scientificName);
-          return (
-            <CircleMarker
-              key={`${record.scientificName}-${index}`}
-              center={[record.decimalLatitude, record.decimalLongitude]}
-              radius={7}
-              pathOptions={{
-                color: style.color,
-                fillColor: style.color,
-                fillOpacity: 0.8,
-                weight: 2,
-              }}
-            >
-              <Popup>
-                <strong>{record.scientificName}</strong>
-                <br />
-                {record.decimalLatitude}, {record.decimalLongitude}
-              </Popup>
-            </CircleMarker>
-          );
-        })}
+        {mappableRecords.map((record, index) => (
+          <Marker
+            key={`${record.scientificName}-${index}`}
+            position={[record.decimalLatitude, record.decimalLongitude]}
+            icon={fishIcon}
+          >
+            <Popup>
+              <strong>{record.scientificName}</strong>
+              <br />
+              {record.decimalLatitude}, {record.decimalLongitude}
+            </Popup>
+          </Marker>
+        ))}
       </MapContainer>
 
       <div className="occurrence-map__legend">

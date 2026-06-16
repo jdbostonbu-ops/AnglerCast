@@ -28,11 +28,11 @@ describe('HomePage', () => {
       }),
     ).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: 'Main navigation' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Freshwater' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Search freshwater' })).toHaveAttribute(
       'href',
       '/freshwater',
     );
-    expect(screen.getByRole('link', { name: 'Saltwater' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Search saltwater' })).toHaveAttribute(
       'href',
       '/saltwater',
     );

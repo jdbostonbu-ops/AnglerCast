@@ -31,7 +31,7 @@ const HomePage = async () => {
 
   return (
     <>
-      <NavBar />
+      <NavBar hideWaterLinks />
 
       <section className="hero">
         <p className="hero__eyebrow">Real records · honest data</p>
