@@ -133,6 +133,33 @@ RED 8.1 — The home view renders Freshwater and Saltwater buttons with correct 
 - What it checks: the HomeButtons component renders a Freshwater button/link pointing to /freshwater and a Saltwater button/link pointing to /saltwater, so a logged-in user reaches either page without typing a URL.
 - Why it fails first; expected behavior: the HomeButtons component doesn't exist yet, so there are no buttons to render.
 
+---
+
+## 9 — Landing page Expected Behavior
+
+RED 9.1 — The landing page renders and explains what AnglerCast does
+
+- What it checks: the landing page at / renders a heading/intro that tells a visitor what AnglerCast is, and includes the nav so they can reach Freshwater and Saltwater.
+- Why it fails first; expected behavior: the landing page content doesn't exist yet (only the placeholder), so there's nothing for the test to find.
+
+---
+
+## 10 — Recommendation feature (fish + location + month) Expected Behavior
+
+RED 10.1 — Given real records, the code returns the top species with a real coordinate and peak month
+
+- What it checks: given a fixed set of real occurrence records for one or more species, the recommendation function returns the top species (the one with the most records), a real full-precision coordinate drawn from that species' records, and the peak month (the month with the most records). The AI is mocked — the code does the selecting, not the AI.
+- Why it fails first; expected behavior: the recommendation function doesn't exist yet.
+
+RED 10.2 — The recommendation includes sample size and a confidence flag
+
+- What it checks: the recommendation includes the total record count (sample size) and a high/low confidence flag based on that count, so the result is honest about how much data backs it.
+- Why it fails first; expected behavior: no sample-size/confidence logic exists yet.
+
+RED 10.3 — Never empty: a recommendation is still returned when data is sparse
+
+- What it checks: when the record set is small but not empty, the function still returns a valid recommendation (species + real coordinate + month), never null or an empty result.
+- Why it fails first; expected behavior: no never-empty handling exists yet.
 
 
 # 2. Run the tests (expect RED)
