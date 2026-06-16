@@ -34,6 +34,26 @@ describe('SightingRateSearch', () => {
     });
   });
 
+  it('treats a typographic minus sign in longitude as a valid negative coordinate', async () => {
+    const user = userEvent.setup();
+    const onSearch = vi.fn();
+
+    render(<SightingRateSearch onSearch={onSearch} />);
+
+    await user.type(screen.getByLabelText('Species'), 'Morone saxatilis');
+    await user.type(screen.getByLabelText('Latitude'), '41.0635001');
+    await user.type(screen.getByLabelText('Longitude'), '−72.0739658');
+    await user.type(screen.getByLabelText('Month'), '6');
+    await user.click(screen.getByRole('button', { name: 'Search' }));
+
+    expect(onSearch).toHaveBeenCalledWith({
+      species: 'Morone saxatilis',
+      latitude: 41.0635001,
+      longitude: -72.0739658,
+      month: 6,
+    });
+  });
+
   it('shows a clear error and does not call onSearch for invalid or out-of-range coordinates', async () => {
     const user = userEvent.setup();
     const onSearch = vi.fn();

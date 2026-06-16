@@ -357,3 +357,35 @@ a {
     linear-gradient(180deg, rgba(11, 31, 51, 0.55) 0%, rgba(11, 31, 51, 0.82) 100%),
     url("https://plus.unsplash.com/premium_photo-1708433275670-e431808510ca?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODF8fGZpc2hpbmd8ZW58MHx8MHx8fDA%3D");
 }
+
+/* ---- Occurrence map ---- */
+.occurrence-map {
+  margin-top: 24px;
+}
+
+.occurrence-map__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 14px;
+  padding: 12px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.occurrence-map__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-text-sand);
+}
+
+.occurrence-map__legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}

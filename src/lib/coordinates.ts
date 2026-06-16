@@ -21,7 +21,8 @@ export const parseCoordinate = ({
   minimum,
   maximum,
 }: ParseCoordinateInput): ParseCoordinateResult => {
-  const coordinate = Number(value);
+  const normalizedValue = value.replaceAll('−', '-');
+  const coordinate = Number(normalizedValue);
 
   if (!Number.isFinite(coordinate)) {
     return {
