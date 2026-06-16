@@ -17,7 +17,7 @@ Deployment: Vercel (app) + Neon (database)
 
 The honest-data thesis (do not violate)
 Real data computes the facts; the AI explains and assembles, it does not invent.
-Locations, fish, months, sighting frequency, sample sizes, and confidence flags are produced by tested code from real occurrence data (GBIF, OBIS).
+Locations, fish, months, sighting frequency, sample sizes, and confidence flags are produced by tested code from real occurrence data (GBIF, OBIS, USGS).
 The AI (OpenAI) phrases recommendations and explanations from facts the code already computed. It must never invent or guess a location, a species, or a season.
 One intentional exception: for travel time/ETA, the AI computes a conditions-aware estimate from inputs the code provides (origin, destination, conditions, speed), guarded by a sanity-check test, and the AI is told to show its reasoning.
 Always show sample size and a high/low confidence flag wherever a frequency or recommendation is shown. Never present a fabricated "catch probability."
