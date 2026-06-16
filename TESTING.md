@@ -124,6 +124,15 @@ RED 7.2 — The nav bar renders the About, and Contact links
 - What it checks: the NavBar component renders About, and Contact links, each pointing to its route (/about, /contact).
 - Why it fails first; expected behavior: the NavBar component doesn't exist yet, so those links aren't rendered.
 
+---
+
+## 8 — Post-login home Expected Behavior
+
+RED 8.1 — The home view renders Freshwater and Saltwater buttons with correct routes
+
+- What it checks: the HomeButtons component renders a Freshwater button/link pointing to /freshwater and a Saltwater button/link pointing to /saltwater, so a logged-in user reaches either page without typing a URL.
+- Why it fails first; expected behavior: the HomeButtons component doesn't exist yet, so there are no buttons to render.
+
 
 
 # 2. Run the tests (expect RED)
