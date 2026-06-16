@@ -161,12 +161,17 @@ RED 10.3 — Never empty: a recommendation is still returned when data is sparse
 - What it checks: when the record set is small but not empty, the function still returns a valid recommendation (species + real coordinate + month), never null or an empty result.
 - Why it fails first; expected behavior: no never-empty handling exists yet.
 
+---
 
 ## 11 — Rugged visual redesign Expected Behavior
 This is a visual feature. Visual styling is verified by eye.
 
+---
+
 ## 12 — Page background fix Expected Behavior
 This is a visual feature. Visual styling is verified by eye.
+
+---
 
 ## 13 — Distinct map markers per species Expected Behavior
 
@@ -179,7 +184,33 @@ Visual part (eyeball-verified, built with the map in Feature 15):
 
 The markers render at real full-precision coordinates on the map, each species visually distinct, with a legend. No 0,0 markers. Verified by eye, not unit-tested.
 
+---
 
+## 14 — Knots/ETA travel time Expected Behavior
+
+RED 14.1 — Distance is computed accurately from the user's full-precision coordinates
+
+- What it checks: a computeDistance function takes the user's origin (full-precision latitude/longitude) and a destination (latitude/longitude) and returns the correct distance between them, using the real coordinates with no truncation.
+- Why it fails first; expected behavior: the computeDistance function doesn't exist yet.
+
+RED 14.2 — A plausible ETA passes
+
+- What it checks: a checkEtaIsReasonable function takes the AI's proposed ETA plus the inputs the code provided (distance, speed) and returns valid (e.g. { isReasonable: true }) when the ETA is in a plausible range for that distance and speed.
+- Why it fails first; expected behavior: the sanity-check function doesn't exist yet.
+
+RED 14.3 — A negative or zero ETA is rejected
+
+- What it checks: the sanity check rejects an ETA that is negative or zero (you can't arrive in no time or in the past) with a clear reason.
+- Why it fails first; expected behavior: no validation of the ETA value exists yet.
+
+RED 14.4 — An implausible ETA for the distance and speed is rejected
+
+- What it checks: the sanity check rejects an ETA that is wildly out of range for the given distance and speed (e.g. far too short to physically cover the distance, or absurdly long) with a clear reason — this is the guard that catches the AI inventing a bad number.
+- Why it fails first; expected behavior: no plausibility-against-distance logic exists yet.
+
+AI part (mocked in tests; the intentional exception):
+
+The user enters their origin at full-precision latitude/longitude. The code computes the distance from those real coordinates (RED 14.1), then provides distance, speed, and conditions to the AI. The AI computes the conditions-aware ETA and shows its reasoning. In unit tests the AI/fetch is mocked; the sanity-check seam (14.2–14.4) guards whatever the AI returns. The AI never invents the origin, destination, or speed — the user provides the origin (full precision) and the code supplies the rest.
 
 # 2. Run the tests (expect RED)
 
