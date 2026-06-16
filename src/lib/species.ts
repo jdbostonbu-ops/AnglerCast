@@ -57,3 +57,8 @@ const speciesByWaterType: Record<WaterType, Species[]> = {
 
 export const getSpeciesForWaterType = (waterType: WaterType): Species[] =>
   speciesByWaterType[waterType];
+
+export const getCommonName = (scientificName: string): string =>
+  [...saltwaterSpecies, ...freshwaterSpecies].find(
+    (species) => species.scientificName === scientificName,
+  )?.commonName ?? scientificName;

@@ -49,6 +49,8 @@ const SaltwaterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [selectedSpecies, setSelectedSpecies] = useState('');
+  const [selectedLatitude, setSelectedLatitude] = useState<number | undefined>(undefined);
+  const [selectedLongitude, setSelectedLongitude] = useState<number | undefined>(undefined);
   const [searchCenter, setSearchCenter] = useState<{ latitude: number; longitude: number } | null>(
     null,
   );
@@ -79,15 +81,14 @@ const SaltwaterPage = () => {
     }
   };
 
-  const ratePercent =
-    result === null ? 0 : Math.round(result.rate.rate * 100);
+  const ratePercent = result === null ? 0 : Math.round(result.rate.rate * 100);
 
   return (
     <>
       <NavBar />
 
       <section className="hero hero--saltwater">
-        <p className="hero__eyebrow">Coast · bays · open ocean</p>
+        <p className="hero__eyebrow">Coast · bays · open water</p>
         <h1>Saltwater</h1>
         <p className="hero__sub">
           Search a saltwater location and see the historical sighting record from real public
@@ -103,9 +104,21 @@ const SaltwaterPage = () => {
         </p>
 
         <div className="search-layout">
-        <SightingRateSearch onSearch={handleSearch} selectedSpecies={selectedSpecies} />
-        <SpeciesList waterType="saltwater" onSelect={setSelectedSpecies} />
-      </div>
+          <SightingRateSearch
+            onSearch={handleSearch}
+            selectedSpecies={selectedSpecies}
+            selectedLatitude={selectedLatitude}
+            selectedLongitude={selectedLongitude}
+          />
+          <SpeciesList
+            waterType="saltwater"
+            onSelect={(selection) => {
+              setSelectedSpecies(selection.scientificName);
+              setSelectedLatitude(selection.latitude);
+              setSelectedLongitude(selection.longitude);
+            }}
+          />
+        </div>
 
         {isLoading ? <p className="section__lead">Searching real records…</p> : null}
         {errorMessage ? <p className="disclaimer">{errorMessage}</p> : null}

@@ -49,6 +49,8 @@ const FreshwaterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [selectedSpecies, setSelectedSpecies] = useState('');
+  const [selectedLatitude, setSelectedLatitude] = useState<number | undefined>(undefined);
+  const [selectedLongitude, setSelectedLongitude] = useState<number | undefined>(undefined);
   const [searchCenter, setSearchCenter] = useState<{ latitude: number; longitude: number } | null>(
     null,
   );
@@ -102,8 +104,20 @@ const FreshwaterPage = () => {
         </p>
 
         <div className="search-layout">
-          <SightingRateSearch onSearch={handleSearch} selectedSpecies={selectedSpecies} />
-          <SpeciesList waterType="freshwater" onSelect={setSelectedSpecies} />
+          <SightingRateSearch
+            onSearch={handleSearch}
+            selectedSpecies={selectedSpecies}
+            selectedLatitude={selectedLatitude}
+            selectedLongitude={selectedLongitude}
+          />
+          <SpeciesList
+            waterType="freshwater"
+            onSelect={(selection) => {
+              setSelectedSpecies(selection.scientificName);
+              setSelectedLatitude(selection.latitude);
+              setSelectedLongitude(selection.longitude);
+            }}
+          />
         </div>
 
         {isLoading ? <p className="section__lead">Searching real records…</p> : null}

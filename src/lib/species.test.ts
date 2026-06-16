@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getSpeciesForWaterType } from '@/lib/species';
+import { getCommonName, getSpeciesForWaterType } from '@/lib/species';
 
 describe('getSpeciesForWaterType', () => {
   it('returns saltwater species with common and scientific names', () => {
@@ -32,5 +32,13 @@ describe('getSpeciesForWaterType', () => {
       scientificName: 'Salvelinus fontinalis',
     });
     expect(freshwaterSpecies).not.toEqual(saltwaterSpecies);
+  });
+});
+
+describe('getCommonName', () => {
+  it('returns the common name for known species and preserves unknown scientific names', () => {
+    expect(getCommonName('Morone saxatilis')).toBe('Striped Bass');
+    expect(getCommonName('Salvelinus fontinalis')).toBe('Brook Trout');
+    expect(getCommonName('Notropis exampleus')).toBe('Notropis exampleus');
   });
 });
