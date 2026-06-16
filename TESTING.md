@@ -15,7 +15,7 @@ Each test below is described in plain English: what it checks, and why it fails 
 
 ---
 
-## Must Have #1 — Email code verification
+## 1 — Email code verification
 
 RED 1.1 — Code is stored hashed, with a future expiry
 - What it checks: the code-generation function returns a stored value that is the HASH of the code (not the raw code), plus an expiry timestamp set in the future.
@@ -43,7 +43,7 @@ RED 1.6 — An already-verified account can't be verified again
 
 ---
 
-## Must Have #2 — Login
+## 2 — Login
 
 RED 2.1 — A correct password for a verified user succeeds
 - What it checks: the credential-check function looks up the user by email and, when the bcrypt compare passes and the user is verified, returns success. DB and bcrypt mocked.
@@ -63,7 +63,7 @@ RED 2.4 — The password field has a working show/hide toggle
 
 ---
 
-## Must Have #3 — CRUD for SavedSpot
+## 3 — CRUD for SavedSpot
 
 RED 3.1 — Create then read returns the spot with full-precision coordinates
 - What it checks: creating a SavedSpot with full-precision coordinates (e.g. 41.063500, -71.862800) stores it, and reading returns the SAME coordinates with no rounding. Prisma mocked.
@@ -79,7 +79,7 @@ RED 3.3 — Update persists and keeps coordinates at full precision
 
 ---
 
-## Must Have #4 — Delete confirmation dialog
+## 4 — Delete confirmation dialog
 
 RED 4.1 — Confirming the dialog deletes the spot
 - What it checks: clicking delete opens the confirmation dialog, and clicking "Confirm" calls the delete handler exactly once. Delete handler mocked.
@@ -91,7 +91,7 @@ RED 4.2 — Canceling the dialog does nothing
 
 ---
 
-## Must Have #5 — Prisma + Neon live database
+## 5 — Prisma + Neon live database
 
 RED 5.1 — A SavedSpot is linked to its User (the relationship)
 - What it checks: with Prisma mocked, creating a User and then a SavedSpot for that user results in a SavedSpot whose userId matches the user's id (the one-User-has-many-SavedSpots relationship).
@@ -101,6 +101,16 @@ Live check (manual, not a unit test):
 - After the mocked tests pass: run the real Prisma migration against Neon, create one row, and read it back to confirm the live connection works. Connection string is in .env (not committed). This is a manual confirmation, separate from the unit tests.
 
 ---
+
+## 6 — Coordinate precision fix Expected Behavior
+RED 6.1 — A full-precision coordinate survives input unchanged (never truncated)
+- What it checks: the parseCoordinate function takes a coordinate the user typed (e.g. "-71.862800987654") and returns the exact same full-precision number, with no rounding or truncation.
+- Why it fails first; expected behavior: the parseCoordinate function doesn't exist yet, so there's nothing to preserve the precision.
+
+RED 6.2 — Out-of-range and non-numeric input is rejected
+- What it checks: parseCoordinate rejects an out-of-range value (e.g. "200") and non-numeric input (e.g. "abc") with a clear error, instead of silently returning a wrong number.
+- Why it fails first; expected behavior: no validation logic exists yet.
+
 
 # 2. Run the tests (expect RED)
 
