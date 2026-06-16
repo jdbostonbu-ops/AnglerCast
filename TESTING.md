@@ -212,6 +212,42 @@ AI part (mocked in tests; the intentional exception):
 
 The user enters their origin at full-precision latitude/longitude. The code computes the distance from those real coordinates (RED 14.1), then provides distance, speed, and conditions to the AI. The AI computes the conditions-aware ETA and shows its reasoning. In unit tests the AI/fetch is mocked; the sanity-check seam (14.2–14.4) guards whatever the AI returns. The AI never invents the origin, destination, or speed — the user provides the origin (full precision) and the code supplies the rest.
 
+---
+
+## 15 — Empirical sighting-rate search (search + map) Expected Behavior
+
+RED 15.1 — The sighting rate is computed as matching-month records ÷ total records
+
+- What it checks: a computeSightingRate function takes a species' nearby occurrence records and a selected month, and returns { rate, matchingMonthCount, totalCount } where rate = matchingMonthCount ÷ totalCount — the share of that species' records that fall in the selected month.
+- Why it fails first; expected behavior: the computeSightingRate function doesn't exist yet.
+
+RED 15.2 — Rate is 0 when there are no records (never divides by zero)
+
+- What it checks: when totalCount is 0, the function returns a rate of 0 (and a 0 count) instead of dividing by zero or crashing.
+- Why it fails first; expected behavior: no empty/zero-guard exists yet.
+
+RED 15.3 — The result includes a high/low confidence flag based on sample size
+
+- What it checks: the result includes the sample size (totalCount) and a high/low confidence flag based on how many records back it, so the rate is always shown honestly.
+- Why it fails first; expected behavior: no confidence logic exists yet.
+
+RED 15.4 — Occurrence records at 0,0 (Null Island) are excluded
+
+- What it checks: a function that prepares records for the map drops any record at latitude 0, longitude 0 (placeholder/garbage coordinates), so no marker is ever placed at Null Island.
+Why it fails first; expected behavior: no 0,0-filtering exists yet.
+
+Occurrence fetch (tested seam; fetch mocked):
+
+A function builds the query to the real occurrence sources (GBIF and OBIS) near the searched coordinates at full precision and returns records shaped with scientificName, decimalLatitude, decimalLongitude, eventDate. In unit tests fetch is mocked — never hits the network.
+
+Visual part (eyeball-verified):
+
+The search input (species, full-precision latitude, longitude, month) and a submit button render on the freshwater and saltwater pages. The entered coordinates drive both the rate and the map, so the map matches the search. The map renders the real occurrences as markers at full-precision coordinates, using the per-species marker styles from Feature 13, with a legend and no 0,0 markers. The sighting rate is shown with its sample size and confidence flag, and the AI phrases the explanation. Verified by eye, not unit-tested.
+
+AI part (assembly only; mocked in tests):
+
+OpenAI receives the already-computed rate, sample size, and confidence and explains them in plain English. It never computes the rate and never invents a location, species, or season.
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.
