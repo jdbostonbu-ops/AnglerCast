@@ -103,6 +103,7 @@ Live check (manual, not a unit test):
 ---
 
 ## 6 — Coordinate precision fix Expected Behavior
+
 RED 6.1 — A full-precision coordinate survives input unchanged (never truncated)
 - What it checks: the parseCoordinate function takes a coordinate the user typed (e.g. "-71.862800987654") and returns the exact same full-precision number, with no rounding or truncation.
 - Why it fails first; expected behavior: the parseCoordinate function doesn't exist yet, so there's nothing to preserve the precision.
@@ -110,6 +111,19 @@ RED 6.1 — A full-precision coordinate survives input unchanged (never truncate
 RED 6.2 — Out-of-range and non-numeric input is rejected
 - What it checks: parseCoordinate rejects an out-of-range value (e.g. "200") and non-numeric input (e.g. "abc") with a clear error, instead of silently returning a wrong number.
 - Why it fails first; expected behavior: no validation logic exists yet.
+
+---
+
+## 7 — Nav bar Expected Behavior
+
+RED 7.1 — The nav bar renders the Freshwater and Saltwater links with correct routes
+- What it checks: the NavBar component renders a Freshwater link pointing to /freshwater and a Saltwater link pointing to /saltwater.
+- Why it fails first; expected behavior: the NavBar component doesn't exist yet, so there are no links to render.
+
+RED 7.2 — The nav bar renders the About, and Contact links
+- What it checks: the NavBar component renders About, and Contact links, each pointing to its route (/about, /contact).
+- Why it fails first; expected behavior: the NavBar component doesn't exist yet, so those links aren't rendered.
+
 
 
 # 2. Run the tests (expect RED)
