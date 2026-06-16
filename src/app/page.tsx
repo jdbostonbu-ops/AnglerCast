@@ -1,6 +1,34 @@
+import Link from 'next/link';
 import { NavBar } from '@/components/NavBar';
+import { getHomeHighlights } from '@/lib/homeHighlights';
 
-const HomePage = () => {
+// Real occurrence data, recomputed automatically once a week (7 days in seconds).
+export const revalidate = 604800;
+
+const monthNames = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+const confidencePillClass: Record<'low' | 'moderate' | 'high', string> = {
+  low: 'pill pill--low',
+  moderate: 'pill pill--size',
+  high: 'pill pill--high',
+};
+
+const HomePage = async () => {
+  const highlights = await getHomeHighlights();
+
   return (
     <>
       <NavBar />
@@ -13,77 +41,43 @@ const HomePage = () => {
           public data — never a guarantee, always honest.
         </p>
 
-        <div className="search-card">
-          <div className="search-card__field">
-            <label htmlFor="species">Species</label>
-            <select id="species">
-              <option>Striped bass</option>
-              <option>Bluefish</option>
-            </select>
-          </div>
-          <div className="search-card__field">
-            <label htmlFor="latitude">Latitude</label>
-            <input id="latitude" defaultValue="41.063500" />
-          </div>
-          <div className="search-card__field">
-            <label htmlFor="longitude">Longitude</label>
-            <input id="longitude" defaultValue="-71.862800" />
-          </div>
-          <div className="search-card__field">
-            <label htmlFor="month">Month</label>
-            <select id="month">
-              <option>June</option>
-            </select>
-          </div>
-          <button type="button" className="search-card__submit">
-            Search
-          </button>
+        <div className="hero__cta">
+          <Link className="hero__cta-link" href="/saltwater">
+            Search saltwater
+          </Link>
+          <Link className="hero__cta-link hero__cta-link--ghost" href="/freshwater">
+            Search freshwater
+          </Link>
         </div>
       </section>
 
       <main className="section">
-        <h2>Top recorded spots</h2>
+        <h2>Top recorded spots this season</h2>
         <p className="section__lead">
-          Computed from real GBIF and OBIS occurrence records near your search — every number shown
-          with its sample size and confidence.
+          Each card is computed live from real GBIF occurrence records — the month shown is the one
+          with the highest share of historical sightings, with its sample size and confidence.
+          Refreshed weekly.
         </p>
 
         <div className="spot-cards">
-          <article className="spot-card">
-            <div className="spot-card__species">Morone saxatilis</div>
-            <div className="spot-card__loc">41.0635, −71.8628 · Montauk</div>
-            <div className="spot-card__rate">
-              62%<small> of records in June</small>
-            </div>
-            <div className="spot-card__meta">
-              <span className="pill pill--size">124 records</span>
-              <span className="pill pill--high">High confidence</span>
-            </div>
-          </article>
-
-          <article className="spot-card">
-            <div className="spot-card__species">Pomatomus saltatrix</div>
-            <div className="spot-card__loc">40.7000, −72.2000 · South Shore</div>
-            <div className="spot-card__rate">
-              38%<small> of records in July</small>
-            </div>
-            <div className="spot-card__meta">
-              <span className="pill pill--size">47 records</span>
-              <span className="pill pill--high">High confidence</span>
-            </div>
-          </article>
-
-          <article className="spot-card">
-            <div className="spot-card__species">Salvelinus fontinalis</div>
-            <div className="spot-card__loc">44.1568, −73.9877 · Adirondacks</div>
-            <div className="spot-card__rate">
-              25%<small> of records in May</small>
-            </div>
-            <div className="spot-card__meta">
-              <span className="pill pill--size">6 records</span>
-              <span className="pill pill--low">Low confidence</span>
-            </div>
-          </article>
+          {highlights.map((card) => (
+            <article className="spot-card" key={card.scientificName}>
+              <div className="spot-card__species">{card.scientificName}</div>
+              <div className="spot-card__loc">
+                {card.latitude.toFixed(4)}, {card.longitude.toFixed(4)} · {card.locationLabel}
+              </div>
+              <div className="spot-card__rate">
+                {Math.round(card.rate * 100)}%
+                <small> of records in {monthNames[card.month - 1]}</small>
+              </div>
+              <div className="spot-card__meta">
+                <span className="pill pill--size">{card.totalCount} records</span>
+                <span className={confidencePillClass[card.confidence]}>
+                  {card.confidence} confidence
+                </span>
+              </div>
+            </article>
+          ))}
         </div>
 
         <p className="disclaimer">
@@ -93,7 +87,7 @@ const HomePage = () => {
       </main>
 
       <footer className="site-footer">
-        AnglerCast · Real occurrence data from GBIF, OBIS, Open-Meteo, USGS · AI explains, never
+        AnglerCast · Real occurrence data from GBIF, OBIS, Open-Meteo, FishBase · AI explains, never
         invents
       </footer>
     </>

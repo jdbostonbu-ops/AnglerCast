@@ -4,6 +4,7 @@ import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { NavBar } from '@/components/NavBar';
 import { SightingRateSearch } from '@/components/SightingRateSearch';
+import { SpeciesList } from '@/components/SpeciesList';
 
 // Leaflet needs the browser, so load the map client-side only (no server-side render).
 const OccurrenceMap = dynamic(
@@ -47,6 +48,7 @@ const SaltwaterPage = () => {
   const [result, setResult] = useState<SearchResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [selectedSpecies, setSelectedSpecies] = useState('');
   const [searchCenter, setSearchCenter] = useState<{ latitude: number; longitude: number } | null>(
     null,
   );
@@ -100,7 +102,10 @@ const SaltwaterPage = () => {
           map come from real occurrence records; the AI only explains the numbers.
         </p>
 
-        <SightingRateSearch onSearch={handleSearch} />
+        <div className="search-layout">
+        <SightingRateSearch onSearch={handleSearch} selectedSpecies={selectedSpecies} />
+        <SpeciesList waterType="saltwater" onSelect={setSelectedSpecies} />
+      </div>
 
         {isLoading ? <p className="section__lead">Searching real records…</p> : null}
         {errorMessage ? <p className="disclaimer">{errorMessage}</p> : null}

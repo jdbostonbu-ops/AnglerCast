@@ -389,3 +389,137 @@ a {
   display: inline-block;
   border: 1px solid rgba(255, 255, 255, 0.4);
 }
+
+/* ============================================
+   Species list + search layout
+   Add to globals.css
+   ============================================ */
+
+/* Two-column: search form on the left, species list on the right */
+.search-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 150px;
+  margin-top: 64px;
+  align-items: start;
+}
+
+@media (min-width: 860px) {
+  .search-layout {
+    grid-template-columns: minmax(320px, 480px) 280px;
+    justify-content: start;
+  }
+
+  /* Pull the species panel up so its title is flush with "Sighting-rate search" */
+  .species-list {
+    margin-top: -160px;
+  }
+}
+
+.species-list {
+  background: #12314F;        /* surface navy — hardcoded in case the var is missing */
+  border: 1px solid #E8B04B;  /* brass border to match the gold line above */
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.species-list__title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.05rem;
+  color: #E8B04B;
+  margin: 0 0 4px;
+}
+
+.species-list__hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+
+.species-list__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 360px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Each fish is a button so it's keyboard-accessible */
+.species-list__item {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.species-list__item:hover {
+  background: var(--navy);
+  border-color: var(--border);
+}
+
+.species-list__item:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 1px;
+}
+
+.species-list__common {
+  color: #E8B04B;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+/* Scientific name shown in italics, quieter — honest about what gets searched */
+.species-list__scientific {
+  color: white;
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+/* ============================================
+   Hero CTA links (home page) — add to globals.css
+   ============================================ */
+ 
+.hero__cta {
+  display: flex;
+  gap: 14px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+ 
+.hero__cta-link {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  background: #E07A22;
+  color: #0B1F33;
+  border: 1px solid #E07A22;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+ 
+.hero__cta-link:hover {
+  background: #E8B04B;
+  border-color: #E8B04B;
+}
+ 
+.hero__cta-link--ghost {
+  background: transparent;
+  color: #EAF1F8;
+  border: 1px solid #E8B04B;
+}
+ 
+.hero__cta-link--ghost:hover {
+  background: rgba(232, 176, 75, 0.15);
+  color: #EAF1F8;
+}

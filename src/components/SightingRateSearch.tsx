@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { parseCoordinate } from '@/lib/coordinates';
 
 type SightingRateSearchInput = {
@@ -12,17 +12,24 @@ type SightingRateSearchInput = {
 
 type SightingRateSearchProps = {
   onSearch: (searchInput: SightingRateSearchInput) => void;
+  selectedSpecies?: string;
 };
 
 const coordinateErrorMessage =
   'Enter valid coordinates: latitude must be -90 to 90 and longitude must be -180 to 180.';
 
-export const SightingRateSearch = ({ onSearch }: SightingRateSearchProps) => {
+export const SightingRateSearch = ({ onSearch, selectedSpecies }: SightingRateSearchProps) => {
   const [species, setSpecies] = useState('');
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
   const [month, setMonth] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    if (selectedSpecies !== undefined && selectedSpecies !== '') {
+      setSpecies(selectedSpecies);
+    }
+  }, [selectedSpecies]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
