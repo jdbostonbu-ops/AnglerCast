@@ -68,7 +68,7 @@ describe('fetchOccurrenceRecords', () => {
         eventDate: '2026-05-20T20:10:48',
       },
     ]);
-    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
   it('returns an empty array when the GBIF response has no results property', async () => {

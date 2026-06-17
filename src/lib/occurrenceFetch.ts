@@ -1,3 +1,5 @@
+import { fetchObisOccurrences } from '@/lib/obisFetch';
+
 type FetchOccurrenceRecordsInput = {
   species: string;
   latitude: number;
@@ -17,6 +19,15 @@ type GbifOccurrenceResponse = {
   results?: GbifOccurrenceRecord[];
 };
 
+const recordKey = ({
+  scientificName,
+  decimalLatitude,
+  decimalLongitude,
+  eventDate,
+}: OccurrenceRecord): string => {
+  return `${scientificName}|${decimalLatitude}|${decimalLongitude}|${eventDate}`;
+};
+
 export const fetchOccurrenceRecords = async ({
   species,
   latitude,
@@ -32,8 +43,7 @@ export const fetchOccurrenceRecords = async ({
   const response = await fetch(`https://api.gbif.org/v1/occurrence/search?${searchParams}`);
   const gbifResponse = (await response.json()) as GbifOccurrenceResponse;
   const results = gbifResponse.results ?? [];
-
-  return results.map(
+  const gbifResults = results.map(
     ({ scientificName, decimalLatitude, decimalLongitude, eventDate }) => ({
       scientificName,
       decimalLatitude,
@@ -41,4 +51,18 @@ export const fetchOccurrenceRecords = async ({
       eventDate,
     }),
   );
+  const obisResults = await fetchObisOccurrences({ species, latitude, longitude });
+  const mergedResults = [...gbifResults, ...obisResults];
+  const seenRecordKeys = new Set<string>();
+
+  return mergedResults.filter((record) => {
+    const key = recordKey(record);
+
+    if (seenRecordKeys.has(key)) {
+      return false;
+    }
+
+    seenRecordKeys.add(key);
+    return true;
+  });
 };

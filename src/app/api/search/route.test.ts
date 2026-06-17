@@ -90,7 +90,7 @@ describe('POST /api/search', () => {
       explanation: 'June accounts for 2 of 3 nearby historical records.',
     });
     expect(response.status).toBe(200);
-    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(fetchMock).toHaveBeenCalledTimes(2);
 expect(fetchMock).toHaveBeenCalledWith(
       expect.stringContaining(`decimalLatitude=${latitude - 0.5}%2C${latitude + 0.5}`),
     );
