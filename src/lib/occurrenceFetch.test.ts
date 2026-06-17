@@ -91,4 +91,57 @@ describe('fetchOccurrenceRecords', () => {
       }),
     ).resolves.toEqual([]);
   });
+
+  it('returns merged records from GBIF and OBIS without replacing GBIF', async () => {
+    const gbifRecord = {
+      scientificName: 'GBIF Morone saxatilis',
+      decimalLatitude: 41.068833,
+      decimalLongitude: -71.859208,
+      eventDate: '2026-01-16T14:24:13',
+    };
+    const obisRecord = {
+      scientificName: 'OBIS Morone saxatilis',
+      decimalLatitude: 38.88368,
+      decimalLongitude: -76.52863,
+      eventDate: '2021-05-09 08:53:30',
+    };
+    const fetchMock = vi.fn(async (requestedUrl: string | URL | Request) => {
+      const url = String(requestedUrl);
+
+      if (url.includes('api.gbif.org')) {
+        return new Response(JSON.stringify({ results: [gbifRecord] }), {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+
+      if (url.includes('api.obis.org')) {
+        return new Response(JSON.stringify({ results: [obisRecord] }), {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+
+      return new Response(JSON.stringify({ results: [] }), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    });
+
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      fetchOccurrenceRecords({
+        species: 'Morone saxatilis',
+        latitude: 41.063500123456,
+        longitude: -71.862800987654,
+      }),
+    ).resolves.toEqual([gbifRecord, obisRecord]);
+  });
 });
