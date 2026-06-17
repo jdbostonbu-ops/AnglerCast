@@ -44,10 +44,11 @@ export async function POST(request: Request): Promise<Response> {
           usgs: await fetchUsgsWaterConditions(destination),
           forecast,
         };
-  const { etaHours, explanation } = await explainTravelEta({
+  const { etaHours, explanation, locationSummary } = await explainTravelEta({
     distanceNauticalMiles,
     speedKnots,
     conditions,
+    locationSpecies,
   });
   const reasonableness = checkEtaIsReasonable({
     etaHours,
@@ -63,6 +64,7 @@ export async function POST(request: Request): Promise<Response> {
       conditions,
       reasonableness,
       locationSpecies,
+      locationSummary,
     },
     { status: 200 },
   );
