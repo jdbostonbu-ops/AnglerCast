@@ -419,12 +419,12 @@ a {
 @media (min-width: 860px) {
   .search-layout {
     grid-template-columns: minmax(320px, 480px) 280px;
-    justify-content: start;
+    justify-content: space-between;
   }
 
   /* Pull the species panel up so its title is flush with "Sighting-rate search" */
   .species-list {
-    margin-top: -160px;
+    margin-top: -360px;
   }
 }
 
@@ -433,6 +433,7 @@ a {
   border: 1px solid #E8B04B;  /* brass border to match the gold line above */
   border-radius: 10px;
   padding: 16px;
+  margin-left: auto; /* push it to the right in the two-column layout */
 }
 
 .species-list__title {
