@@ -304,6 +304,18 @@ npx vitest run
 
 ---
 
+## 📖 A snapshot at TDD Testing Before and After
+
+<p align="center">
+  <img src="TDD failed test.png" width="600" />
+</p>
+
+<p align="center">
+  <img src="TDD passed test.png" width="600" />
+</p>
+
+---
+
 ## 💬 Feedback
 
 Tried AnglerCast out on the water (or at your desk)? I'd genuinely love to hear what worked and what didn't.
