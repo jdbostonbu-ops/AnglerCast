@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
-import { NavBar } from '@/components/NavBar';
+import { SiteNav } from '@/components/SiteNav';
 import { SightingRateSearch } from '@/components/SightingRateSearch';
 import { SpeciesList } from '@/components/SpeciesList';
 
@@ -85,7 +85,7 @@ const SaltwaterPage = () => {
 
   return (
     <>
-      <NavBar />
+      <SiteNav />
 
       <section className="hero hero--saltwater">
         <p className="hero__eyebrow">Coast · bays · open water</p>

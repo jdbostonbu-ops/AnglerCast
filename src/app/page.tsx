@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { NavBar } from '@/components/NavBar';
+import { SiteNav } from '@/components/SiteNav';
 import { getHomeHighlights } from '@/lib/homeHighlights';
 
 // Real occurrence data, recomputed automatically once a week (7 days in seconds).
@@ -31,7 +31,7 @@ const HomePage = async () => {
 
   return (
     <>
-      <NavBar hideWaterLinks />
+      <SiteNav hideWaterLinks />
 
       <section className="hero">
         <p className="hero__eyebrow">Real records · honest data</p>

@@ -2,7 +2,7 @@
 
 import {useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { NavBar } from '@/components/NavBar';
+import { SiteNav } from '@/components/SiteNav';
 import { SightingRateSearch } from '@/components/SightingRateSearch';
 import { SpeciesList } from '@/components/SpeciesList';
 import { SavedSpotsSection } from '@/components/SavedSpotsSection';
@@ -92,21 +92,11 @@ const FreshwaterPage = () => {
     }
   };
 
-  const handleLogout = async () => {
-
-    await fetch('/api/auth/logout', { method: 'POST' });
-
-    setUserId(null);
-
-    window.location.href = '/';
-
-  };
-
   const ratePercent = result === null ? 0 : Math.round(result.rate.rate * 100);
 
   return (
     <>
-      <NavBar isLoggedIn={userId !== null} onLogout={handleLogout} />
+      <SiteNav />
 
       <section className="hero hero--freshwater">
         <p className="hero__eyebrow">Lakes · rivers · ponds</p>

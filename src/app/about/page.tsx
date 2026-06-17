@@ -1,9 +1,9 @@
-import { NavBar } from '@/components/NavBar';
+import { SiteNav } from '@/components/SiteNav';
 
 const AboutPage = () => {
   return (
     <>
-      <NavBar />
+      <SiteNav />
 
       <section className="hero hero--about">
         <p className="hero__eyebrow">What AnglerCast is</p>

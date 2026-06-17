@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi, beforeEach } from 'vitest';
 import HomePage from '@/app/page';
 
 vi.mock('@/lib/homeHighlights', () => ({
@@ -19,6 +19,17 @@ vi.mock('@/lib/homeHighlights', () => ({
 }));
 
 describe('HomePage', () => {
+
+    beforeEach(() => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({
+        ok: true,
+        json: async () => ({ userId: null }),
+      })),
+    );
+  });
+
   it('renders the AnglerCast landing page with the NavBar', async () => {
     render(await HomePage());
 

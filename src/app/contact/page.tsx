@@ -1,9 +1,9 @@
-import { NavBar } from '@/components/NavBar';
+import { SiteNav } from '@/components/SiteNav';
 
 const ContactPage = () => {
   return (
     <>
-      <NavBar />
+      <SiteNav />
 
       <section className="hero hero--contact">
         <p className="hero__eyebrow">Get in touch</p>
