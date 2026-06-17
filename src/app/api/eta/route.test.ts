@@ -6,6 +6,7 @@ const fetchMarineConditionsMock = vi.hoisted(() => vi.fn());
 const fetchForecastConditionsMock = vi.hoisted(() => vi.fn());
 const explainTravelEtaMock = vi.hoisted(() => vi.fn());
 const checkEtaIsReasonableMock = vi.hoisted(() => vi.fn());
+const fetchSpeciesAtLocationMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/distance', () => ({
   computeDistance: computeDistanceMock,
@@ -25,6 +26,10 @@ vi.mock('@/lib/travelEta', () => ({
 
 vi.mock('@/lib/eta', () => ({
   checkEtaIsReasonable: checkEtaIsReasonableMock,
+}));
+
+vi.mock('@/lib/locationSpecies', () => ({
+  fetchSpeciesAtLocation: fetchSpeciesAtLocationMock,
 }));
 
 describe('POST /api/eta', () => {
@@ -54,8 +59,13 @@ describe('POST /api/eta', () => {
       forecast: forecastConditions,
     };
     const reasonableness = { isReasonable: true };
+    const locationSpecies = [
+      { scientificName: 'Gadus morhua', recordCount: 1644 },
+      { scientificName: 'Pollachius virens', recordCount: 820 },
+    ];
 
     computeDistanceMock.mockReturnValueOnce(15.5);
+    fetchSpeciesAtLocationMock.mockResolvedValueOnce(locationSpecies);
     fetchMarineConditionsMock.mockResolvedValueOnce(marineConditions);
     fetchForecastConditionsMock.mockResolvedValueOnce(forecastConditions);
     explainTravelEtaMock.mockResolvedValueOnce({
@@ -88,6 +98,7 @@ describe('POST /api/eta', () => {
       explanation: 'Choppy with a stiff wind; roughly an hour and ten.',
       conditions,
       reasonableness,
+      locationSpecies,
     });
     expect(computeDistanceMock).toHaveBeenCalledWith({
       origin: { latitude: 41.0, longitude: -71.5 },
@@ -95,6 +106,7 @@ describe('POST /api/eta', () => {
     });
     expect(fetchMarineConditionsMock).toHaveBeenCalledWith(destination);
     expect(fetchForecastConditionsMock).toHaveBeenCalledWith(destination);
+    expect(fetchSpeciesAtLocationMock).toHaveBeenCalledWith(destination);
     expect(explainTravelEtaMock).toHaveBeenCalledWith({
       distanceNauticalMiles: 15.5,
       speedKnots: 18,
