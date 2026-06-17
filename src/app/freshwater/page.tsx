@@ -103,11 +103,11 @@ const FreshwaterPage = () => {
         <h1>Freshwater</h1>
         <p className="hero__sub">
           Search a freshwater location and see the historical sighting record from real public
-          occurrence data — with sample size and confidence, never a guarantee.<br>GBIF stands 
+          occurrence data — with sample size and confidence, never a guarantee. GBIF stands 
           for the Global Biodiversity Information Facility. It's an international, government-funded 
           open-data network that lets anyone access records about where species have been observed or 
           recorded around the world. The data comes from museums, herbaria, research institutions, 
-          citizen-science platforms (like iNaturalist), and government surveys — all aggregated into one searchable place.</br>
+          citizen-science platforms (like iNaturalist), and government surveys — all aggregated into one searchable place.
         </p>
       </section>
 
