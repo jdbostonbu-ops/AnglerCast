@@ -45,7 +45,7 @@ const SignupPage = () => {
     <>
       <NavBar />
 
-      <section className="hero hero--about">
+      <section className="hero hero--signup">
         <p className="hero__eyebrow">Create your account</p>
         <h1>Sign up</h1>
         <p className="hero__sub">
