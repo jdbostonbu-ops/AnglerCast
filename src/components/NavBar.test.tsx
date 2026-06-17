@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 import { NavBar } from '@/components/NavBar';
 
 describe('NavBar', () => {
@@ -18,5 +18,22 @@ describe('NavBar', () => {
     );
     expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute('href', '/about');
     expect(screen.getByRole('link', { name: 'Contact' })).toHaveAttribute('href', '/contact');
+  });
+
+  it('shows a Log out button when isLoggedIn is true', () => {
+    render(<NavBar isLoggedIn onLogout={() => {}} />);
+    expect(screen.getByRole('button', { name: /log out/i })).toBeInTheDocument();
+  });
+
+  it('does not show a Log out button when isLoggedIn is false', () => {
+    render(<NavBar isLoggedIn={false} onLogout={() => {}} />);
+    expect(screen.queryByRole('button', { name: /log out/i })).toBeNull();
+  });
+
+  it('calls onLogout when the Log out button is clicked', () => {
+    const onLogout = vi.fn();
+    render(<NavBar isLoggedIn onLogout={onLogout} />);
+    fireEvent.click(screen.getByRole('button', { name: /log out/i }));
+    expect(onLogout).toHaveBeenCalledTimes(1);
   });
 });

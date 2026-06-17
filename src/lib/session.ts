@@ -14,3 +14,9 @@ export const getSessionUserId = async (): Promise<string | null> => {
 
   return sessionCookie?.value ?? null;
 };
+
+export const clearSession = async (): Promise<void> => {
+  const cookieStore = await cookies();
+
+  cookieStore.delete(sessionCookieName);
+};

@@ -92,11 +92,21 @@ const FreshwaterPage = () => {
     }
   };
 
+  const handleLogout = async () => {
+
+    await fetch('/api/auth/logout', { method: 'POST' });
+
+    setUserId(null);
+
+    window.location.href = '/';
+
+  };
+
   const ratePercent = result === null ? 0 : Math.round(result.rate.rate * 100);
 
   return (
     <>
-      <NavBar />
+      <NavBar isLoggedIn={userId !== null} onLogout={handleLogout} />
 
       <section className="hero hero--freshwater">
         <p className="hero__eyebrow">Lakes · rivers · ponds</p>

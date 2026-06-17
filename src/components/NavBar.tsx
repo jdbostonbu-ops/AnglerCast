@@ -1,5 +1,11 @@
+'use client';
+
+import type { ReactElement } from 'react';
+
 type NavBarProps = {
   hideWaterLinks?: boolean;
+  isLoggedIn?: boolean;
+  onLogout?: () => void;
 };
 
 const navLinks = [
@@ -12,7 +18,11 @@ const navLinks = [
 
 const waterHrefs = ['/freshwater', '/saltwater'];
 
-export const NavBar = ({ hideWaterLinks = false }: NavBarProps) => {
+export const NavBar = ({
+  hideWaterLinks = false,
+  isLoggedIn = false,
+  onLogout,
+}: NavBarProps): ReactElement => {
   const links = hideWaterLinks
     ? navLinks.filter((link) => !waterHrefs.includes(link.href))
     : navLinks;
@@ -31,6 +41,11 @@ export const NavBar = ({ hideWaterLinks = false }: NavBarProps) => {
             {link.label}
           </a>
         ))}
+        {isLoggedIn ? (
+          <button type="button" onClick={onLogout}>
+            Log out
+          </button>
+        ) : null}
       </div>
     </nav>
   );
