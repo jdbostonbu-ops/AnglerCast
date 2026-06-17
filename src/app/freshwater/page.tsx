@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import {useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { NavBar } from '@/components/NavBar';
 import { SightingRateSearch } from '@/components/SightingRateSearch';
 import { SpeciesList } from '@/components/SpeciesList';
+import { SavedSpotsSection } from '@/components/SavedSpotsSection';
 
 // Leaflet needs the browser, so load the map client-side only (no server-side render).
 const OccurrenceMap = dynamic(
@@ -54,11 +55,21 @@ const FreshwaterPage = () => {
   const [searchCenter, setSearchCenter] = useState<{ latitude: number; longitude: number } | null>(
     null,
   );
+  const [userId, setUserId] = useState<string | null>(null);
+  const [lastSearch, setLastSearch] = useState<SearchValues | null>(null);
+
+  useEffect(() => {
+  fetch('/api/auth/me')
+    .then((response) => (response.ok ? response.json() : { userId: null }))
+    .then((data: { userId: string | null }) => setUserId(data.userId))
+    .catch(() => setUserId(null));
+  }, []);
 
   const handleSearch = async (values: SearchValues) => {
     setIsLoading(true);
     setErrorMessage(null);
     setSearchCenter({ latitude: values.latitude, longitude: values.longitude });
+    setLastSearch(values);
 
     try {
       const response = await fetch('/api/search', {
@@ -150,6 +161,14 @@ const FreshwaterPage = () => {
             ) : null}
           </>
         ) : null}
+            <SavedSpotsSection
+              userId={userId}
+              waterType="freshwater"
+              canSave={result !== null && lastSearch !== null}
+              prefillSpecies={lastSearch?.species}
+              prefillLatitude={lastSearch?.latitude}
+              prefillLongitude={lastSearch?.longitude}
+            />
       </main>
     </>
   );

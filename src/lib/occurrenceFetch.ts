@@ -14,7 +14,7 @@ type OccurrenceRecord = {
 type GbifOccurrenceRecord = OccurrenceRecord;
 
 type GbifOccurrenceResponse = {
-  results: GbifOccurrenceRecord[];
+  results?: GbifOccurrenceRecord[];
 };
 
 export const fetchOccurrenceRecords = async ({
@@ -31,8 +31,9 @@ export const fetchOccurrenceRecords = async ({
   });
   const response = await fetch(`https://api.gbif.org/v1/occurrence/search?${searchParams}`);
   const gbifResponse = (await response.json()) as GbifOccurrenceResponse;
+  const results = gbifResponse.results ?? [];
 
-  return gbifResponse.results.map(
+  return results.map(
     ({ scientificName, decimalLatitude, decimalLongitude, eventDate }) => ({
       scientificName,
       decimalLatitude,

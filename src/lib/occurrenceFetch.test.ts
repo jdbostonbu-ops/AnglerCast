@@ -70,4 +70,25 @@ describe('fetchOccurrenceRecords', () => {
     ]);
     expect(fetchMock).toHaveBeenCalledOnce();
   });
+
+  it('returns an empty array when the GBIF response has no results property', async () => {
+    const fetchMock = vi.fn(async () => {
+      return new Response(JSON.stringify({}), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    });
+
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      fetchOccurrenceRecords({
+        species: 'Morone saxatilis',
+        latitude: 41.063500123456,
+        longitude: -71.862800987654,
+      }),
+    ).resolves.toEqual([]);
+  });
 });

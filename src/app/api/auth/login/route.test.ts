@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { prisma } from '@/lib/prisma';
 import { checkLoginCredentials } from '@/lib/login';
+import { createSession } from '@/lib/session';
 import { POST } from './route';
 
 vi.mock('bcryptjs', () => ({
@@ -20,6 +21,10 @@ vi.mock('@/lib/prisma', () => ({
 
 vi.mock('@/lib/login', () => ({
   checkLoginCredentials: vi.fn(),
+}));
+
+vi.mock('@/lib/session', () => ({
+  createSession: vi.fn(),
 }));
 
 describe('POST /api/auth/login', () => {
@@ -60,6 +65,7 @@ describe('POST /api/auth/login', () => {
       email,
       password,
     });
+    expect(createSession).toHaveBeenCalledWith('user_1');
     expect(prisma.user.findUnique).not.toHaveBeenCalled();
     expect(bcrypt.compare).not.toHaveBeenCalled();
   });

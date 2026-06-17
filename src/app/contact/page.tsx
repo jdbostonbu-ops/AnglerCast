@@ -19,6 +19,14 @@ const ContactPage = () => {
           Email AnglerCast at hello@anglercast.app and we will get back to you. Tell us what you
           fish for and where — it helps us improve the recommendations.
         </p>
+
+        <p>
+          Have feedback or a feature request?{' '}
+          <a href="https://tally.so/r/q4N1jk" target="_blank" rel="noopener noreferrer">
+            Share it with us here
+          </a>
+          .
+        </p>
       </main>
     </>
   );

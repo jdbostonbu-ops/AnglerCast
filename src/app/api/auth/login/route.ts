@@ -1,4 +1,5 @@
 import { checkLoginCredentials } from '@/lib/login';
+import { createSession } from '@/lib/session';
 
 type LoginRequestBody = {
   email: string;
@@ -23,6 +24,8 @@ export async function POST(request: Request): Promise<Response> {
   if (!result.isAuthenticated) {
     return Response.json(result, { status: getFailureStatus(result.reason) });
   }
+
+  await createSession(result.user.id);
 
   return Response.json(
     {
