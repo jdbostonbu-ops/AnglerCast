@@ -103,7 +103,7 @@ const SaltwaterPage = () => {
         <h1>Saltwater</h1>
         <p className="hero__sub">
           Search a saltwater location and see the historical sighting record from real public
-          occurrence data — with sample size and confidence, never a guarantee.
+          occurrence data — with sample size and confidence, never a guarantee. 
         </p>
       </section>
 
@@ -111,7 +111,10 @@ const SaltwaterPage = () => {
         <h2>Sighting-rate search</h2>
         <p className="section__lead">
           Select a species on the right, a full-precision latitude and longitude will be populated, and then select a month. Then, click search.The rate and the
-          map come from real occurrence records; the AI only explains the numbers. After it populates, you can save the spot with your own notes.
+          map come from real occurrence records; the AI only explains the numbers. After it populates, you can save the spot with your own notes. <br />We get our data from OBIS. 
+          OBIS stands for the Ocean Biodiversity Information System. It's the marine counterpart to GBIF — an international open-data network, run under UNESCO's 
+          Intergovernmental Oceanographic Commission, that aggregates records of where ocean species have been observed or recorded worldwide. The data comes from 
+          research cruises, tagging studies, museum collections, and monitoring programs.
         </p>
 
         <div className="search-layout">
