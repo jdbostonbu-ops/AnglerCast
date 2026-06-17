@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="fishing.png" width="400" />
+</p>
+
 <div align="center">
 
 # 🎣 AnglerCast
@@ -21,23 +25,23 @@ _Fish move constantly. AnglerCast shows you the historical sighting record from 
 ![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=for-the-badge&logo=leaflet&logoColor=white)
 
 ![Built test-first](https://img.shields.io/badge/built-test--first_(TDD)-cf922c?style=for-the-badge)
-![Tests](https://img.shields.io/badge/tests-75_passing-2D9E4F?style=for-the-badge&logo=vitest&logoColor=white)
-![GitHub stars](https://img.shields.io/github/stars/YOUR_GITHUB_USERNAME/anglercast?style=for-the-badge&logo=github&color=e2a83b)
+![Tests](https://img.shields.io/badge/tests-90_passing-2D9E4F?style=for-the-badge&logo=vitest&logoColor=white)
+![GitHub stars](https://img.shields.io/github/stars/jdbostonbu-ops/AnglerCast?style=for-the-badge&logo=github&color=e2a83b)
 
-**[🌐 Live Site](https://anglercast.fyi)
+**[🌐 Live Site](https://anglercast.fyi)**
 </div>
 
 ---
 
-[👤 Author](https://github.com/jdbostonbu-ops/AnglerCast)
+[👤 Author's Profile](https://github.com/jdbostonbu-ops)
 
 ---
 
 ## 📖 About
 
-**AnglerCast** is a web app for fishermen planning a trip who want to know where and when fish *can* be — not where they're guaranteed to be. Fish are always moving, but anglers and researchers leave a trail of where fish have actually been recorded. AnglerCast turns that real public occurrence data into honest, plain-English guidance.
+**AnglerCast** is a web app with its own domain for fishermen planning a trip who want to know where and when fish *can* be — not where they're guaranteed to be. Fish are always moving, but anglers and researchers leave a trail of where fish have actually been recorded. AnglerCast turns that real public occurrence data into honest, plain-English guidance.
 
-It's split into **Freshwater** and **Saltwater** views, each with live conditions, a map of real recorded occurrences, an honest historical sighting rate, and an AI that *explains* the numbers — it never invents them.
+It's split into **Freshwater** and **Saltwater** views, each with a map of real recorded occurrences, an honest historical sighting rate, and an AI that *explains* the numbers — it never invents them. A separate **Explore** page provides a conditions-aware travel-time tool.
 
 ---
 
@@ -47,7 +51,7 @@ This is the principle the whole app is built around, and it is never violated:
 
 > **Real data computes the facts. The AI explains and assembles — it does not invent.**
 
-- 📌 Locations, fish, months, sighting frequency, sample sizes, and confidence flags are produced by **tested code** from real occurrence data (GBIF, OBIS, USGS).
+- 📌 Locations, fish, months, sighting frequency, sample sizes, and confidence flags are produced by **tested code** from real occurrence data (GBIF and OBIS).
 - 🗣️ The AI (OpenAI) only *phrases* recommendations from facts the code already computed. It **never** invents a location, a species, or a season.
 - 📊 Every rate or recommendation is shown with its **sample size** and a **high/low confidence flag**.
 - 🚫 There is **never** a fabricated "catch probability." The app shows where fish *have been recorded* — never a guarantee of where they are now.
@@ -74,7 +78,7 @@ The rules that kept it honest:
 - 🔒 **External calls are mocked in every unit test** — GBIF, OBIS, Open-Meteo, USGS, OpenAI, Prisma/Neon, and Resend email. Unit tests never hit the real network or database.
 - 🧩 **Pure, tested seams.** Core logic lives in small closure-based functions (e.g. `computeSightingRate`, `verifyEmailVerificationCode`, `checkLoginCredentials`) that are tested directly. Route handlers wire those seams together; UI is eyeball-verified on top of green logic.
 - 📒 **Two ledgers.** Every cycle is recorded in [`TESTING.md`](./TESTING.md) (the RED plan) and [`RESULTS.md`](./RESULTS.md) (the RED → GREEN outcomes).
-- ✅ **The result:** a full Vitest suite of **75 passing unit, component, and integration tests** across 34 files, with a clean `typecheck`.
+- ✅ **The result:** a full Vitest suite of **90 passing** unit, component, and integration tests across 40 files, with a clean `typecheck`.
 
 > Strict TypeScript throughout — **no `any`**, no `var`, closure-based arrow functions, factory functions over classes (except Next.js route handlers).
 
@@ -90,7 +94,7 @@ Built in this order, each test-first:
 - [x] 🗑️ **Delete confirmation dialog** — no accidental deletes
 - [x] 🗄️ **Prisma + Neon live database** — accounts and spots persist
 - [x] 🎯 **Coordinate precision fix** — full decimal precision, never truncated
-- [x] 🧭 **Nav bar** — Freshwater · Saltwater · About · Contact, with logout
+- [x] 🧭 **Nav bar** — Freshwater · Saltwater · Explore · Contact, with logout
 - [x] 🏠 **Post-login home** — two-button entry to Fresh / Salt
 - [x] 🛬 **Landing page** — rugged outdoor feel
 - [x] 🎣 **Recommendation feature** — real fish + real location + best month, AI-phrased
@@ -123,10 +127,10 @@ Every fact comes from a real source. The AI explains and assembles; it does not 
 | Source | Key | Role |
 |---|---|---|
 | **GBIF Occurrence** | keyless | Historical species occurrences worldwide (primary) |
-| **OBIS Occurrence** | keyless | Marine occurrence records (Darwin Core), labeled separately |
-| **Open-Meteo Marine** | keyless | Saltwater / ocean conditions |
-| **Open-Meteo Forecast** | keyless | Freshwater / inland conditions |
-| **USGS** | keyless | Fish life-history facts that enrich the AI explanation |
+| **OBIS Occurrence** | keyless | Marine occurrence records (Darwin Core), merged with GBIF |
+| **Open-Meteo Marine** | keyless | Saltwater / ocean conditions (waves, swell, currents) |
+| **Open-Meteo Forecast** | keyless | Wind and weather conditions (both water types) |
+| **USGS** | keyless | Live water conditions (streamflow, gage height, water temperature) near the location |
 | **OpenAI** `gpt-4o-mini` | key | Explains conditions, phrases recommendations, computes travel-time |
 
 ---
@@ -231,9 +235,22 @@ It's always shown with:
 
 ---
 
+## ⛵ Travel Time (Explore)
+
+The **Explore** page is a conditions-aware travel-time tool. A fisherman enters their **origin** coordinates, their **destination** coordinates (the fishing spot), their **boat speed in knots**, and the **water type**. AnglerCast then:
+
+- 📐 computes the distance from the full-precision coordinates (haversine, in nautical miles),
+- 🌊 fetches real conditions at the destination — **Open-Meteo Marine + Forecast** for saltwater, **USGS + Open-Meteo Forecast** for freshwater,
+- 🧠 asks the AI to estimate a conditions-aware **ETA** and explain the conditions in plain English, and
+- 🚦 guards the AI's number with a **sanity check** that rejects an impossible ETA.
+
+The result shows the ETA, the distance, the AI's explanation, and the raw conditions it was computed from — so you always see what the estimate is based on.
+
+---
+
 ## 🔄 Live Weekly Updates
 
-The home page's "Top recorded spots this season" cards are computed **live from real GBIF occurrence records** — each card surfaces the dominant month, the rate, the sample size, and a confidence flag, and the data is **refreshed weekly**. Nothing is hard-coded or invented.
+The home page's "Top recorded spots this season" cards are computed **live from real GBIF + OBIS occurrence records** — each card surfaces the dominant month, the rate, the sample size, and a confidence flag, and the data is **refreshed weekly**. Nothing is hard-coded or invented.
 
 ---
 
@@ -249,8 +266,8 @@ The home page's "Top recorded spots this season" cards are computed **live from 
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/YOUR_GITHUB_USERNAME/anglercast.git
-cd anglercast
+git clone https://github.com/jdbostonbu-ops/AnglerCast.git
+cd AnglerCast
 
 # 2. Install dependencies
 npm install
@@ -299,7 +316,7 @@ Tried AnglerCast out on the water (or at your desk)? I'd genuinely love to hear 
 
 **Jacqueline Delgado**
 
-🔗 **Repository:** [github.com/YOUR_GITHUB_USERNAME/anglercast](https://github.com/YOUR_GITHUB_USERNAME/anglercast)
+🔗 **Repository:** [github.com/jdbostonbu-ops/AnglerCast](https://github.com/jdbostonbu-ops/AnglerCast)
 🌐 **Live site:** [anglercast.fyi](https://anglercast.fyi)
 
 ---
@@ -308,7 +325,7 @@ Tried AnglerCast out on the water (or at your desk)? I'd genuinely love to hear 
 
 If AnglerCast is useful to you — or you just appreciate honest-data engineering and a fully test-first build — **please give it a star.** It genuinely helps. 🎣
 
-### ⭐ **[Star AnglerCast on GitHub](https://github.com/YOUR_GITHUB_USERNAME/anglercast)** ⭐
+### ⭐ **[Star AnglerCast on GitHub](https://github.com/jdbostonbu-ops/AnglerCast)** ⭐
 
 <div align="center">
 
