@@ -69,6 +69,9 @@ const SignupPage = () => {
             {isSubmitting ? 'Creating account…' : 'Sign up'}
           </button>
         </form>
+        <p className="auth-form__alt">
+          Already have an account? <a href="/login">Log in</a>
+        </p>
       </main>
     </>
   );
