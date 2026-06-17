@@ -189,7 +189,7 @@ A logged-in angler can save the places they care about:
 
 - ➕ **Create** a spot with a name, coordinates, species, water type, and optional notes.
 - 📋 **Read** — see a list of *your own* saved spots (and only yours).
-- ✏️ **Update** — rename a spot or edit its notes; the change persists.
+- ✏️ **Update** — No updates on the cards
 - 🗑️ **Delete** — behind a confirmation dialog (below).
 
 Coordinates are stored exactly as entered — **at full precision, never rounded.**
