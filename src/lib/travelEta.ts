@@ -2,11 +2,16 @@ type ExplainTravelEtaInput = {
   distanceNauticalMiles: number;
   speedKnots: number;
   conditions: Record<string, unknown>;
+  locationSpecies: {
+    scientificName: string;
+    recordCount: number;
+  }[];
 };
 
 type TravelEtaExplanation = {
   etaHours: number;
   explanation: string;
+  locationSummary: string;
 };
 
 type OpenAIChatCompletionResponse = {
@@ -21,6 +26,7 @@ export const explainTravelEta = async ({
   distanceNauticalMiles,
   speedKnots,
   conditions,
+  locationSpecies,
 }: ExplainTravelEtaInput): Promise<TravelEtaExplanation> => {
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -34,7 +40,7 @@ export const explainTravelEta = async ({
         {
           role: 'system',
           content:
-            'Act as an honest fishing and boating guide. Compute a conditions-aware ETA in hours from the provided distance, speed, and conditions. Only use the numbers provided and never invent data. Respond ONLY with a JSON object of the form {"etaHours": number, "explanation": string}.',
+            'Act as an honest fishing and boating guide. Compute a conditions-aware ETA in hours from the provided distance, speed, and conditions. Also write a brief plain-English locationSummary paragraph describing which fish species have historically been recorded at the destination, based only on the provided locationSpecies data. Only use the numbers and species provided and never invent data or species. Respond ONLY with a JSON object of the form {"etaHours": number, "explanation": string, "locationSummary": string}.',
         },
         {
           role: 'user',
@@ -42,6 +48,7 @@ export const explainTravelEta = async ({
             distanceNauticalMiles,
             speedKnots,
             conditions,
+            locationSpecies,
           }),
         },
       ],
@@ -55,5 +62,6 @@ export const explainTravelEta = async ({
   return {
     etaHours: parsed.etaHours,
     explanation: parsed.explanation,
+    locationSummary: parsed.locationSummary,
   };
 };
