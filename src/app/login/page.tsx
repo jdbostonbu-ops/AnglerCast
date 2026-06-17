@@ -46,7 +46,7 @@ const LoginPage = () => {
     <>
       <NavBar />
 
-      <section className="hero hero--about">
+      <section className="hero hero--login">
         <p className="hero__eyebrow">Welcome back</p>
         <h1>Log in</h1>
         <p className="hero__sub">
