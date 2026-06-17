@@ -1,6 +1,7 @@
 import { checkEtaIsReasonable } from '@/lib/eta';
 import { computeDistance } from '@/lib/distance';
 import { fetchForecastConditions } from '@/lib/forecastConditions';
+import { fetchSpeciesAtLocation } from '@/lib/locationSpecies';
 import { fetchMarineConditions } from '@/lib/marineConditions';
 import { explainTravelEta } from '@/lib/travelEta';
 import { fetchUsgsWaterConditions } from '@/lib/usgsWaterConditions';
@@ -32,6 +33,7 @@ export async function POST(request: Request): Promise<Response> {
     destination,
   });
   const forecast = await fetchForecastConditions(destination);
+  const locationSpecies = await fetchSpeciesAtLocation(destination);
   const conditions: Record<string, unknown> =
     waterType === 'saltwater'
       ? {
@@ -60,6 +62,7 @@ export async function POST(request: Request): Promise<Response> {
       explanation,
       conditions,
       reasonableness,
+      locationSpecies,
     },
     { status: 200 },
   );
