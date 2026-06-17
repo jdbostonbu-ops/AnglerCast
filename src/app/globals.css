@@ -613,3 +613,16 @@ a {
   color: #E07A22;
   font-size: 0.9rem;
 }
+
+.auth-form__alt {
+  margin-top: 16px;
+  max-width: 420px;
+  text-align: center;
+  color: #EAF1F8;
+  font-size: 0.9rem;
+}
+
+.auth-form__alt a {
+  color: #E8B04B;
+  text-decoration: underline;
+}
