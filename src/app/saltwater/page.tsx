@@ -110,8 +110,8 @@ const SaltwaterPage = () => {
       <main className="section">
         <h2>Sighting-rate search</h2>
         <p className="section__lead">
-          Enter a species, a full-precision latitude and longitude, and a month. The rate and the
-          map come from real occurrence records; the AI only explains the numbers.
+          Select a species on the right, a full-precision latitude and longitude will be populated, and then select a month. Then, click search.The rate and the
+          map come from real occurrence records; the AI only explains the numbers. After it populates, you can save the spot with your own notes.
         </p>
 
         <div className="search-layout">
