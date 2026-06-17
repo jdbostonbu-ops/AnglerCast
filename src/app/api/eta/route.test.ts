@@ -71,6 +71,7 @@ describe('POST /api/eta', () => {
     explainTravelEtaMock.mockResolvedValueOnce({
       etaHours: 1.2,
       explanation: 'Choppy with a stiff wind; roughly an hour and ten.',
+      locationSummary: 'Cod and pollock are the most-recorded species here.',
     });
     checkEtaIsReasonableMock.mockReturnValueOnce(reasonableness);
 
@@ -99,6 +100,7 @@ describe('POST /api/eta', () => {
       conditions,
       reasonableness,
       locationSpecies,
+      locationSummary: 'Cod and pollock are the most-recorded species here.',
     });
     expect(computeDistanceMock).toHaveBeenCalledWith({
       origin: { latitude: 41.0, longitude: -71.5 },
@@ -111,6 +113,7 @@ describe('POST /api/eta', () => {
       distanceNauticalMiles: 15.5,
       speedKnots: 18,
       conditions,
+      locationSpecies,
     });
     expect(checkEtaIsReasonableMock).toHaveBeenCalledWith({
       etaHours: 1.2,
