@@ -19,6 +19,7 @@ type EtaResult = {
   etaHours: number;
   explanation: string;
   locationSummary: string;
+  tideSummary: string;
   conditions: {
     marine: {
       waveHeight: number;
@@ -99,16 +100,21 @@ const ExplorePage = () => {
           a confidence flag every time, so you can judge it for yourself.
         </p>
         <p className="section__lead">
-          The numbers come from real data — GBIF and OBIS occurrence records, Open-Meteo conditions,
-          and USGS water conditions. Our code computes every figure. The AI only explains the
-          results in plain English; it never invents a location, a species, or a season.
+          The numbers come from real data — GBIF (Global Biodiversity Information Facility) and 
+          OBIS (Ocean Biodiversity Information System) occurrence records for species history, Open-Meteo 
+          Marine and Forecast for wave, current, and wind conditions, USGS (U.S. Geological Survey) for 
+          live water conditions, and NOAA CO-OPS (National Oceanic and Atmospheric Administration, Center 
+          for Operational Oceanographic Products and Services) for high and low tide predictions. Our code 
+          computes every figure. The AI only explains the results in plain English; it never invents a 
+          location, a species, a season, or a tide.
         </p>
 
         <h2>Travel-time tool</h2>
         <p className="section__lead">
-          Enter your origin, destination, speed, and water type. AnglerCast computes the distance
-          from your full-precision coordinates, fetches current conditions, and asks the AI to
-          estimate a conditions-aware ETA from those facts.
+          Enter your origin, destination, speed, and water type. AnglerCast computes the distance from your 
+          full-precision coordinates using the haversine formula and fetches current conditions, then asks 
+          the AI to estimate a conditions-aware ETA from those facts — the travel-time figure is the AI's 
+          estimate, while the distance and conditions are real measured data.
         </p>
 
         <form className="search-card" onSubmit={handleSubmit}>
@@ -222,6 +228,8 @@ const ExplorePage = () => {
               <article className="spot-card">
               <h3>What's been recorded here</h3>
               <p className="disclaimer">{result.locationSummary}</p>
+              <h3>Tide Summary</h3>
+              <p className="disclaimer">{result.tideSummary}</p>
             </article>
           </div>
         ) : null}

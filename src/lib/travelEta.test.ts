@@ -7,7 +7,7 @@ describe('explainTravelEta', () => {
   });
 
   it('asks OpenAI to estimate travel ETA from provided distance, speed, and conditions', async () => {
-      const content =
+    const content =
       '{"etaHours": 2.5, "explanation": "Calm seas, about two and a half hours.", "locationSummary": "Striped bass and bluefish are the most-recorded species here.", "tideSummary": "High tide at 12:47 PM; low tide at 7:12 PM. Best fishing is around high tide."}';
     const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
       ok: true,

@@ -126,12 +126,13 @@ Every fact comes from a real source. The AI explains and assembles; it does not 
 
 | Source | Key | Role |
 |---|---|---|
-| **GBIF Occurrence** | keyless | Historical species occurrences worldwide (primary) |
-| **OBIS Occurrence** | keyless | Marine occurrence records (Darwin Core), merged with GBIF |
+| **GBIF Occurrence** (Global Biodiversity Information Facility) | keyless | Historical species occurrences worldwide (primary) |
+| **OBIS Occurrence** (Ocean Biodiversity Information System) | keyless | Marine occurrence records (Darwin Core), merged with GBIF |
 | **Open-Meteo Marine** | keyless | Saltwater / ocean conditions (waves, swell, currents) |
 | **Open-Meteo Forecast** | keyless | Wind and weather conditions (both water types) |
-| **USGS** | keyless | Live water conditions (streamflow, gage height, water temperature) near the location |
-| **OpenAI** `gpt-4o-mini` | key | Explains conditions, phrases recommendations, computes travel-time |
+| **USGS** (U.S. Geological Survey) | keyless | Live water conditions (streamflow, gage height, water temperature) near the location |
+| **NOAA CO-OPS** (National Oceanic and Atmospheric Administration, Center for Operational Oceanographic Products and Services) | keyless | High and low tide predictions for the nearest coastal station (saltwater) |
+| **OpenAI** `gpt-4o-mini` | key | Explains conditions and phrases the ETA, species, and tide summaries in plain English |
 
 ---
 
