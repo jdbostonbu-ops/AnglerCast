@@ -83,6 +83,7 @@ describe('POST /api/eta', () => {
       etaHours: 1.2,
       explanation: 'Choppy with a stiff wind; roughly an hour and ten.',
       locationSummary: 'Cod and pollock are the most-recorded species here.',
+      tideSummary: 'High tide at 12:47 PM; low tide at 7:12 PM.',
     });
     checkEtaIsReasonableMock.mockReturnValueOnce(reasonableness);
 
@@ -113,6 +114,7 @@ describe('POST /api/eta', () => {
       locationSpecies,
       locationSummary: 'Cod and pollock are the most-recorded species here.',
       tides,
+      tideSummary: 'High tide at 12:47 PM; low tide at 7:12 PM.',
     });
     expect(computeDistanceMock).toHaveBeenCalledWith({
       origin: { latitude: 41.0, longitude: -71.5 },
@@ -134,6 +136,7 @@ describe('POST /api/eta', () => {
       speedKnots: 18,
       conditions,
       locationSpecies,
+      tides,
     });
     expect(checkEtaIsReasonableMock).toHaveBeenCalledWith({
       etaHours: 1.2,
