@@ -33,7 +33,11 @@ export async function POST(request: Request): Promise<Response> {
     destination,
   });
   const forecast = await fetchForecastConditions(destination);
-  const locationSpecies = await fetchSpeciesAtLocation(destination);
+  const locationSpecies = await fetchSpeciesAtLocation({
+    latitude: destination.latitude,
+    longitude: destination.longitude,
+    waterType,
+  });
   const conditions: Record<string, unknown> =
     waterType === 'saltwater'
       ? {
