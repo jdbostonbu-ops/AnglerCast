@@ -22,7 +22,7 @@ type NoaaPrediction = {
 };
 
 type NoaaTideResponse = {
-  predictions: NoaaPrediction[];
+  predictions?: NoaaPrediction[];
 };
 
 const tideStations: TideStation[] = [
@@ -77,8 +77,9 @@ export const fetchTidePredictions = async ({
     `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?${searchParams}`,
   );
   const tideResponse = (await response.json()) as NoaaTideResponse;
+  const predictions = Array.isArray(tideResponse.predictions) ? tideResponse.predictions : [];
 
-  return tideResponse.predictions.map((prediction) => ({
+  return predictions.map((prediction) => ({
     time: prediction.t,
     heightFeet: Number(prediction.v),
     type: prediction.type === 'H' ? 'high' : 'low',
