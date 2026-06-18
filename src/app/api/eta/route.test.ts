@@ -108,7 +108,11 @@ describe('POST /api/eta', () => {
     });
     expect(fetchMarineConditionsMock).toHaveBeenCalledWith(destination);
     expect(fetchForecastConditionsMock).toHaveBeenCalledWith(destination);
-    expect(fetchSpeciesAtLocationMock).toHaveBeenCalledWith(destination);
+    expect(fetchSpeciesAtLocationMock).toHaveBeenCalledWith({
+      latitude: destination.latitude,
+      longitude: destination.longitude,
+      waterType: 'saltwater',
+    });
     expect(explainTravelEtaMock).toHaveBeenCalledWith({
       distanceNauticalMiles: 15.5,
       speedKnots: 18,
