@@ -18,6 +18,7 @@ type EtaResult = {
   distanceNauticalMiles: number;
   etaHours: number;
   explanation: string;
+  locationSummary: string;
   conditions: Record<string, unknown>;
   reasonableness: EtaReasonableness;
 };
@@ -202,6 +203,10 @@ const ExplorePage = () => {
               </pre>
             </article>
             <p className="disclaimer">{result.explanation}</p>
+            <div className="spot-card" style={{ marginTop: '24px' }}>
+              <h3>What's been recorded here</h3>
+              <p>{result.locationSummary}</p>
+            </div>
           </div>
         ) : null}
 
