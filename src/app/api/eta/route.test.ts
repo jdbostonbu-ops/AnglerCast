@@ -7,6 +7,7 @@ const fetchForecastConditionsMock = vi.hoisted(() => vi.fn());
 const explainTravelEtaMock = vi.hoisted(() => vi.fn());
 const checkEtaIsReasonableMock = vi.hoisted(() => vi.fn());
 const fetchSpeciesAtLocationMock = vi.hoisted(() => vi.fn());
+const fetchTidePredictionsMock = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/distance', () => ({
   computeDistance: computeDistanceMock,
@@ -30,6 +31,10 @@ vi.mock('@/lib/eta', () => ({
 
 vi.mock('@/lib/locationSpecies', () => ({
   fetchSpeciesAtLocation: fetchSpeciesAtLocationMock,
+}));
+
+vi.mock('@/lib/tideConditions', () => ({
+  fetchTidePredictions: fetchTidePredictionsMock,
 }));
 
 describe('POST /api/eta', () => {
@@ -64,8 +69,14 @@ describe('POST /api/eta', () => {
       { scientificName: 'Pollachius virens', recordCount: 820 },
     ];
 
+    const tides = [
+      { time: '2026-06-18 12:47', heightFeet: 2.83, type: 'high' as const },
+      { time: '2026-06-18 19:12', heightFeet: 0.299, type: 'low' as const },
+    ];
+
     computeDistanceMock.mockReturnValueOnce(15.5);
     fetchSpeciesAtLocationMock.mockResolvedValueOnce(locationSpecies);
+    fetchTidePredictionsMock.mockResolvedValueOnce(tides);
     fetchMarineConditionsMock.mockResolvedValueOnce(marineConditions);
     fetchForecastConditionsMock.mockResolvedValueOnce(forecastConditions);
     explainTravelEtaMock.mockResolvedValueOnce({
@@ -101,6 +112,7 @@ describe('POST /api/eta', () => {
       reasonableness,
       locationSpecies,
       locationSummary: 'Cod and pollock are the most-recorded species here.',
+      tides,
     });
     expect(computeDistanceMock).toHaveBeenCalledWith({
       origin: { latitude: 41.0, longitude: -71.5 },
@@ -112,6 +124,10 @@ describe('POST /api/eta', () => {
       latitude: destination.latitude,
       longitude: destination.longitude,
       waterType: 'saltwater',
+    });
+    expect(fetchTidePredictionsMock).toHaveBeenCalledWith({
+      latitude: destination.latitude,
+      longitude: destination.longitude,
     });
     expect(explainTravelEtaMock).toHaveBeenCalledWith({
       distanceNauticalMiles: 15.5,
