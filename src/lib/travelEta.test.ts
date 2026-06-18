@@ -7,8 +7,8 @@ describe('explainTravelEta', () => {
   });
 
   it('asks OpenAI to estimate travel ETA from provided distance, speed, and conditions', async () => {
-    const content =
-      '{"etaHours": 2.5, "explanation": "Calm seas, about two and a half hours.", "locationSummary": "Striped bass and bluefish are the most-recorded species here."}';
+      const content =
+      '{"etaHours": 2.5, "explanation": "Calm seas, about two and a half hours.", "locationSummary": "Striped bass and bluefish are the most-recorded species here.", "tideSummary": "High tide at 12:47 PM; low tide at 7:12 PM. Best fishing is around high tide."}';
     const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
       ok: true,
       json: async () => ({
@@ -36,6 +36,10 @@ describe('explainTravelEta', () => {
         { scientificName: 'Morone saxatilis', recordCount: 1200 },
         { scientificName: 'Pomatomus saltatrix', recordCount: 640 },
       ],
+       tides: [
+        { time: '2026-06-18 12:47', heightFeet: 2.83, type: 'high' },
+        { time: '2026-06-18 19:12', heightFeet: 0.299, type: 'low' },
+      ],
     });
 
     expect(fetchMock).toHaveBeenCalledWith(
@@ -52,6 +56,7 @@ describe('explainTravelEta', () => {
 
     expect(requestBodyText).toContain('25');
     expect(requestBodyText).toContain('Morone saxatilis');
+    expect(requestBodyText).toContain('12:47');
     expect(requestBodyText).toContain('10');
     expect(requestBodyText).toContain('0.8');
     expect(requestBodyText).toContain('6');
@@ -60,6 +65,7 @@ describe('explainTravelEta', () => {
       etaHours: 2.5,
       explanation: 'Calm seas, about two and a half hours.',
       locationSummary: 'Striped bass and bluefish are the most-recorded species here.',
+      tideSummary: 'High tide at 12:47 PM; low tide at 7:12 PM. Best fishing is around high tide.',
     });
   });
 });
