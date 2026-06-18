@@ -14,6 +14,18 @@ describe('checkEtaIsReasonable', () => {
     });
   });
 
+it('returns valid when the ETA is essentially the expected time but rounded slightly down', () => {
+    expect(
+      checkEtaIsReasonable({
+        etaHours: 1.8,
+        distanceNauticalMiles: 54.07,
+        speedKnots: 30,
+      }),
+    ).toEqual({
+      isReasonable: true,
+    });
+  });
+
   it('rejects a negative or zero ETA with a clear reason', () => {
     expect(
       checkEtaIsReasonable({
