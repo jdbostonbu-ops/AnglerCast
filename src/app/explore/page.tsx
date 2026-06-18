@@ -19,7 +19,19 @@ type EtaResult = {
   etaHours: number;
   explanation: string;
   locationSummary: string;
-  conditions: Record<string, unknown>;
+  conditions: {
+    marine: {
+      waveHeight: number;
+      waveDirection: number;
+      wavePeriod: number;
+      oceanCurrentVelocity: number;
+    };
+    forecast: {
+      windSpeed: number;
+      windDirection: number;
+      windGusts: number;
+    };
+  };
   reasonableness: EtaReasonableness;
 };
 
@@ -175,8 +187,9 @@ const ExplorePage = () => {
         {errorMessage ? <p className="disclaimer">{errorMessage}</p> : null}
 
         {result ? (
-          <div className="spot-cards" style={{ marginTop: '24px' }}>
+         <div className="spot-cards" style={{ marginTop: '24px' }}>
             <article className="spot-card">
+              <h3>Estimated Travel Time</h3>
               <div className="spot-card__rate">
                 {result.etaHours}
                 <small> hours estimated travel time</small>
@@ -191,22 +204,25 @@ const ExplorePage = () => {
               </div>
               {!result.reasonableness.isReasonable ? (
                 <p className="disclaimer">
-                  This estimate may not be reliable — please double-check your inputs.:{' '}
-                  {result.reasonableness.reason}. Treat it as unreliable.
+                  This estimate may not be reliable — please double-check your inputs. Treat it as unreliable.
                 </p>
               ) : null}
+              <p className="disclaimer">{result.explanation}</p>
+              <h3>Conditions used</h3>
+              <p>
+                Wave height {result.conditions.marine.waveHeight} m, wave direction{' '}
+                {result.conditions.marine.waveDirection}°, wave period{' '}
+                {result.conditions.marine.wavePeriod} s, ocean current{' '}
+                {result.conditions.marine.oceanCurrentVelocity} m/s. Wind speed{' '}
+                {result.conditions.forecast.windSpeed} km/h, wind direction{' '}
+                {result.conditions.forecast.windDirection}°, wind gusts{' '}
+                {result.conditions.forecast.windGusts} km/h.
+                </p>
             </article>
-            <article className="spot-card">
-              <div className="spot-card__species">Conditions used</div>
-              <pre className="spot-card__loc" style={{ whiteSpace: 'pre-wrap' }}>
-                {JSON.stringify(result.conditions, null, 2)}
-              </pre>
-            </article>
-            <p className="disclaimer">{result.explanation}</p>
-            <div className="spot-card" style={{ marginTop: '24px' }}>
+              <article className="spot-card">
               <h3>What's been recorded here</h3>
-              <p>{result.locationSummary}</p>
-            </div>
+              <p className="disclaimer">{result.locationSummary}</p>
+            </article>
           </div>
         ) : null}
 
