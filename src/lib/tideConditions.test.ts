@@ -38,4 +38,18 @@ describe('fetchTidePredictions', () => {
       { time: '2026-06-18 19:12', heightFeet: 0.299, type: 'low' },
     ]);
   });
+
+  it('returns an empty array when NOAA returns no predictions', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      json: async () => ({}),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await fetchTidePredictions({
+      latitude: 41.36,
+      longitude: -72.09,
+    });
+
+    expect(result).toEqual([]);
+  });
 });
