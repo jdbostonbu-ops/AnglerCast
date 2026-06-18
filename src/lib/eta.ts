@@ -31,7 +31,7 @@ export const checkEtaIsReasonable = ({
     };
   }
 
-  if (etaHours < expectedEtaHours || etaHours > expectedEtaHours * 3) {
+  if (etaHours < expectedEtaHours * 0.5 || etaHours > expectedEtaHours * 3) {
     return {
       isReasonable: false,
       reason: 'implausible_eta',
