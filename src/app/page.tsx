@@ -87,7 +87,7 @@ const HomePage = async () => {
       </main>
 
       <footer className="site-footer">
-        AnglerCast · Real occurrence data from GBIF, OBIS, Open-Meteo, FishBase · AI explains, never
+        AnglerCast · Real occurrence data from GBIF, OBIS, Open-Meteo, USGS · NOAA · AI explains, never
         invents
       </footer>
     </>
