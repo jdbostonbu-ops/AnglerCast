@@ -25,7 +25,7 @@ _Fish move constantly. AnglerCast shows you the historical sighting record from 
 ![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=for-the-badge&logo=leaflet&logoColor=white)
 
 ![Built test-first](https://img.shields.io/badge/built-test--first_(TDD)-cf922c?style=for-the-badge)
-![Tests](https://img.shields.io/badge/tests-90_passing-2D9E4F?style=for-the-badge&logo=vitest&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-94_passing-2D9E4F?style=for-the-badge&logo=vitest&logoColor=white)
 ![GitHub stars](https://img.shields.io/github/stars/jdbostonbu-ops/AnglerCast?style=for-the-badge&logo=github&color=e2a83b)
 
 **[🌐 Live Site](https://anglercast.fyi)**
@@ -75,10 +75,10 @@ AnglerCast was built **test-first, end to end.** Every behavior followed the sam
 The rules that kept it honest:
 
 - 🧱 **Test-first, always.** No implementation exists before a failing test does.
-- 🔒 **External calls are mocked in every unit test** — GBIF, OBIS, Open-Meteo, USGS, OpenAI, Prisma/Neon, and Resend email. Unit tests never hit the real network or database.
+- 🔒 **External calls are mocked in every unit test** — GBIF, OBIS, NOAA, Open-Meteo, USGS, OpenAI, Prisma/Neon, and Resend email. Unit tests never hit the real network or database.
 - 🧩 **Pure, tested seams.** Core logic lives in small closure-based functions (e.g. `computeSightingRate`, `verifyEmailVerificationCode`, `checkLoginCredentials`) that are tested directly. Route handlers wire those seams together; UI is eyeball-verified on top of green logic.
 - 📒 **Two ledgers.** Every cycle is recorded in [`TESTING.md`](./TESTING.md) (the RED plan) and [`RESULTS.md`](./RESULTS.md) (the RED → GREEN outcomes).
-- ✅ **The result:** a full Vitest suite of **90 passing** unit, component, and integration tests across 40 files, with a clean `typecheck`.
+- ✅ **The result:** a full Vitest suite of **94 passing** unit, component, and integration tests across 42 files, with a clean `typecheck`.
 
 > Strict TypeScript throughout — **no `any`**, no `var`, closure-based arrow functions, factory functions over classes (except Next.js route handlers).
 
