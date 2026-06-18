@@ -72,6 +72,8 @@ AnglerCast was built **test-first, end to end.** Every behavior followed the sam
 5. 🔁 repeat →  One test at a time. Never weaken or delete a test to pass.
 ```
 
+> Test-first, provable. AnglerCast was built test-first. For most features, the failing test (RED) was committed before its implementation (GREEN) as a separate commit — so the discipline is verifiable in git history, not just claimed. You can check out any RED commit and run the test to watch it fail because the implementation doesn't exist yet. For example, at commit 604735b the OBIS fetch test imports a module that hasn't been written, so the suite fails to resolve it — RED by construction. A few early features were committed in batches rather than separate RED/GREEN steps; for those, the red-first cycle is recorded in RESULTS.md. The full sequence of RED commits is visible by filtering the log: git log --oneline | grep "test:".
+
 The rules that kept it honest:
 
 - 🧱 **Test-first, always.** No implementation exists before a failing test does.
