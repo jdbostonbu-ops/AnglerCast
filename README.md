@@ -61,7 +61,7 @@ This is the principle the whole app is built around, and it is never violated:
 
 ## 🧪 Test-Driven Development
 
-AnglerCast was built **test-first, end to end.** Every behavior followed the same disciplined cycle:
+AnglerCast was built test-first. Most features followed the same disciplined cycle:
 
 ```
 1. 🔴 RED    →  Write a failing test first. Run it. Confirm it fails for the
