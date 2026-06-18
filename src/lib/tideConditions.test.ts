@@ -31,6 +31,10 @@ describe('fetchTidePredictions', () => {
     expect(fetchMock).toHaveBeenCalledWith(
       expect.stringContaining('station=8461490'),
     );
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining('date=today'),
+    );
+    
     expect(result).toEqual([
       { time: '2026-06-18 00:14', heightFeet: 3.431, type: 'high' },
       { time: '2026-06-18 06:59', heightFeet: -0.111, type: 'low' },
