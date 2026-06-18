@@ -3,6 +3,7 @@ import { computeDistance } from '@/lib/distance';
 import { fetchForecastConditions } from '@/lib/forecastConditions';
 import { fetchSpeciesAtLocation } from '@/lib/locationSpecies';
 import { fetchMarineConditions } from '@/lib/marineConditions';
+import { fetchTidePredictions } from '@/lib/tideConditions';
 import { explainTravelEta } from '@/lib/travelEta';
 import { fetchUsgsWaterConditions } from '@/lib/usgsWaterConditions';
 
@@ -38,6 +39,7 @@ export async function POST(request: Request): Promise<Response> {
     longitude: destination.longitude,
     waterType,
   });
+  const tides = waterType === 'saltwater' ? await fetchTidePredictions(destination) : [];
   const conditions: Record<string, unknown> =
     waterType === 'saltwater'
       ? {
@@ -69,6 +71,7 @@ export async function POST(request: Request): Promise<Response> {
       reasonableness,
       locationSpecies,
       locationSummary,
+      tides,
     },
     { status: 200 },
   );
