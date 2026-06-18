@@ -75,6 +75,8 @@ export const fetchTidePredictions = async ({
     format: 'json',
     units: 'english',
     datum: 'MLLW',
+    date: 'today',
+    time_zone: 'lst_ldt',
     station: nearestStation.id,
   });
   const response = await fetch(
