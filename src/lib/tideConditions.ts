@@ -27,6 +27,10 @@ type NoaaTideResponse = {
 
 const tideStations: TideStation[] = [
   { id: '8461490', latitude: 41.355, longitude: -72.09 },
+  { id: '8510560', latitude: 41.0483, longitude: -71.9594 },
+  { id: '8518750', latitude: 40.7006, longitude: -74.0142 },
+  { id: '8443970', latitude: 42.3539, longitude: -71.0503 },
+  { id: '8723214', latitude: 25.7314, longitude: -80.1617 },
 ];
 
 const coordinateDistance = ({
