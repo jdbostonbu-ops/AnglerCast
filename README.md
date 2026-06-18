@@ -141,6 +141,15 @@ The AI is strictly an **explanation and assembly** layer, powered by `gpt-4o-min
 
 ---
 
+## Try these on the Explore page:
+
+Off Fort Lauderdale (Atlantic): 26.1000, -80.0500
+Off Key West (Atlantic side): 24.5000, -81.8000
+Gulf of Mexico, off Tampa: 27.7000, -83.0000
+Off Naples (Gulf): 26.1000, -81.9000
+
+---
+
 ## 🗄️ Database — Neon Postgres + Prisma
 
 Accounts and saved spots live in a real **PostgreSQL** database on **Neon** (serverless, accessed over a pooled connection in production), through the **Prisma** ORM.
