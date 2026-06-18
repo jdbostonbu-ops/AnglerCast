@@ -352,12 +352,12 @@ a {
 .hero--saltwater {
   background-image:
     linear-gradient(180deg, rgba(11, 31, 51, 0.55) 0%, rgba(11, 31, 51, 0.82) 100%),
-    url("https://media.istockphoto.com/id/157481615/photo/ocean-fishing-reels-on-a-boat-in-the-ocean.jpg?s=1024x1024&w=is&k=20&c=MYU4UstJ95Ar0Qib-80p5yOsfzbGa1xik-wm0sVff9I=");
+    url("https://images.unsplash.com/photo-1625183656263-171183307b15?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
 }
 
 
 /* About page hero image */
-.hero--about {
+.hero--explore {
   background-image:
     linear-gradient(180deg, rgba(11, 31, 51, 0.55) 0%, rgba(11, 31, 51, 0.82) 100%),
     url("https://images.unsplash.com/photo-1551131618-3f0a5cf594b4?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
