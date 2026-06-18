@@ -52,11 +52,11 @@ const HomePage = async () => {
       </section>
 
       <main className="section">
-        <h2>Top recorded spots this season</h2>
+        <h2>Top recorded spots by season</h2>
         <p className="section__lead">
-          Each card is computed live from real GBIF occurrence records — the month shown is the one
-          with the highest share of historical sightings, with its sample size and confidence.
-          Refreshed weekly.
+          Each card is computed live from real GBIF and OBIS occurrence records — the month 
+          shown is the one with the highest share of historical sightings, with its sample 
+          size and confidence. Refreshed weekly.
         </p>
 
         <div className="spot-cards">
