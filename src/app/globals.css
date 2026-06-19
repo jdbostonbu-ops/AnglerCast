@@ -210,6 +210,10 @@ a {
   max-width: 620px;
 }
 
+.contact-email {
+  color: var(--color-text-light);
+}
+
 /* ---- Spot cards ---- */
 .spot-cards {
   display: grid;
