@@ -22,6 +22,9 @@ export async function POST(request: Request): Promise<Response> {
     records: occurrences,
     selectedMonth: month,
   });
+  const occurrencesForSelectedMonth = occurrences.filter(
+    ({ eventDate }) => new Date(eventDate).getUTCMonth() + 1 === month,
+  );
   const explanation = await explainSightingRate({
     species,
     latitude,
@@ -33,7 +36,7 @@ export async function POST(request: Request): Promise<Response> {
   return Response.json(
     {
       rate: sightingRate,
-      occurrences,
+      occurrences: occurrencesForSelectedMonth,
       explanation,
     },
     { status: 200 },
