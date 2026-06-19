@@ -163,11 +163,13 @@ describe('resetPasswordWithCode', () => {
     expect(updateArg.where).toEqual({ email: 'verified@example.com' });
     expect(updateArg.data.passwordResetCodeHash).toBeNull();
     expect(updateArg.data.passwordResetCodeExpiresAt).toBeNull();
-    expect(updateArg.data.passwordHash).toEqual(expect.any(String));
+
+   const newPasswordHash = updateArg.data.passwordHash;
+    expect(typeof newPasswordHash).toBe('string');
     await expect(
-      bcrypt.compare('new-password', updateArg.data.passwordHash),
+      bcrypt.compare('new-password', newPasswordHash as string),
     ).resolves.toBe(true);
-  });
+     });
 
   it('rejects an expired code with reason "expired" and does not change the password', async () => {
     const now = new Date('2026-01-15T12:00:00.000Z');

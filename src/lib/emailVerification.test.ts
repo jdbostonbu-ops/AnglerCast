@@ -112,6 +112,8 @@ describe('createEmailVerificationCode', () => {
       isVerified: false,
       verificationCodeHash,
       verificationCodeExpiresAt,
+      passwordResetCodeHash: null,
+      passwordResetCodeExpiresAt: null,
       createdAt: now,
     };
 
@@ -135,6 +137,8 @@ describe('createEmailVerificationCode', () => {
       isVerified: true,
       verificationCodeHash: null,
       verificationCodeExpiresAt: null,
+      passwordResetCodeHash: null,
+      passwordResetCodeExpiresAt: null,
       createdAt: now,
     });
 
@@ -169,6 +173,8 @@ describe('createEmailVerificationCode', () => {
       isVerified: true,
       verificationCodeHash,
       verificationCodeExpiresAt,
+      passwordResetCodeHash: null,
+      passwordResetCodeExpiresAt: null,
       createdAt: now,
     };
 

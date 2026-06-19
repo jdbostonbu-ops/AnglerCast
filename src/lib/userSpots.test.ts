@@ -27,6 +27,8 @@ describe('User SavedSpot relationship', () => {
       isVerified: true,
       verificationCodeHash: null,
       verificationCodeExpiresAt: null,
+      passwordResetCodeHash: null,
+      passwordResetCodeExpiresAt: null,
       createdAt,
     };
     const savedSpot = {

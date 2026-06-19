@@ -33,6 +33,8 @@ describe('checkLoginCredentials', () => {
       isVerified: true,
       verificationCodeHash: null,
       verificationCodeExpiresAt: null,
+      passwordResetCodeHash: null,
+      passwordResetCodeExpiresAt: null,
       createdAt: new Date('2026-01-15T12:00:00.000Z'),
     };
 
@@ -69,6 +71,8 @@ describe('checkLoginCredentials', () => {
       isVerified: true,
       verificationCodeHash: null,
       verificationCodeExpiresAt: null,
+      passwordResetCodeHash: null,
+      passwordResetCodeExpiresAt: null,
       createdAt: new Date('2026-01-15T12:00:00.000Z'),
     };
 
@@ -102,6 +106,8 @@ describe('checkLoginCredentials', () => {
       isVerified: false,
       verificationCodeHash: null,
       verificationCodeExpiresAt: null,
+      passwordResetCodeHash: null,
+      passwordResetCodeExpiresAt: null,
       createdAt: new Date('2026-01-15T12:00:00.000Z'),
     };
 
