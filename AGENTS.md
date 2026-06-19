@@ -133,3 +133,60 @@ Map (client component): renders the real occurrences as markers at full-precisio
 AI explanation (assembly only): OpenAI receives the computed rate, sample size, and confidence and explains them; never computes or invents.
 Acceptance: listed in the doc — covers the rate formula, full-precision coordinates, the matching map with markers/legend and no 0,0, and "historical sighting rate, never a catch probability."
 
+
+
+Feature #17 — Password reset (forgot password) — Expected Behavior 
+
+RED 17.1 — createPasswordResetCode — reset code is generated hashed, with a future expiry 
+
+What it checks: the generator returns a 6-digit code, the HASH of that code (not the raw code), and an expiry timestamp set in the future. 
+
+Why it fails first; expected behavior: the generator function doesn't exist yet, so there's nothing to make a code, hash it, or set an expiry. 
+
+RED 17.2 — verifyPasswordResetCode — a correct, unexpired code verifies as valid; expired and wrong codes are rejected 
+
+What it checks: the pure verify function returns valid when the entered code matches the stored hash and the expiry is in the future; returns "expired" when the code is correct but the expiry is past (time mocked); returns "mismatch" when the code doesn't match the hash. 
+
+Why it fails first; expected behavior: the verify function doesn't exist yet, so there's no expiry check or hash comparison. 
+
+RED 17.3 — requestPasswordReset — only verified accounts may reset; a code is issued and stored 
+
+What it checks: requesting a reset for an account where isVerified = false is rejected with a clear "not verified" reason; for a verified account, a reset code is generated and stored on the user. DB mocked. 
+
+Why it fails first; expected behavior: the request-reset function doesn't exist yet, so there's no user lookup, no isVerified check, and nowhere storing the code. 
+
+RED 17.4 — resetPasswordWithCode — a correct code sets a new password and clears the reset fields 
+
+What it checks: given a valid, unexpired code, the function hashes the NEW password, updates the user, and clears the stored reset code and expiry so it can't be reused; an expired or wrong code is rejected and the password is left unchanged. DB mocked, time mocked for the expired case. 
+
+Why it fails first; expected behavior: the confirm function doesn't exist yet to verify the code, hash the new password, or clear the fields. 
+
+RED 17.5 — request-reset API route — POST email returns success without revealing whether the email exists 
+
+What it checks: POSTing an email returns the same success response whether or not the account exists (so it can't be used to discover registered emails); when the account exists and is verified, it calls requestPasswordReset and triggers the email send. Route, DB, and email send mocked. 
+
+Why it fails first; expected behavior: the request-reset route doesn't exist yet. 
+
+RED 17.6 — confirm-reset API route — POST email + code + new password updates the password for a valid code 
+
+What it checks: POSTing email, code, and new password returns success and updates the password when the code is valid; returns the appropriate error response for expired or mismatched codes. Route and DB mocked. 
+
+Why it fails first; expected behavior: the confirm-reset route doesn't exist yet. 
+
+RED 17.7 — email send — the reset code is delivered via Resend 
+
+What it checks: when a reset is requested for a verified account, the Resend email client is called with the recipient's address and the reset code in the message. Resend mocked (no real email sent in the test). 
+
+Why it fails first; expected behavior: there's no reset-email send wired yet. 
+
+RED 17.8 — request-reset UI page — the user can enter their email and submit 
+
+What it checks: the page renders an email field and a submit control; submitting posts the email to the request-reset route and shows a confirmation message. Fetch mocked. 
+
+Why it fails first; expected behavior: the request-reset page doesn't exist yet. 
+
+RED 17.9 — confirm-reset UI page — the user can enter the code and a new password and submit 
+
+What it checks: the page renders a code field, a new-password field, and a submit control; submitting posts to the confirm-reset route and shows success or the appropriate error. Fetch mocked. 
+
+Why it fails first; expected behavior: the confirm-reset page doesn't exist yet. 
