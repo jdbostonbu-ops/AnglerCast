@@ -388,6 +388,18 @@ RED 21.1 — explainSightingRate — the model is instructed to use an upbeat to
 
 - Why it fails first; expected behavior: the current system prompt only says to write in a "warm, casual tone like an experienced angler talking to a friend," which produces flat, generic output — it gives no greeting, no sign-off, and no playful-energy instruction, so the lively "Alright, folks… Happy fishing!" voice is gone.
 
+---
+
+# 22 — AI explanation: percentage is a share of records, not a chance — Expected Behavior
+
+RED 22.1 — explainSightingRate — the model is instructed to describe the percentage as a share of records, not a chance of catching
+
+- What it checks: the system prompt sent to OpenAI defines what the percentage represents — it ties the percentage to records (share/percentage of records) and forbids framing it as a chance, probability, or likelihood of catching (the test matches the system message against /percentage.*records|share of (the )?records|percentage of (the )?records/i and /not a chance|never.*chance|not.*probability|not.*likelihood of catching/i). The test inspects the request body's system message; OpenAI is mocked, so no real call is made.
+
+- Why it fails first; expected behavior: the current system prompt only says to "state the percentage" without defining what it represents, so the model is free to relabel it as catch odds (e.g. "That puts your chances at a whopping 23.33%!") instead of "23.33% of records."
+
+---
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.
