@@ -17,7 +17,7 @@ const ContactPage = () => {
         <h2>Reach us</h2>
         <p className="section__lead">
           Email AnglerCast at <span className="contact-email">fish@anglercast.fyi</span> and we will get back to you. This site is live. Tell us what you
-          fish for and where — it helps us improve the recommendations.
+          fish for and where — it helps improve the app.
         </p>
 
         <p>
