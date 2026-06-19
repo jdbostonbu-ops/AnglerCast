@@ -89,6 +89,10 @@ const ExplorePage = () => {
         <h1>Explore</h1>
         <p className="hero__sub">
           Honest fishing data — where fish have been recorded, never a guarantee of where they are.
+          On this page you will need to enter the origin and destination coordinates, your boat speed,
+          and the water type. Use exact coordinates for longitude and latitude (e.g. 36.4, -74.1).
+          AnglerCast will compute the distance and fetch current conditions and AI will estimate an ETA
+          and tell you what fish have been recorded in the area.
         </p>
       </section>
 
@@ -235,8 +239,8 @@ const ExplorePage = () => {
         ) : null}
 
         <p className="disclaimer">
-          Where fish were recorded is not where they are guaranteed to be. We show the record, with
-          its sample size and confidence — never a fabricated catch probability.
+          The numbers are real occurrence records. We say it like anglers do — but a record 
+          isn't a promise. The water decides.
         </p>
       </main>
     </>
