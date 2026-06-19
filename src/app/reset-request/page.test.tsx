@@ -23,7 +23,7 @@ describe('ResetRequestPage', () => {
     expect(screen.getByRole('button', { name: /send|reset/i })).toBeInTheDocument();
   });
 
-  it('submits the email and shows a confirmation message', async () => {
+ it('submits the email and shows a confirmation message', async () => {
     render(<ResetRequestPage />);
 
     fireEvent.change(screen.getByLabelText(/email/i), {
@@ -42,4 +42,17 @@ describe('ResetRequestPage', () => {
       await screen.findByText(/if an account exists|check your email|sent/i),
     ).toBeInTheDocument();
   });
+
+  it('shows a link to the confirm page after a successful request', async () => {
+    render(<ResetRequestPage />);
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: 'angler@example.com' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /send|reset/i }));
+
+    const confirmLink = await screen.findByRole('link', { name: /enter.*code|reset code|confirm/i });
+    expect(confirmLink).toHaveAttribute('href', '/reset-confirm');
+  });
 });
+ 
