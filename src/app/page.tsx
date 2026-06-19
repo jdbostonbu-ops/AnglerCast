@@ -81,8 +81,9 @@ const HomePage = async () => {
         </div>
 
         <p className="disclaimer">
-          Fish are like bees — always moving. AnglerCast shows where fish were recorded, never where
-          they are guaranteed to be. The AI explains the numbers; it never invents them.
+          Fish are like bees — always moving. AnglerCast was developed by a beekeeper. It shows where fish were recorded, never where
+          they are guaranteed to be. The AI explains the numbers; Real records, angler talk. A spot's 
+          history isn't a promise — every angler knows that. That's why they call it fishing, not catching.
         </p>
       </main>
 
