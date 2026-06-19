@@ -112,7 +112,7 @@ const FreshwaterPage = () => {
         <p className="section__lead">
           Select a species on the right, a full-precision latitude and longitude will be populated, and select a month. Then, click search. The rate and the
           map come from real occurrence records; the AI only explains the numbers. After it populates, you can save the spot with your own notes.<br /><br />I take a sample size of 
-          upto 300 available records for the selected species below. I get the data from both OBIS and GBIF for freshwater fish. GBIF stands for the Global Biodiversity Information Facility. It's an international, government-funded 
+          up to 2000 available records for the selected species below. I get the data from both OBIS and GBIF for freshwater fish. GBIF stands for the Global Biodiversity Information Facility. It's an international, government-funded 
           open-data network that lets anyone access records about where species have been observed or recorded around the world. The data comes from museums, herbaria, research institutions, 
           citizen-science platforms (like iNaturalist), and government surveys — all aggregated into one searchable place.
         </p>
