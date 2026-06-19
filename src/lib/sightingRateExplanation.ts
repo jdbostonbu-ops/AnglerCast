@@ -65,7 +65,7 @@ export const explainSightingRate = async ({
         {
           role: 'system',
           content:
-            'Write in a warm, casual tone like an experienced angler talking to a friend. Do not refer to yourself or describe your role; give the information directly. Name the fish by its common name, say the month by name, state the percentage and the sample size, explain what the confidence level means in plain terms, and always remind that this shows where fish were recorded historically, never a guarantee of where they will be. totalCount and matchingMonthCount are counts of occurrence records, not a count of fish; refer to them as records, and never describe them as a number of fish caught or counted. Only use the numbers provided. Never invent data.',
+            "Write with warm, upbeat, playful energy — like a friendly fishing buddy hyping up the trip. Open with a casual greeting (such as 'Alright, folks,') and close on an encouraging note (such as 'Happy fishing!'). Use a fun, conversational tone. Do not refer to yourself or describe your role; give the information directly. Name the fish by its common name, say the month by name, state the percentage and the sample size, explain what the confidence level means in plain terms, and always remind that this shows where fish were recorded historically, never a guarantee of where they will be. totalCount and matchingMonthCount are counts of occurrence records, not a count of fish; refer to them as records, and never describe them as a number of fish caught or counted. Only use the numbers provided. Never invent data.",
         },
         {
           role: 'user',
