@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { randomInt } from 'node:crypto';
+import { prisma } from '@/lib/prisma';
 
 type PasswordResetCode = {
   code: string;
@@ -31,6 +32,30 @@ type VerifyPasswordResetCodeResult =
   | VerifyPasswordResetCodeSuccessResult
   | VerifyPasswordResetCodeExpiredResult
   | VerifyPasswordResetCodeMismatchResult;
+
+type RequestPasswordResetInput = {
+  email: string;
+};
+
+type RequestPasswordResetMissingAccountResult = {
+  ok: false;
+  reason: 'account_not_found';
+};
+
+type RequestPasswordResetUnverifiedAccountResult = {
+  ok: false;
+  reason: 'account_not_verified';
+};
+
+type RequestPasswordResetSuccessResult = {
+  ok: true;
+  code: string;
+};
+
+type RequestPasswordResetResult =
+  | RequestPasswordResetSuccessResult
+  | RequestPasswordResetMissingAccountResult
+  | RequestPasswordResetUnverifiedAccountResult;
 
 const resetCodeLength = 6;
 const resetCodeExpiryMinutes = 15;
@@ -73,5 +98,42 @@ export const verifyPasswordResetCode = async ({
 
   return {
     isValid: true,
+  };
+};
+
+export const requestPasswordReset = async ({
+  email,
+}: RequestPasswordResetInput): Promise<RequestPasswordResetResult> => {
+  const account = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  if (!account) {
+    return {
+      ok: false,
+      reason: 'account_not_found',
+    };
+  }
+
+  if (!account.isVerified) {
+    return {
+      ok: false,
+      reason: 'account_not_verified',
+    };
+  }
+
+  const resetCode = await createPasswordResetCode();
+
+  await prisma.user.update({
+    where: { email },
+    data: {
+      passwordResetCodeHash: resetCode.resetCodeHash,
+      passwordResetCodeExpiresAt: resetCode.expiresAt,
+    },
+  });
+
+  return {
+    ok: true,
+    code: resetCode.code,
   };
 };

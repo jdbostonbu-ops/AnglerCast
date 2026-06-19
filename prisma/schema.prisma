@@ -17,6 +17,8 @@ model User {          // Columns are below
   isVerified                Boolean    @default(false)
   verificationCodeHash      String?
   verificationCodeExpiresAt DateTime?
+  passwordResetCodeHash      String?
+  passwordResetCodeExpiresAt DateTime?
   createdAt                 DateTime   @default(now())
 
   savedSpots                SavedSpot[]
