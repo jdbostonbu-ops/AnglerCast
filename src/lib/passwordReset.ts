@@ -57,6 +57,25 @@ type RequestPasswordResetResult =
   | RequestPasswordResetMissingAccountResult
   | RequestPasswordResetUnverifiedAccountResult;
 
+type ResetPasswordWithCodeInput = {
+  email: string;
+  enteredCode: string;
+  newPassword: string;
+};
+
+type ResetPasswordWithCodeFailureResult = {
+  ok: false;
+  reason: 'expired' | 'mismatch';
+};
+
+type ResetPasswordWithCodeSuccessResult = {
+  ok: true;
+};
+
+type ResetPasswordWithCodeResult =
+  | ResetPasswordWithCodeSuccessResult
+  | ResetPasswordWithCodeFailureResult;
+
 const resetCodeLength = 6;
 const resetCodeExpiryMinutes = 15;
 const bcryptSaltRounds = 10;
@@ -135,5 +154,43 @@ export const requestPasswordReset = async ({
   return {
     ok: true,
     code: resetCode.code,
+  };
+};
+
+export const resetPasswordWithCode = async ({
+  email,
+  enteredCode,
+  newPassword,
+}: ResetPasswordWithCodeInput): Promise<ResetPasswordWithCodeResult> => {
+  const account = (await prisma.user.findUnique({
+    where: { email },
+  }))!;
+
+  const verificationResult = await verifyPasswordResetCode({
+    enteredCode,
+    resetCodeHash: account.passwordResetCodeHash!,
+    expiresAt: account.passwordResetCodeExpiresAt!,
+  });
+
+  if (!verificationResult.isValid) {
+    return {
+      ok: false,
+      reason: verificationResult.reason,
+    };
+  }
+
+  const passwordHash = await bcrypt.hash(newPassword, bcryptSaltRounds);
+
+  await prisma.user.update({
+    where: { email },
+    data: {
+      passwordHash,
+      passwordResetCodeHash: null,
+      passwordResetCodeExpiresAt: null,
+    },
+  });
+
+  return {
+    ok: true,
   };
 };
