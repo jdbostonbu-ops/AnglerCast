@@ -39,11 +39,30 @@ describe('ResetConfirmPage', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: /reset password/i }));
 
-    await waitFor(() => {
+   await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
         '/api/auth/reset-confirm',
         expect.objectContaining({ method: 'POST' }),
       );
     });
+  });
+
+
+it('shows a link to log in after a successful reset', async () => {
+    render(<ResetConfirmPage />);
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: 'angler@example.com' },
+    });
+    fireEvent.change(screen.getByLabelText(/code/i), {
+      target: { value: '123456' },
+    });
+    fireEvent.change(screen.getByLabelText(/new password/i), {
+      target: { value: 'brand-new-password' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /reset password/i }));
+
+    const loginLink = await screen.findByRole('link', { name: /log in/i });
+    expect(loginLink).toHaveAttribute('href', '/login');
   });
 });
