@@ -69,8 +69,11 @@ const LoginPage = () => {
             {isSubmitting ? 'Logging in…' : 'Log in'}
           </button>
         </form>
-         <p className="auth-form__alt">
+        <p className="auth-form__alt">
           Don&apos;t have an account? <a href="/signup">Sign up</a>
+        </p>
+        <p className="auth-form__alt">
+          <a href="/reset-request">Forgot password?</a>
         </p>
       </main>
     </>
