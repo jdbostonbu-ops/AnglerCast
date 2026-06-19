@@ -39,6 +39,7 @@ export const fetchOccurrenceRecords = async ({
     scientificName: species,
     decimalLatitude: latitudeRange,
     decimalLongitude: longitudeRange,
+    limit: '300',
   });
   const response = await fetch(`https://api.gbif.org/v1/occurrence/search?${searchParams}`);
   const gbifResponse = (await response.json()) as GbifOccurrenceResponse;
