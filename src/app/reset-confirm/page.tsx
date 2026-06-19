@@ -71,7 +71,14 @@ const ResetConfirmPage = () => {
 
           <PasswordField label="New password" name="newPassword" />
 
-          {successMessage ? <p>{successMessage}</p> : null}
+          {successMessage ? (
+            <div>
+              <p>{successMessage}</p>
+              <p className="auth-form__alt">
+                <a href="/login">Log in</a>
+              </p>
+            </div>
+          ) : null}
           {errorMessage ? <p className="auth-form__error">{errorMessage}</p> : null}
 
           <button type="submit" className="auth-form__submit" disabled={isSubmitting}>
