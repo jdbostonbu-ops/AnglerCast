@@ -150,4 +150,36 @@ describe('explainSightingRate', () => {
     expect(systemMessage?.content).toMatch(/Happy fishing/i);
     expect(systemMessage?.content).toMatch(/upbeat|playful|fun/i);
   });
+
+  it('instructs the model to describe the percentage as a share of records, not a chance', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { content: 'ok' } }],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await explainSightingRate({
+      species: 'Morone saxatilis',
+      latitude: 41.0,
+      longitude: -71.0,
+      month: 6,
+      sightingRate: {
+        rate: 0.25,
+        matchingMonthCount: 3,
+        totalCount: 12,
+        confidence: 'moderate',
+      },
+    });
+
+    const requestInit = fetchMock.mock.calls[0]?.[1];
+    const requestBody = JSON.parse(requestInit?.body as string) as {
+      messages: { role: string; content: string }[];
+    };
+    const systemMessage = requestBody.messages.find((m) => m.role === 'system');
+    expect(systemMessage).toBeDefined();
+    expect(systemMessage?.content).toMatch(/percentage.*records|share of (the )?records|percentage of (the )?records/i);
+    expect(systemMessage?.content).toMatch(/not a chance|never.*chance|not.*probability|not.*likelihood of catching/i);
+  });
 });
