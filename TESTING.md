@@ -362,6 +362,16 @@ RED 17.12 — After a successful reset, the confirm page shows a link to log in
 
 - Why it fails first; expected behavior: the EmptyRecordsNotice component doesn't exist yet, so the test can't import it from @/components/EmptyRecordsNotice and fails to resolve the module.
 
+---
+
+## 19 — Honest "records" wording in the AI sighting-rate explanation — Expected BehaviorRED 19.1 — explainSightingRate — the model is instructed to call the counts "records," not a fish count
+
+- What it checks: the system prompt sent to OpenAI explicitly tells the model that the counts are occurrence records — it includes the word "records" and an instruction not to describe them as a count of fish (e.g. "not a fish count" / "occurrence records"). The test inspects the request body's system message; OpenAI is mocked, so no real call is made.
+
+- Why it fails first; expected behavior: the current system prompt only says to "state the percentage and the sample size" without defining what the counts represent, so it contains no "records" instruction and nothing forbidding a fish-count framing — leaving the model free to say "30 fish counted."
+
+---
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.
