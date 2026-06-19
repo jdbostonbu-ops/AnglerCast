@@ -372,6 +372,14 @@ RED 17.12 — After a successful reset, the confirm page shows a link to log in
 
 ---
 
+## 20 — AI explanation voice: no self-reference — Expected BehaviorRED 20.1 — explainSightingRate — the model is instructed not to refer to itself or announce its role
+
+- What it checks: the system prompt sent to OpenAI includes an instruction telling the model not to refer to itself or describe its role (the test matches the system message against /do not (refer to|mention|describe) yourself|do not announce your role|never refer to yourself/i). The test inspects the request body's system message; OpenAI is mocked, so no real call is made.
+
+- Why it fails first; expected behavior: the current system prompt says to "write like an honest fishing guide" but never forbids the model from naming that role, so the model can echo the instruction in its output (e.g. "As an honest fishing guide, I want to share…") instead of just adopting the voice.
+
+---
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.
