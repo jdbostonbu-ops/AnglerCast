@@ -84,14 +84,19 @@ describe('POST /api/search', () => {
       }),
     );
 
+    const juneRecords = mappedRecords.filter(
+      (record) => new Date(record.eventDate).getUTCMonth() + 1 === month,
+    );
+
     await expect(response.json()).resolves.toEqual({
       rate: sightingRate,
-      occurrences: mappedRecords,
+      occurrences: juneRecords,
       explanation: 'June accounts for 2 of 3 nearby historical records.',
     });
+
     expect(response.status).toBe(200);
     expect(fetchMock).toHaveBeenCalledTimes(2);
-expect(fetchMock).toHaveBeenCalledWith(
+    expect(fetchMock).toHaveBeenCalledWith(
       expect.stringContaining(`decimalLatitude=${latitude - 0.5}%2C${latitude + 0.5}`),
     );
     expect(fetchMock).toHaveBeenCalledWith(
