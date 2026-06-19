@@ -35,23 +35,41 @@ export const fetchOccurrenceRecords = async ({
 }: FetchOccurrenceRecordsInput): Promise<OccurrenceRecord[]> => {
   const latitudeRange = `${latitude - 0.5},${latitude + 0.5}`;
   const longitudeRange = `${longitude - 0.5},${longitude + 0.5}`;
-  const searchParams = new URLSearchParams({
-    scientificName: species,
-    decimalLatitude: latitudeRange,
-    decimalLongitude: longitudeRange,
-    limit: '300',
-  });
-  const response = await fetch(`https://api.gbif.org/v1/occurrence/search?${searchParams}`);
-  const gbifResponse = (await response.json()) as GbifOccurrenceResponse;
-  const results = gbifResponse.results ?? [];
-  const gbifResults = results.map(
-    ({ scientificName, decimalLatitude, decimalLongitude, eventDate }) => ({
-      scientificName,
-      decimalLatitude,
-      decimalLongitude,
-      eventDate,
-    }),
-  );
+  const gbifPageSize = 300;
+  const maxGbifRecords = 2000;
+  const gbifResults: OccurrenceRecord[] = [];
+  let offset = 0;
+
+  while (gbifResults.length < maxGbifRecords) {
+    const searchParams = new URLSearchParams({
+      scientificName: species,
+      decimalLatitude: latitudeRange,
+      decimalLongitude: longitudeRange,
+      limit: '300',
+      offset: offset.toString(),
+    });
+    const response = await fetch(`https://api.gbif.org/v1/occurrence/search?${searchParams}`);
+    const gbifResponse = (await response.json()) as GbifOccurrenceResponse;
+    const results = gbifResponse.results ?? [];
+    const pageResults = results.map(
+      ({ scientificName, decimalLatitude, decimalLongitude, eventDate }) => ({
+        scientificName,
+        decimalLatitude,
+        decimalLongitude,
+        eventDate,
+      }),
+    );
+    const remainingGbifSlots = maxGbifRecords - gbifResults.length;
+
+    gbifResults.push(...pageResults.slice(0, remainingGbifSlots));
+
+    if (results.length < gbifPageSize) {
+      break;
+    }
+
+    offset += gbifPageSize;
+  }
+
   const obisResults = await fetchObisOccurrences({ species, latitude, longitude });
   const mergedResults = [...gbifResults, ...obisResults];
   const seenRecordKeys = new Set<string>();
