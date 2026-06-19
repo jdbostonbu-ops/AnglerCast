@@ -7,6 +7,15 @@ type SendVerificationEmailResult = {
   id: string;
 };
 
+type SendPasswordResetEmailInput = {
+  email: string;
+  code: string;
+};
+
+type SendPasswordResetEmailResult = {
+  id: string;
+};
+
 type ResendEmailResponse = {
   id: string;
 };
@@ -28,6 +37,32 @@ export const sendVerificationEmail = async ({
       to: email,
       subject: 'Verify your AnglerCast account',
       html: `<p>Your AnglerCast verification code is <strong>${code}</strong>.</p>`,
+    }),
+  });
+  const resendResponse = (await response.json()) as ResendEmailResponse;
+
+  return {
+    id: resendResponse.id,
+  };
+};
+
+export const sendPasswordResetEmail = async ({
+  email,
+  code,
+}: SendPasswordResetEmailInput): Promise<SendPasswordResetEmailResult> => {
+  const fromAddress = process.env.EMAIL_FROM ?? 'onboarding@resend.dev';
+
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${process.env.RESEND_API_KEY ?? ''}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: fromAddress,
+      to: email,
+      subject: 'Reset your AnglerCast password',
+      html: `<p>Your AnglerCast password reset code is <strong>${code}</strong>.</p>`,
     }),
   });
   const resendResponse = (await response.json()) as ResendEmailResponse;
