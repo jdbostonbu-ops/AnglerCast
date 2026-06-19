@@ -1,3 +1,4 @@
+import { sendPasswordResetEmail } from '@/lib/email';
 import { requestPasswordReset } from '@/lib/passwordReset';
 
 type ResetRequestBody = {
@@ -7,7 +8,11 @@ type ResetRequestBody = {
 export async function POST(request: Request): Promise<Response> {
   const { email } = (await request.json()) as ResetRequestBody;
 
-  await requestPasswordReset({ email });
+  const result = await requestPasswordReset({ email });
+
+  if (result.ok) {
+    await sendPasswordResetEmail({ email, code: result.code });
+  }
 
   return Response.json({ ok: true }, { status: 200 });
 }
