@@ -380,6 +380,14 @@ RED 17.12 — After a successful reset, the confirm page shows a link to log in
 
 ---
 
+# 21 — AI explanation voice: upbeat angler tone — Expected Behavior
+
+RED 21.1 — explainSightingRate — the model is instructed to use an upbeat tone with a casual greeting and encouraging close
+
+- What it checks: the system prompt sent to OpenAI instructs a warm, playful, upbeat angler voice — it includes an example casual greeting ("Alright, folks,"), an example encouraging close ("Happy fishing!"), and an upbeat/playful/fun tone word (the test matches the system message against /Alright, folks/i, /Happy fishing/i, and /upbeat|playful|fun/i). The test inspects the request body's system message; OpenAI is mocked, so no real call is made.
+
+- Why it fails first; expected behavior: the current system prompt only says to write in a "warm, casual tone like an experienced angler talking to a friend," which produces flat, generic output — it gives no greeting, no sign-off, and no playful-energy instruction, so the lively "Alright, folks… Happy fishing!" voice is gone.
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.
