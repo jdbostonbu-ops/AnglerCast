@@ -102,7 +102,7 @@ Live check (manual, not a unit test):
 
 ---
 
-## 6 — Coordinate precision fix Expected Behavior
+## 6 — Coordinate precision Expected Behavior
 
 RED 6.1 — A full-precision coordinate survives input unchanged (never truncated)
 - What it checks: the parseCoordinate function takes a coordinate the user typed (e.g. "-71.862800987654") and returns the exact same full-precision number, with no rounding or truncation.
@@ -281,7 +281,8 @@ RED 16.5 — The saved-spot routes create, list, update, and delete scoped to th
 
 RED 16.6 — The sighting-rate search route ties fetch → rate → confidence together
 
-- What it checks: the search route takes species + full-precision lat/long + month, calls the occurrence fetch, runs computeSightingRate, and returns the rate with sample size and confidence; excludes 0,0 records before mapping. Fetch and AI mocked.
+- What it checks: the search route takes species + full-precision lat/long + month, calls the occurrence fetch, runs computeSightingRate over all nearby records, and returns the rate with sample size and confidence; excludes 0,0 records, and returns map occurrences filtered to the selected month (see Feature 24). Fetch and AI mocked.
+
 - Why it fails first; expected behavior: the search route handler doesn't exist yet.
 
 Manual end-to-end verification (eyeball, against live Neon — for the gate):
@@ -380,7 +381,7 @@ RED 17.12 — After a successful reset, the confirm page shows a link to log in
 
 ---
 
-# 21 — AI explanation voice: upbeat angler tone — Expected Behavior
+## 21 — AI explanation voice: upbeat angler tone — Expected Behavior
 
 RED 21.1 — explainSightingRate — the model is instructed to use an upbeat tone with a casual greeting and encouraging close
 
@@ -390,7 +391,7 @@ RED 21.1 — explainSightingRate — the model is instructed to use an upbeat to
 
 ---
 
-# 22 — AI explanation: percentage is a share of records, not a chance — Expected Behavior
+## 22 — AI explanation: percentage is a share of records, not a chance — Expected Behavior
 
 RED 22.1 — explainSightingRate — the model is instructed to describe the percentage as a share of records, not a chance of catching
 
@@ -399,6 +400,36 @@ RED 22.1 — explainSightingRate — the model is instructed to describe the per
 - Why it fails first; expected behavior: the current system prompt only says to "state the percentage" without defining what it represents, so the model is free to relabel it as catch odds (e.g. "That puts your chances at a whopping 23.33%!") instead of "23.33% of records."
 
 ---
+
+## 23 — OBIS fetch returns a confident sample, not a default page — Expected Behavior 
+
+RED 23.1 — fetchObisOccurrences — requests 2000 records from OBIS instead of the small default page 
+
+- What it checks: the OBIS request includes a size=2000 query parameter, so OBIS returns up to 2000 occurrence records for the species rather than its small default page (the test inspects the fetched URL's search params and asserts size is 2000). Fetch is mocked; no real OBIS call is made. 
+
+- Why it fails first; expected behavior: the current fetchObisOccurrences sends only the species name with no size parameter, so OBIS returns its small default page (~the handful of records that left the app computing month percentages over only ~30 records — far too small a sample to speak with confidence for any of the 40 species). 
+
+RED 23.2 — fetchOccurrenceRecords — requests up to 300 records from GBIF instead of the small default page
+
+- What it checks: the GBIF request includes a limit=300 query parameter, so GBIF returns up to 300 occurrence records for the species near the searched coordinates rather than its small default page (the test inspects the fetched GBIF URL's search params and asserts limit is 300). Fetch is mocked; no real GBIF call is made.
+
+- Why it fails first; expected behavior: the current fetchOccurrenceRecords sends only scientificName and the coordinate ranges with no limit parameter, so GBIF returns its small default page — far too small a sample for the freshwater page (which is GBIF-driven), leaving freshwater month percentages and the map computed over too few records.
+
+## RED 23.3 — fetchOccurrenceRecords — paginates GBIF to collect up to 2000 records, stopping early when records run out
+
+- What it checks: the GBIF fetch requests records in pages (using an offset that advances by the page size) and accumulates results until it has collected 2000 records or GBIF returns a partial/empty page (meaning no more records exist). The test mocks fetch to return full pages until a point and then a short page, and asserts that (a) GBIF is called multiple times with advancing offsets, (b) pagination stops once 2000 are collected, and (c) pagination stops early when a returned page is short (no further requests, no error). Fetch is mocked; no real GBIF call is made.
+
+- Why it fails first; expected behavior: the current fetchOccurrenceRecords makes a single GBIF request with limit=300, so it can never return more than 300 records — under-pulling the rich local GBIF data (e.g. 9,345 Rainbow Trout records available in-box) while global OBIS records dominate the merged sample.
+
+---
+
+## 24 — Map shows only the selected month's records — Expected Behavior
+
+RED 24.1 — search route — the returned occurrences are filtered to the selected month, while the sighting rate is still computed over all records
+
+- What it checks: when the search route is called with records spanning multiple months, the occurrences array it returns (the records the map renders) contains only records whose eventDate falls in the selected month, while rate.totalCount still reflects all records (so the percentage denominator is unchanged). The test mocks the fetch/data layer so the records are controlled; it asserts the returned occurrences are month-filtered and that rate.totalCount equals the full record count.
+
+- Why it fails first; expected behavior: the route currently builds occurrences with prepareOccurrenceRecordsForMap (which only drops 0,0 NullIsland records) and never filters by month, so the map receives all-month records — the percentage changes with the month but the map does not, which defeats the seasonal-location purpose.
 
 # 2. Run the tests (expect RED)
 
