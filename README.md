@@ -80,7 +80,7 @@ The rules that kept it honest:
 - 🔒 **External calls are mocked in every unit test** — GBIF, OBIS, NOAA, Open-Meteo, USGS, OpenAI, Prisma/Neon, and Resend email. Unit tests never hit the real network or database.
 - 🧩 **Pure, tested seams.** Core logic lives in small closure-based functions (e.g. `computeSightingRate`, `verifyEmailVerificationCode`, `checkLoginCredentials`) that are tested directly. Route handlers wire those seams together; UI is eyeball-verified on top of green logic.
 - 📒 **Two ledgers.** Every cycle is recorded in [`TESTING.md`](./TESTING.md) (the RED plan) and [`RESULTS.md`](./RESULTS.md) (the RED → GREEN outcomes).
-- ✅ **The result:** a full Vitest suite of **118 passing** unit, component, and integration tests across 42 files, with a clean `typecheck`.
+- ✅ **The result:** a full Vitest suite of **118 passing** unit, component, and integration tests across 48 files, with a clean `typecheck`.
 
 > Strict TypeScript throughout — **no `any`**, no `var`, closure-based arrow functions, factory functions over classes (except Next.js route handlers).
 
