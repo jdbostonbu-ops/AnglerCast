@@ -63,4 +63,26 @@ describe('fetchObisOccurrences', () => {
       }),
     ).resolves.toEqual([]);
   });
+
+it('requests 2000 records from OBIS', async () => {
+    const fetchMock = vi.fn<typeof fetch>(
+      async () =>
+        new Response(JSON.stringify({ results: [] }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await fetchObisOccurrences({
+      species: 'Morone saxatilis',
+      latitude: 41.063500123456,
+      longitude: -71.862800987654,
+    });
+
+    const calledUrl = String(fetchMock.mock.calls[0]?.[0]);
+    const size = new URL(calledUrl).searchParams.get('size');
+    expect(size).toBe('2000');
+  });
+
 });
