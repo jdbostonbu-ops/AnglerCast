@@ -61,7 +61,14 @@ const ResetRequestPage = () => {
             />
           </div>
 
-          {message ? <p>{message}</p> : null}
+          {message ? (
+            <div>
+              <p>{message}</p>
+              <p className="auth-form__alt">
+                <a href="/reset-confirm">Enter your code</a>
+              </p>
+            </div>
+          ) : null}
           {errorMessage ? <p className="auth-form__error">{errorMessage}</p> : null}
 
           <button type="submit" className="auth-form__submit" disabled={isSubmitting}>
