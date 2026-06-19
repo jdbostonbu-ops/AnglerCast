@@ -51,6 +51,54 @@ describe('fetchOccurrenceRecords', () => {
     expect(requestedUrl).toContain('limit=300');
   });
 
+  it('paginates GBIF to collect up to 2000 records', async () => {
+    const makeGbifRecord = (index: number) => ({
+      scientificName: 'Oncorhynchus mykiss',
+      decimalLatitude: 48.5 + index / 100000,
+      decimalLongitude: -123.0 - index / 100000,
+      eventDate: '2024-05-01T00:00:00',
+    });
+
+    const fetchMock = vi.fn(async (requestedUrl: string | URL | Request) => {
+      const url = String(requestedUrl);
+
+      if (url.includes('api.gbif.org')) {
+        const offset = Number(new URL(url).searchParams.get('offset') ?? '0');
+        const pageSize = 300;
+        const results = Array.from({ length: pageSize }, (_unused, i) =>
+          makeGbifRecord(offset + i),
+        );
+        return new Response(JSON.stringify({ results }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      return new Response(JSON.stringify({ results: [] }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    const records = await fetchOccurrenceRecords({
+      species: 'Oncorhynchus mykiss',
+      latitude: 48.5,
+      longitude: -123.0,
+    });
+
+    const gbifCalls = fetchMock.mock.calls.filter((call) =>
+      String(call[0]).includes('api.gbif.org'),
+    );
+
+    const offsets = gbifCalls.map((call) =>
+      Number(new URL(String(call[0])).searchParams.get('offset') ?? '0'),
+    );
+
+    expect(offsets).toEqual([0, 300, 600, 900, 1200, 1500, 1800]);
+    expect(records).toHaveLength(2000);
+  });
+
   it('parses a mocked real GBIF response into occurrence records', async () => {
     const fetchMock = vi.fn(async () => {
       return new Response(JSON.stringify(gbifSample), {
