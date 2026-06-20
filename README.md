@@ -28,7 +28,7 @@ _Fish move constantly. AnglerCast shows you the historical sighting record from 
 ![Tests](https://img.shields.io/badge/tests-125_passing-2D9E4F?style=for-the-badge&logo=vitest&logoColor=white)
 ![GitHub stars](https://img.shields.io/github/stars/jdbostonbu-ops/AnglerCast?style=for-the-badge&logo=github&color=e2a83b)
 
-**[🌐 Live Site](https://anglercast.fyi)**
+**[🌐 Live Site](https://anglercast.fyi/signup)**
 </div>
 
 ---
