@@ -93,4 +93,38 @@ describe('POST /api/auth/signup', () => {
       code: verificationCode.code,
     });
   });
+  it('returns a clean error when the email already exists, instead of throwing (27.1)', async () => {
+    const email = 'existing@example.com';
+    const password = 'secure-password';
+    const passwordHash = 'hashed-password';
+    const verificationCode = {
+      code: '123456',
+      verificationCodeHash: 'hashed-verification-code',
+      expiresAt: new Date('2026-01-15T12:15:00.000Z'),
+    };
+
+    const duplicateKeyError = Object.assign(new Error('Unique constraint failed'), {
+      code: 'P2002',
+    });
+
+    vi.mocked(bcrypt.hash).mockResolvedValueOnce(passwordHash as never);
+    vi.mocked(createEmailVerificationCode).mockResolvedValueOnce(verificationCode);
+    vi.mocked(prisma.user.create).mockRejectedValueOnce(duplicateKeyError);
+
+    const request = new Request('http://localhost/api/auth/signup', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const response = await POST(request);
+
+    expect(response.status).toBeGreaterThanOrEqual(400);
+    expect(response.status).toBeLessThan(500);
+    const data = (await response.json()) as { error?: string };
+    expect(typeof data.error).toBe('string');
+    expect(sendVerificationEmailMock).not.toHaveBeenCalled();
+  });
 });

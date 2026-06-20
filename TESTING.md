@@ -472,6 +472,19 @@ Notes: (1) All app pages (/, /saltwater, /freshwater, /explore, /contact) are pr
 
 ---
 
+## 27 — Signup handles a duplicate email cleanly — Expected Behavior
+
+RED 27.1 — POST /api/auth/signup — returns a clean error when the email already exists, instead of throwing
+
+- What it checks: when prisma.user.create rejects with a Prisma duplicate-key error (code P2002 — the email is already registered), the signup route returns a handled error response (a non-2xx status with a JSON error message) instead of letting the error propagate as an unhandled 500. prisma.user.create is mocked to reject with a P2002-style error; the test asserts the route resolves to the handled error response (does not reject/throw) and does not call sendVerificationEmail.
+
+- Why it fails first; expected behavior: the route currently calls prisma.user.create with no try/catch, so a P2002 rejection propagates unhandled — there is no duplicate-email guard yet.
+
+
+Notes: (1) This is a robustness / UX fix, not a security fix — it converts an unhandled 500 (on a duplicate email) into a clean, specific error the signup page can display. The page already reads data.error from the response, so returning { error: '...' } makes the page show a specific message instead of its generic fallback. (2) The exact status code (e.g. 409 Conflict) and error wording are a GREEN-time choice — the test asserts only that the response is a handled non-2xx with an error field and that no verification email is sent; it does not lock a specific status or message. (3) Honest privacy note to decide at GREEN: a specific "that email is already registered" message confirms an email exists (a mild account-enumeration signal). That's a deliberate tradeoff — clearer UX vs. not revealing which emails are registered. The test does not force either choice.
+
+---
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.
