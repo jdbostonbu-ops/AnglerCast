@@ -332,7 +332,7 @@ npx vitest run
 
 Tried AnglerCast out on the water (or at your desk)? I'd genuinely love to hear what worked and what didn't.
 
-### 👉 **[Leave feedback via this short Tally form](https://tally.so/r/YOUR_TALLY_FORM_ID)**
+### 👉 **[Leave feedback via this short Tally form](https://tally.so/r/q4N1jk)**
 
 ---
 
@@ -341,7 +341,7 @@ Tried AnglerCast out on the water (or at your desk)? I'd genuinely love to hear 
 **Jacqueline Delgado**
 
 🔗 **Repository:** [github.com/jdbostonbu-ops/AnglerCast](https://github.com/jdbostonbu-ops/AnglerCast)
-🌐 **Live site:** [anglercast.fyi](https://anglercast.fyi)
+🌐 **Live site:** [anglercast.fyi](https://anglercast.fyi/signup)
 
 ---
 
