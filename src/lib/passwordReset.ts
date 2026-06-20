@@ -162,14 +162,28 @@ export const resetPasswordWithCode = async ({
   enteredCode,
   newPassword,
 }: ResetPasswordWithCodeInput): Promise<ResetPasswordWithCodeResult> => {
-  const account = (await prisma.user.findUnique({
+  const account = await prisma.user.findUnique({
     where: { email },
-  }))!;
+  });
+
+  if (!account) {
+    return {
+      ok: false,
+      reason: 'mismatch',
+    };
+  }
+
+  if (!account.passwordResetCodeHash || !account.passwordResetCodeExpiresAt) {
+    return {
+      ok: false,
+      reason: 'mismatch',
+    };
+  }
 
   const verificationResult = await verifyPasswordResetCode({
     enteredCode,
-    resetCodeHash: account.passwordResetCodeHash!,
-    expiresAt: account.passwordResetCodeExpiresAt!,
+    resetCodeHash: account.passwordResetCodeHash,
+    expiresAt: account.passwordResetCodeExpiresAt,
   });
 
   if (!verificationResult.isValid) {
