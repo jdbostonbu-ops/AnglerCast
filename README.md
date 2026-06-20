@@ -269,7 +269,7 @@ The home page's "Top recorded spots this season" cards are computed **live from 
 ## 🌐 Domain & Deployment
 
 - ☁️ Deployed on **Vercel**, with the production build regenerating the Prisma client on every deploy.
-- 🌍 Live on a custom domain — **[anglercast.fyi](https://anglercast.fyi)** — with DNS managed in Cloudflare (A + CNAME records, SSL issued automatically).
+- 🌍 Live on a custom domain — **[anglercast.fyi](https://anglercast.fyi/signup)** — with DNS managed in Cloudflare (A + CNAME records, SSL issued automatically).
 - 📧 The domain is **verified with Resend** (DKIM / SPF / DMARC), so verification emails deliver to real users from `@anglercast.fyi`.
 
 ---

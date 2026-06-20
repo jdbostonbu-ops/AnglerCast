@@ -357,7 +357,7 @@ RED 17.12 — After a successful reset, the confirm page shows a link to log in
 
 ---
 
-## Feature 18 — Empty-records notice on search resultsRED 18.1 — A no-records message shows only when there are zero records
+## Feature 18 — Empty-records notice on search results RED 18.1 — A no-records message shows only when there are zero records
 
 - What it checks: the EmptyRecordsNotice component renders the message "No records found near these coordinates" when totalCount is 0, and renders nothing when totalCount is greater than 0 (tested with totalCount={1}).
 
