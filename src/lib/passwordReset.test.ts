@@ -229,4 +229,41 @@ describe('resetPasswordWithCode', () => {
     expect(result).toEqual({ ok: false, reason: 'mismatch' });
     expect(prisma.user.update).not.toHaveBeenCalled();
   });
+
+   it('returns a clean failure when no account exists for the email (25.1)', async () => {
+    vi.mocked(prisma.user.findUnique).mockResolvedValueOnce(null);
+
+    const result = await resetPasswordWithCode({
+      email: 'nobody@example.com',
+      enteredCode: '123456',
+      newPassword: 'new-password',
+    });
+
+    expect(result.ok).toBe(false);
+    expect(prisma.user.update).not.toHaveBeenCalled();
+  });
+
+  it('returns a clean failure when the account has no reset code pending (25.2)', async () => {
+    const accountWithoutResetCode = {
+      id: 'user_1',
+      email: 'verified@example.com',
+      passwordHash: 'old-hash',
+      isVerified: true,
+      verificationCodeHash: null,
+      verificationCodeExpiresAt: null,
+      passwordResetCodeHash: null,
+      passwordResetCodeExpiresAt: null,
+      createdAt: new Date('2026-01-15T12:00:00.000Z'),
+    };
+    vi.mocked(prisma.user.findUnique).mockResolvedValueOnce(accountWithoutResetCode);
+
+    const result = await resetPasswordWithCode({
+      email: 'verified@example.com',
+      enteredCode: '123456',
+      newPassword: 'new-password',
+    });
+
+    expect(result.ok).toBe(false);
+    expect(prisma.user.update).not.toHaveBeenCalled();
+  });
 });

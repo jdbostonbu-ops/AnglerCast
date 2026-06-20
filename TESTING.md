@@ -431,6 +431,27 @@ RED 24.1 — search route — the returned occurrences are filtered to the selec
 
 - Why it fails first; expected behavior: the route currently builds occurrences with prepareOccurrenceRecordsForMap (which only drops 0,0 NullIsland records) and never filters by month, so the map receives all-month records — the percentage changes with the month but the map does not, which defeats the seasonal-location purpose.
 
+---
+
+## 25 — resetPasswordWithCode handles missing account / missing reset code — Expected Behavior
+
+RED 25.1 — resetPasswordWithCode — returns a clean failure when no account exists for the email
+
+- What it checks: when prisma.user.findUnique resolves to null (no account for that email), resetPasswordWithCode returns a handled failure result ({ ok: false, reason: ... }) instead of throwing. prisma is mocked to return null; the test asserts the function resolves (does not reject/throw) and that prisma.user.update is not called.
+
+- Why it fails first; expected behavior: the function currently does (await prisma.user.findUnique(...))!, so a null account is force-unwrapped and the next line throws — there is no missing-account guard yet.
+
+RED 25.2 — resetPasswordWithCode — returns a clean failure when the account has no reset code pending
+
+- What it checks: when the account exists but passwordResetCodeHash / passwordResetCodeExpiresAt are null (the user never requested a reset, or already used it), resetPasswordWithCode returns a handled failure result ({ ok: false, reason: ... }) instead of throwing, and does not change the password (prisma.user.update not called). prisma mocked to return an account with null reset fields.
+
+- Why it fails first; expected behavior: the function passes account.passwordResetCodeHash! / account.passwordResetCodeExpiresAt! straight into verifyPasswordResetCode, so null reset fields are force-unwrapped and throw — there is no missing-code guard yet.
+
+
+Notes: (1) This is a robustness fix, not a security fix — the existing valid/expired/mismatch enforcement is already correct and tested; this only converts a crash (unhandled null via ! assertions) into a clean handled failure for inputs the current tests don't exercise (e.g. a user who skips straight to reset-confirm without requesting a code). (2) The exact reason strings are a design choice, decided at GREEN — reuse an existing reason or add new ones (e.g. 'account_not_found', 'no_reset_pending'); the ResetPasswordWithCodeResult type may need widening, which is part of the GREEN.
+
+---
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.
