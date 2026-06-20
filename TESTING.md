@@ -452,6 +452,26 @@ Notes: (1) This is a robustness fix, not a security fix — the existing valid/e
 
 ---
 
+## 26 — Server-side route guard (middleware) — Expected BehaviorThe testable seam is a pure helper, shouldRedirectToLogin(pathname, hasSessionCookie), that decides whether a request should be redirected to /login. The actual middleware.ts is a thin wrapper that reads the anglercast_session cookie and the pathname, calls this helper, and returns a redirect or continues. The wrapper's real redirect wiring is verified by curl (see notes), not unit-tested.RED 26.1 — shouldRedirectToLogin — protected route with no session cookie redirects
+
+- What it checks: shouldRedirectToLogin('/', false) returns true — a protected app route with no session cookie should be redirected to login. Tested for representative protected paths (e.g. /, /saltwater, /freshwater, /explore, /contact).
+
+- Why it fails first; expected behavior: the shouldRedirectToLogin helper does not exist yet.
+RED 26.2 — shouldRedirectToLogin — protected route with a session cookie does not redirect
+
+- What it checks: shouldRedirectToLogin('/', true) returns false — a protected route with the session cookie present is allowed through. Presence of the cookie is sufficient (matches current getSessionUserId behavior — presence, not validity).
+
+- Why it fails first; expected behavior: the helper does not exist yet.
+RED 26.3 — shouldRedirectToLogin — auth route with no session cookie does not redirect
+
+- What it checks: shouldRedirectToLogin('/login', false) returns false — auth routes (/login, /signup, /verify, /reset-confirm) are exempt even with no cookie, so a logged-out user can reach them (preventing a redirect loop). Tested for representative auth paths.
+
+- Why it fails first; expected behavior: the helper does not exist yet.
+
+Notes: (1) All app pages (/, /saltwater, /freshwater, /explore, /contact) are protected; only /login, /signup, /verify, /reset-confirm, and /api/auth/* are exempt (plus Next.js internals/static assets, handled by the middleware matcher, not this helper). (2) The helper checks presence of the session cookie (a boolean passed in), not its authenticity — the cookie stores a raw userId with no signing — so the tests assert presence-based allow/deny only. Cookie signing is a separate future hardening task. (3) These unit tests verify the decision logic only. The thin middleware.ts wrapper (reading the real cookie, returning the real redirect, and the path matcher) is verified end-to-end with a curl to a protected route while logged out (expect a redirect and no protected HTML) — a passing unit test does NOT prove the deployed app withholds the page.
+
+---
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.
