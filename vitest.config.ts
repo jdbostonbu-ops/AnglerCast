@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
+import GitMarkdownReporter from './vitest-md-reporter';
 import path from 'node:path';
 
 export default defineConfig({
@@ -8,6 +9,8 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
+    reporters: ['default', new GitMarkdownReporter()],
+    outputFile: { markdown: 'test-report.md' },
   },
   resolve: {
     alias: {
