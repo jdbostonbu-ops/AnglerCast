@@ -11,6 +11,7 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     reporters: ['default', new GitMarkdownReporter()],
     outputFile: { markdown: 'test-report.md' },
+    exclude: ['node_modules', 'dist', '.next', 'e2e/**'],
   },
   resolve: {
     alias: {
