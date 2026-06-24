@@ -3,6 +3,12 @@ import { describe, expect, it, vi } from 'vitest';
 import { NavBar } from '@/components/NavBar';
 
 describe('NavBar', () => {
+
+it('renders the AnglerCast brand name', () => {
+    render(<NavBar />);
+    expect(screen.getByText('AnglerCast')).toBeInTheDocument();
+  });
+
   it('renders Home,Freshwater, Saltwater, Explore, and Contact links', () => {
     render(<NavBar />);
 
