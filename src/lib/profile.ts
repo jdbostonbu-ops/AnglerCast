@@ -47,10 +47,11 @@ export const saveProfileImage = async ({
 
 export const getDisplayAvatar = ({
   profileImageUrl,
+  email,
 }: GetDisplayAvatarInput): DisplayAvatar => {
   if (profileImageUrl) {
     return { kind: 'image', src: profileImageUrl };
   }
 
-  throw new Error('Profile image URL is required for image avatars.');
+  return { kind: 'letter', letter: email.charAt(0).toUpperCase() };
 };
