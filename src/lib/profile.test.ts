@@ -1,6 +1,6 @@
 // src/lib/profile.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { saveProfileName } from '@/lib/profile';
+import { saveProfileName, saveProfileImage } from '@/lib/profile';
 
 vi.mock('@/lib/prisma', () => ({
   prisma: {
@@ -46,5 +46,41 @@ describe('saveProfileName', () => {
 
     const readBack = await prisma.user.findUnique({ where: { id: userId } });
     expect(readBack?.profileName).toBe(name);
+  });
+});
+
+describe('saveProfileImage', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('stores the profile image URL on the user and a follow-up read returns it', async () => {
+    const userId = 'user-abc-123';
+    const imageUrl = 'https://images.example.com/profiles/trigger.jpg';
+
+    vi.mocked(prisma.user.update).mockResolvedValueOnce({
+      id: userId,
+      email: 'jdboston@example.com',
+      profileName: 'trigger',
+      profileImageUrl: imageUrl,
+    } as unknown as Awaited<ReturnType<typeof prisma.user.update>>);
+
+    await saveProfileImage({ userId, imageUrl });
+
+    expect(prisma.user.update).toHaveBeenCalledTimes(1);
+    expect(prisma.user.update).toHaveBeenCalledWith({
+      where: { id: userId },
+      data: { profileImageUrl: imageUrl },
+    });
+
+    vi.mocked(prisma.user.findUnique).mockResolvedValueOnce({
+      id: userId,
+      email: 'jdboston@example.com',
+      profileName: 'trigger',
+      profileImageUrl: imageUrl,
+    } as unknown as Awaited<ReturnType<typeof prisma.user.findUnique>>);
+
+    const readBack = await prisma.user.findUnique({ where: { id: userId } });
+    expect(readBack?.profileImageUrl).toBe(imageUrl);
   });
 });

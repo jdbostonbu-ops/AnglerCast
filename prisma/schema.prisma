@@ -13,6 +13,8 @@ datasource db {
 model User {          // Columns are below
   id                        String     @id @default(cuid()) // Primary Key. My primary key is a cuid — a random, non-sequential ID. Per OWASP, that's defense-in-depth: it mitigates enumeration and avoids leaking record counts
   email                     String     @unique
+  profileName               String?
+  profileImageUrl           String?
   passwordHash              String
   isVerified                Boolean    @default(false)
   verificationCodeHash      String?
