@@ -485,6 +485,126 @@ Notes: (1) This is a robustness / UX fix, not a security fix — it converts an 
 
 ---
 
+## 28 — Profile in the nav bar (display name + optional image)
+
+This feature extends the existing NavBar (section 7) to show the logged-in user's profile, and adds the data layer behind it. The NavBar gains a profile section on the right side: avatar + display name when set, "Set up profile" prompt when not.
+
+RED 28.1 — A user can save a profile name to their account
+- What it checks: a saveProfileName function takes a userId and a name string, stores it, and a follow-up read returns the saved name. Prisma mocked.
+- Why it fails first; expected behavior: the saveProfileName function doesn't exist yet.
+
+RED 28.2 — A user can save a profile image URL to their account
+- What it checks: a saveProfileImage function takes a userId and an image URL, stores it, and a follow-up read returns the saved URL. The upload itself is out of scope here — this test covers the URL being persisted on the user record. Prisma mocked.
+- Why it fails first; expected behavior: the saveProfileImage function doesn't exist yet.
+
+RED 28.3 — getDisplayAvatar returns the image URL when one is set
+- What it checks: getDisplayAvatar({ profileImageUrl, email }) returns { kind: "image", src: profileImageUrl } when the user has uploaded an image.
+- Why it fails first; expected behavior: the getDisplayAvatar function doesn't exist yet.
+
+RED 28.4 — getDisplayAvatar falls back to the first letter of the email when no image is set
+- What it checks: getDisplayAvatar({ profileImageUrl: null, email: "jdboston@example.com" }) returns { kind: "letter", letter: "J" } — uppercase first letter of the email.
+- Why it fails first; expected behavior: no fallback logic exists yet.
+
+RED 28.5 — The NavBar renders the AnglerCast logo on the left and the existing links in the middle (regression guard)
+- What it checks: the existing NavBar still renders the AnglerCast logo/title on the left and the Freshwater, Saltwater, About, Contact links in their existing positions, so adding the profile doesn't break what's already tested in section 7.
+- Why it fails first; expected behavior: this test should PASS immediately if section 7 still holds. It's here as a regression guard before we modify the NavBar.
+
+RED 28.6 — The NavBar renders the profile avatar and display name on the right when a profile is set
+- What it checks: the NavBar component, given a logged-in user with a profile name "trigger" and a profile image URL, renders an avatar image and the name "trigger" on the right side of the nav.
+- Why it fails first; expected behavior: the NavBar doesn't render a profile section yet.
+
+RED 28.7 — The NavBar renders the letter avatar when no profile image is set
+- What it checks: the NavBar, given a user with profile name "trigger" and no profile image, renders the letter avatar (first letter of email, uppercase) and the name "trigger" on the right side.
+- Why it fails first; expected behavior: no letter-avatar rendering exists yet.
+
+RED 28.8 — The NavBar renders "Set up profile" prompt when no profile name is set
+- What it checks: the NavBar, given a logged-in user with no profile name, renders a "Set up profile" link/button on the right side instead of an avatar+name pair.
+- Why it fails first; expected behavior: no profile-not-set state exists yet.
+
+RED 28.9 — Posting requires a profile name; without one, canPostCatch returns false
+- What it checks: a canPostCatch({ profileName }) function returns { allowed: false, reason: "no profile name" } when profileName is empty/null, and { allowed: true } when set.
+- Why it fails first; expected behavior: no profile-name check exists yet.
+
+RED 28.10 — When canPostCatch is false, clicking Post on the feed shows "Set up profile" dialog instead of submitting
+- What it checks: clicking "Post" without a profile name shows a dialog with the message "Set up profile" (and does NOT call the submit handler). Submit handler mocked.
+- Why it fails first; expected behavior: the dialog doesn't exist yet.
+
+---
+
+## 29 — Catch Reports Feed (per-page: freshwater and saltwater)
+
+RED 29.1 — A logged-in user can create a catch report scoped to a water type
+- What it checks: a createCatchReport function takes a userId, a waterType ("freshwater" or "saltwater"), and the post body text, and returns a saved post with id, userId, waterType, body, createdAt. Prisma mocked.
+- Why it fails first; expected behavior: the createCatchReport function doesn't exist yet.
+
+RED 29.2 — Each feed returns only the posts for its water type
+- What it checks: getCatchReports({ waterType: "freshwater" }) returns only freshwater posts; getCatchReports({ waterType: "saltwater" }) returns only saltwater posts. Two seeded sets of posts in the mock.
+- Why it fails first; expected behavior: no water-type filtering exists yet.
+
+RED 29.3 — Posts return newest first (real-time feel)
+- What it checks: getCatchReports returns posts sorted by createdAt descending, so the newest catch shows at the top of the feed.
+- Why it fails first; expected behavior: no ordering logic exists yet.
+
+RED 29.4 — Each returned post includes the author's display name and avatar
+- What it checks: getCatchReports returns each post joined with the author's profileName and a resolved avatar (image URL if set, otherwise the first-letter-of-email fallback), so the feed component doesn't have to fetch users separately.
+- Why it fails first; expected behavior: no join/avatar-resolution logic exists yet.
+
+RED 29.5 — A user can update their OWN post
+- What it checks: updateCatchReport({ postId, userId, newBody }) updates the post body when the userId owns the post, and returns the updated post. Prisma mocked.
+- Why it fails first; expected behavior: the update function doesn't exist yet.
+
+RED 29.6 — A user cannot update someone else's post
+- What it checks: updateCatchReport rejects (with a clear "not your post" error) when the userId does not own the post. The post is not changed.
+- Why it fails first; expected behavior: no ownership check exists yet.
+
+RED 29.7 — A user can delete their OWN post
+- What it checks: deleteCatchReport({ postId, userId }) removes the post when the userId owns it, and returns success. Prisma mocked.
+- Why it fails first; expected behavior: the delete function doesn't exist yet.
+
+RED 29.8 — A user cannot delete someone else's post
+- What it checks: deleteCatchReport rejects (with a clear "not your post" error) when the userId does not own the post. The post is not removed.
+- Why it fails first; expected behavior: no ownership check exists yet.
+
+---
+
+## 30 — Catch Report Edit and Delete UI
+
+RED 30.1 — A pencil edit button is shown only on the user's own posts
+- What it checks: the CatchPost component renders a pencil edit button when the post's userId matches the logged-in user, and does NOT render it on other users' posts.
+- Why it fails first; expected behavior: the edit-button-with-ownership logic doesn't exist yet.
+
+RED 30.2 — Clicking the pencil reveals an editable field and a Save button
+- What it checks: clicking the pencil swaps the post body for an editable textarea pre-filled with the current body, and shows a Save button next to it.
+- Why it fails first; expected behavior: the edit-mode toggle and Save button don't exist yet.
+
+RED 30.3 — Clicking Save calls the update handler with the new body
+- What it checks: editing the textarea and clicking Save calls the update handler exactly once with the new body text. Update handler mocked.
+- Why it fails first; expected behavior: the Save wiring doesn't exist yet.
+
+RED 30.4 — Confirming the delete dialog calls the delete handler exactly once
+- What it checks: clicking delete on a catch post opens the confirmation dialog, and clicking "Confirm" calls the delete handler exactly once. Delete handler mocked.
+- Why it fails first; expected behavior: the dialog and its confirm wiring don't exist yet.
+
+RED 30.5 — Canceling the delete dialog does nothing
+- What it checks: clicking "Cancel" does NOT call the delete handler and closes the dialog.
+- Why it fails first; expected behavior: no cancel behavior exists yet.
+
+---
+
+## 31 — Real-time feed refresh (no manual reload)
+
+RED 31.1 — The feed polls for new posts on a fixed interval
+- What it checks: the CatchFeed component calls getCatchReports on mount and then again on a fixed interval (e.g. every 10 seconds). Fake timers and a mocked getCatchReports are used to assert the second call fires after the interval advances.
+- Why it fails first; expected behavior: no polling logic exists yet.
+
+RED 31.2 — A newly-posted catch appears in the feed without a page refresh
+- What it checks: when getCatchReports returns a longer list on the second poll, the CatchFeed re-renders with the new post visible at the top — no page reload, no user action required.
+- Why it fails first; expected behavior: no re-render-on-new-data logic exists yet.
+
+RED 31.3 — Polling stops when the component unmounts
+- What it checks: when the CatchFeed component unmounts, the polling interval is cleared so it doesn't keep firing or leak memory.
+- Why it fails first; expected behavior: no cleanup exists yet.
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.
