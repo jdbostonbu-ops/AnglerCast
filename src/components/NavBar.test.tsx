@@ -42,4 +42,25 @@ it('renders the AnglerCast brand name', () => {
     fireEvent.click(screen.getByRole('button', { name: /log out/i }));
     expect(onLogout).toHaveBeenCalledTimes(1);
   });
+
+  it('renders the profile avatar image and display name on the right when a profile is set', () => {
+    render(
+      <NavBar
+        isLoggedIn
+        profile={{
+          profileName: 'trigger',
+          profileImageUrl: 'https://images.example.com/profiles/trigger.jpg',
+          email: 'jdboston@example.com',
+        }}
+      />,
+    );
+
+    const avatar = screen.getByRole('img', { name: /profile avatar/i });
+    expect(avatar).toHaveAttribute(
+      'src',
+      'https://images.example.com/profiles/trigger.jpg',
+    );
+
+    expect(screen.getByText('trigger')).toBeInTheDocument();
+  });
 });
