@@ -98,3 +98,17 @@ describe('getDisplayAvatar', () => {
     });
   });
 });
+
+describe('getDisplayAvatar fallback', () => {
+  it('returns the uppercase first letter of the email when no image is set', () => {
+    const result = getDisplayAvatar({
+      profileImageUrl: null,
+      email: 'jdboston@example.com',
+    });
+
+    expect(result).toEqual({
+      kind: 'letter',
+      letter: 'J',
+    });
+  });
+});
