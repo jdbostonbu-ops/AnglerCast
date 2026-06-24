@@ -1,6 +1,6 @@
 // src/lib/profile.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { saveProfileName, saveProfileImage } from '@/lib/profile';
+import { saveProfileName, saveProfileImage, getDisplayAvatar } from '@/lib/profile';
 
 vi.mock('@/lib/prisma', () => ({
   prisma: {
@@ -82,5 +82,19 @@ describe('saveProfileImage', () => {
 
     const readBack = await prisma.user.findUnique({ where: { id: userId } });
     expect(readBack?.profileImageUrl).toBe(imageUrl);
+  });
+});
+
+describe('getDisplayAvatar', () => {
+  it('returns the image URL when profileImageUrl is set', () => {
+    const result = getDisplayAvatar({
+      profileImageUrl: 'https://images.example.com/profiles/trigger.jpg',
+      email: 'jdboston@example.com',
+    });
+
+    expect(result).toEqual({
+      kind: 'image',
+      src: 'https://images.example.com/profiles/trigger.jpg',
+    });
   });
 });
