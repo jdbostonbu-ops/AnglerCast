@@ -1,11 +1,17 @@
 'use client';
 
 import type { ReactElement } from 'react';
+import { getDisplayAvatar } from '@/lib/profile';
 
 type NavBarProps = {
   hideWaterLinks?: boolean;
   isLoggedIn?: boolean;
   onLogout?: () => void;
+  profile?: {
+    profileName: string;
+    profileImageUrl: string | null;
+    email: string;
+  };
 };
 
 const navLinks = [
@@ -22,10 +28,17 @@ export const NavBar = ({
   hideWaterLinks = false,
   isLoggedIn = false,
   onLogout,
+  profile,
 }: NavBarProps): ReactElement => {
   const links = hideWaterLinks
     ? navLinks.filter((link) => !waterHrefs.includes(link.href))
     : navLinks;
+  const displayAvatar = profile
+    ? getDisplayAvatar({
+        profileImageUrl: profile.profileImageUrl,
+        email: profile.email,
+      })
+    : null;
 
   return (
     <nav aria-label="Main navigation" className="site-nav">
@@ -47,6 +60,14 @@ export const NavBar = ({
           </button>
         ) : null}
       </div>
+      {profile ? (
+        <div className="site-nav__profile">
+          {displayAvatar?.kind === 'image' ? (
+            <img alt="Profile avatar" src={displayAvatar.src} />
+          ) : null}
+          <span>{profile.profileName}</span>
+        </div>
+      ) : null}
     </nav>
   );
 };
