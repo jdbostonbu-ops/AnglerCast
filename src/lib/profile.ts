@@ -5,6 +5,11 @@ type SaveProfileNameInput = {
   name: string;
 };
 
+type SaveProfileImageInput = {
+  userId: string;
+  imageUrl: string;
+};
+
 export const saveProfileName = async ({
   userId,
   name,
@@ -12,5 +17,15 @@ export const saveProfileName = async ({
   await prisma.user.update({
     where: { id: userId },
     data: { profileName: name },
+  });
+};
+
+export const saveProfileImage = async ({
+  userId,
+  imageUrl,
+}: SaveProfileImageInput): Promise<void> => {
+  await prisma.user.update({
+    where: { id: userId },
+    data: { profileImageUrl: imageUrl },
   });
 };
