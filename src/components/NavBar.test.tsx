@@ -63,4 +63,21 @@ it('renders the AnglerCast brand name', () => {
 
     expect(screen.getByText('trigger')).toBeInTheDocument();
   });
+
+  it('renders the letter avatar and display name when no profile image is set', () => {
+    render(
+      <NavBar
+        isLoggedIn
+        profile={{
+          profileName: 'trigger',
+          profileImageUrl: null,
+          email: 'jdboston@example.com',
+        }}
+      />,
+    );
+
+    expect(screen.queryByRole('img', { name: /profile avatar/i })).toBeNull();
+    expect(screen.getByText('J')).toBeInTheDocument();
+    expect(screen.getByText('trigger')).toBeInTheDocument();
+  });
 });
