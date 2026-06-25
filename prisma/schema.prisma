@@ -24,6 +24,7 @@ model User {          // Columns are below
   createdAt                 DateTime   @default(now())
 
   savedSpots                SavedSpot[]
+  catchReports              CatchReport[]
 }
 
 model SavedSpot {     // Columns are below
@@ -38,6 +39,18 @@ model SavedSpot {     // Columns are below
   species   String
   waterType String   // "freshwater" | "saltwater"
   notes     String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model CatchReport {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  waterType String   // "freshwater" | "saltwater"
+  body      String
   createdAt DateTime @default(now())
 
   @@index([userId])
