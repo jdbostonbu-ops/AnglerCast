@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type ReactElement } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactElement } from 'react';
 import { CatchPost } from '@/components/CatchPost';
 
 type CatchFeedPost = {
@@ -27,6 +27,7 @@ type CatchFeedProps = {
   currentUserId?: string;
   onUpdate?: (postId: string, newBody: string) => void;
   onDelete?: (postId: string) => void;
+  refreshKey?: number;
 };
 
 export const CatchFeed = ({
@@ -35,16 +36,18 @@ export const CatchFeed = ({
   currentUserId,
   onUpdate,
   onDelete,
+  refreshKey,
 }: CatchFeedProps): ReactElement => {
   const [posts, setPosts] = useState<CatchFeedPost[]>([]);
+  const hasHandledInitialRefreshKey = useRef(false);
+
+  const loadAndStoreReports = useCallback(async (): Promise<void> => {
+    const fetchedPosts = await fetchReports({ waterType });
+
+    setPosts(fetchedPosts);
+  }, [fetchReports, waterType]);
 
   useEffect(() => {
-    const loadAndStoreReports = async (): Promise<void> => {
-      const fetchedPosts = await fetchReports({ waterType });
-
-      setPosts(fetchedPosts);
-    };
-
     void loadAndStoreReports();
 
     const intervalId = window.setInterval(() => {
@@ -54,7 +57,16 @@ export const CatchFeed = ({
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [fetchReports, waterType]);
+  }, [loadAndStoreReports]);
+
+  useEffect(() => {
+    if (!hasHandledInitialRefreshKey.current) {
+      hasHandledInitialRefreshKey.current = true;
+      return;
+    }
+
+    void loadAndStoreReports();
+  }, [loadAndStoreReports, refreshKey]);
 
   return (
     <div>
