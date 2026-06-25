@@ -88,3 +88,26 @@ describe('CatchPost save', () => {
     );
   });
 });
+
+describe('CatchPost delete confirmation', () => {
+  it('opens a confirmation dialog and calls onDelete once when Confirm is clicked', () => {
+    const onDelete = vi.fn();
+
+    render(
+      <CatchPost
+        post={basePost}
+        currentUserId="user-1"
+        onUpdate={() => {}}
+        onDelete={onDelete}
+      />,
+    );
+
+    // onDelete should not fire just from opening the dialog
+    fireEvent.click(screen.getByRole('button', { name: /delete/i }));
+    expect(onDelete).not.toHaveBeenCalled();
+
+    // Confirming the dialog fires onDelete exactly once
+    fireEvent.click(screen.getByRole('button', { name: /confirm/i }));
+    expect(onDelete).toHaveBeenCalledTimes(1);
+  });
+});
