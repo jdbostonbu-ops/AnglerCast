@@ -4,6 +4,7 @@ import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { NavBar } from '@/components/NavBar';
 import { PasswordField } from '@/components/PasswordField';
+import { Spinner } from '@/components/Spinner';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -65,9 +66,12 @@ const LoginPage = () => {
 
           {errorMessage ? <p className="auth-form__error">{errorMessage}</p> : null}
 
-          <button type="submit" className="auth-form__submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Logging in…' : 'Log in'}
-          </button>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            <button type="submit" className="auth-form__submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Logging in…' : 'Log in'}
+            </button>
+            {isSubmitting ? <Spinner /> : null}
+          </span>
         </form>
         <p className="auth-form__alt">
           Don&apos;t have an account? <a href="/signup">Sign up</a>
