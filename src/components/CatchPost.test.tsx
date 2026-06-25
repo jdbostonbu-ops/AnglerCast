@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { CatchPost } from '@/components/CatchPost';
 
@@ -37,5 +37,25 @@ describe('CatchPost edit button visibility', () => {
     );
 
     expect(screen.queryByRole('button', { name: /edit/i })).toBeNull();
+  });
+});
+
+describe('CatchPost edit mode', () => {
+  it('reveals an editable textarea pre-filled with the body and a Save button when the pencil is clicked', () => {
+    render(
+      <CatchPost
+        post={basePost}
+        currentUserId="user-1"
+        onUpdate={() => {}}
+        onDelete={() => {}}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /edit/i }));
+
+    const textarea = screen.getByRole('textbox');
+    expect(textarea).toHaveValue('Caught a smallmouth bass at dawn.');
+
+    expect(screen.getByRole('button', { name: /save/i })).toBeInTheDocument();
   });
 });
