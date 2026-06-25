@@ -1,130 +1,138 @@
 # Test Run & Git Summary Report
-**Generated on:** 6/25/2026, 12:46:08 PM
+**Generated on:** 6/25/2026, 4:09:44 PM
 
 ## 🕒 Recent Git Commit Log
-* **71765d4** - Jacqueline Delgado, 66 seconds ago : test: add RED for profile image upload via Vercel Blob
-* **0b59697** - Jacqueline Delgado, 16 minutes ago : updated test-report.md file
-* **db4ca12** - Jacqueline Delgado, 17 minutes ago : fix: add createdAt to CatchFeedPost type so production build type-checks
-* **7d5d87b** - Jacqueline Delgado, 22 minutes ago : added prompts to PROMPTS file and updated TESTING.md file with additional plan for new features
-* **f597cdd** - Jacqueline Delgado, 23 minutes ago : feat: show spinner beside login button while submitting
-* **c20e48b** - Jacqueline Delgado, 28 minutes ago : feat: show MapHint between AI explanation and map on both pages
-* **8393434** - Jacqueline Delgado, 41 minutes ago : feat: MapHint renders zoom guidance text
-* **71c1a83** - Jacqueline Delgado, 43 minutes ago : test: add RED for MapHint zoom guidance component
-* **b9f3fd5** - Jacqueline Delgado, 47 minutes ago : feat: wire waterType into SightingRateSearch on both pages, fix fetchReports return type
-* **a6c22a8** - Jacqueline Delgado, 59 minutes ago : feat: Species field is a common-name dropdown that submits the scientific name
-* **fdf8059** - Jacqueline Delgado, 73 minutes ago : test: add RED for Species field as common-name dropdown
-* **e47914d** - Jacqueline Delgado, 2 hours ago : fix: CatchPost exits edit mode after a successful save
-* **a9c1c95** - Jacqueline Delgado, 2 hours ago : test: add RED for CatchPost closing editor after successful save
-* **08072e4** - Jacqueline Delgado, 2 hours ago : feat: bump refreshKey after post/delete/update so feed updates instantly
-* **677acc1** - Jacqueline Delgado, 2 hours ago : feat: CatchFeed re-fetches immediately when refreshKey changes
-* **bd449dd** - Jacqueline Delgado, 2 hours ago : test: add RED for CatchFeed immediate refresh on refreshKey change
-* **67b2329** - Jacqueline Delgado, 2 hours ago : feat: minimum visible duration so action spinners are perceptible on fast actions
-* **100edb0** - Jacqueline Delgado, 2 hours ago : added prompt md and made changed to testing-report md file
-* **05e0fcd** - Jacqueline Delgado, 2 hours ago : feat: add animated spinner to post, delete, and save buttons during async actions
-* **671be81** - Jacqueline Delgado, 2 hours ago : feat: wire catch reports feed onto freshwater page
-* **1fb3dd4** - Jacqueline Delgado, 2 hours ago : feat: clear composer textarea after successful post, keep text on failure
-* **839e640** - Jacqueline Delgado, 2 hours ago : test: add RED for CatchComposer clearing textarea after successful post
-* **dd33144** - Jacqueline Delgado, 2 hours ago : polish: add gap between avatar and author name in catch posts
-* **2bf56d1** - Jacqueline Delgado, 2 hours ago : polish: space out post timestamp and show Posting state on post button
-* **2bbf0d9** - Jacqueline Delgado, 2 hours ago : feat: display relative timestamp on catch posts, add createdAt to test fixture
-* **849db7b** - Jacqueline Delgado, 2 hours ago : test: add RED for CatchPost timestamp display
-* **4c5a4f6** - Jacqueline Delgado, 3 hours ago : feat: implement formatRelativeTime helper
-* **d05557a** - Jacqueline Delgado, 3 hours ago : test: add RED for formatRelativeTime helper
-* **017f607** - Jacqueline Delgado, 3 hours ago : fix: add id and name to composer and edit textareas for accessibility
-* **eab0e2c** - Jacqueline Delgado, 3 hours ago : feat: disable delete/save buttons while in progress to prevent double-action
-* **eee79de** - Jacqueline Delgado, 3 hours ago : test: add RED for CatchPost double-delete and double-save prevention
-* **558db64** - Jacqueline Delgado, 3 hours ago : fix: full-width composer textarea and spacing between catch posts
-* **0c00993** - Jacqueline Delgado, 3 hours ago : feat: wire CatchFeed edit/delete to PATCH/DELETE routes on saltwater page
-* **ca931f9** - Jacqueline Delgado, 3 hours ago : feat: CatchFeed renders posts as CatchPost with edit/delete for 2c, fix test flush
-* **ae822d3** - Jacqueline Delgado, 3 hours ago : test: add RED for CatchFeed rendering posts as CatchPost with edit/delete
-* **73cc181** - Jacqueline Delgado, 3 hours ago : feat: PATCH catch-reports route updates post body for owner
-* **71e233b** - Jacqueline Delgado, 3 hours ago : test: add RED for PATCH catch-reports route
-* **da11013** - Jacqueline Delgado, 3 hours ago : feat: DELETE catch-reports route deletes post for owner
-* **10ec2c6** - Jacqueline Delgado, 3 hours ago : test: add RED for DELETE catch-reports route
-* **7f455c0** - Jacqueline Delgado, 3 hours ago : feat: CatchComposer disables post button while submitting to prevent double-post
-* **274bbe0** - Jacqueline Delgado, 3 hours ago : test: add RED for CatchComposer double-submit prevention
-* **f591a43** - Jacqueline Delgado, 4 hours ago : feat: add catch reports feed beside saved spots on saltwater page
-* **41e3147** - Jacqueline Delgado, 4 hours ago : feat: CatchComposer post box with profile gate
-* **acd28ab** - Jacqueline Delgado, 4 hours ago : test: add RED for CatchComposer post box with profile gate
-* **781cd50** - Jacqueline Delgado, 4 hours ago : feat: POST catch-reports route creates post for logged-in user
-* **53b2398** - Jacqueline Delgado, 4 hours ago : test: add RED for POST catch-reports route
-* **7d384b0** - Jacqueline Delgado, 4 hours ago : feat: GET catch-reports route lists posts for water type
-* **9a175a5** - Jacqueline Delgado, 4 hours ago : test: add RED for GET catch-reports route
-* **a99bdcd** - Jacqueline Delgado, 4 hours ago : fix: constrain profile image preview to thumbnail so Save button stays visible
-* **4e1a055** - Jacqueline Delgado, 4 hours ago : feat: NavBar pencil edit link to profile next to avatar
-* **3c3d994** - Jacqueline Delgado, 4 hours ago : test: add RED for NavBar pencil edit link to profile
-* **5934f2c** - Jacqueline Delgado, 5 hours ago : feat: SiteNav fetches profile and passes to NavBar for avatar display
-* **134a379** - Jacqueline Delgado, 5 hours ago : feat: GET profile route returns current user profile
-* **bfc3f2c** - Jacqueline Delgado, 5 hours ago : test: add RED for GET profile route
-* **6833d15** - Jacqueline Delgado, 5 hours ago : feat: ProfileForm shows uploaded image preview
-* **d4ff519** - Jacqueline Delgado, 5 hours ago : test: add RED for ProfileForm image preview
-* **39a9b31** - Jacqueline Delgado, 14 hours ago : chore: add public/uploads folder, ignore uploaded files
-* **f7c49d3** - Jacqueline Delgado, 14 hours ago : feat: wire ProfileForm uploadImage to image upload route on profile page
-* **c5cb9b3** - Jacqueline Delgado, 14 hours ago : feat: ProfileForm file upload with pencil for RED 33.2, fix test act flush
-* **9ec3fbf** - Jacqueline Delgado, 14 hours ago : test: rewrite RED 33.2 for ProfileForm file upload, remove URL field
-* **8062659** - Jacqueline Delgado, 14 hours ago : feat: profile image upload route writes file and returns path for RED 33.1, adapt test for jsdom
-* **cf29996** - Jacqueline Delgado, 14 hours ago : test: add RED 33.1 for profile image upload route
-* **a5597c9** - Jacqueline Delgado, 15 hours ago : feat: POST profile route saves profile for logged-in user for RED 32.4
-* **b5a8e60** - Jacqueline Delgado, 15 hours ago : test: add RED 32.4 for POST profile route
-* **0fa2e3b** - Jacqueline Delgado, 15 hours ago : feat: ProfileForm empty name validation for RED 32.3
-* **2ff1c15** - Jacqueline Delgado, 15 hours ago : test: add RED 32.3 for ProfileForm empty name validation
-* **4997b08** - Jacqueline Delgado, 15 hours ago : feat: ProfileForm submit calls onSave with values for RED 32.2
-* **874b6ab** - Jacqueline Delgado, 15 hours ago : test: add RED 32.2 for ProfileForm submit calls onSave
-* **d588e3a** - Jacqueline Delgado, 15 hours ago : feat: ProfileForm renders fields and Save button for RED 32.1
-* **c8e9587** - Jacqueline Delgado, 15 hours ago : test: add RED 32.1 for ProfileForm rendering
-* **24f2c3c** - Jacqueline Delgado, 15 hours ago : test: add RED 31.3 guarding CatchFeed stops polling on unmount (passes on arrival)
-* **66f54a8** - Jacqueline Delgado, 15 hours ago : feat: CatchFeed renders new posts on poll for RED 31.2, fix test promise flushing
-* **f41fcdd** - Jacqueline Delgado, 15 hours ago : test: add RED 31.2 for CatchFeed renders new posts
-* **beacf11** - Jacqueline Delgado, 15 hours ago : feat: CatchFeed polling interval for RED 31.1
-* **e72745c** - Jacqueline Delgado, 15 hours ago : test: add RED 31.1 for CatchFeed polling interval
-* **17fffd0** - Jacqueline Delgado, 15 hours ago : feat: CatchPost delete cancel closes dialog for RED 30.5
-* **2ea518b** - Jacqueline Delgado, 15 hours ago : test: add RED 30.5 for CatchPost delete cancel
-* **256b875** - Jacqueline Delgado, 15 hours ago : feat: CatchPost delete confirmation dialog for RED 30.4
-* **67f4520** - Jacqueline Delgado, 15 hours ago : test: add RED 30.4 for CatchPost delete confirmation
-* **a5f84e8** - Jacqueline Delgado, 15 hours ago : feat: CatchPost Save calls onUpdate with edited body for RED 30.3
-* **bacd474** - Jacqueline Delgado, 15 hours ago : test: add RED 30.3 for CatchPost Save calls onUpdate
-* **80b2e1f** - Jacqueline Delgado, 15 hours ago : feat: CatchPost edit mode textarea and Save button for RED 30.2
-* **7f1fe6c** - Jacqueline Delgado, 15 hours ago : test: add RED 30.2 for CatchPost edit mode textarea and Save
-* **c1345aa** - Jacqueline Delgado, 15 hours ago : feat: CatchPost edit button visibility for RED 30.1
-* **870bd09** - Jacqueline Delgado, 15 hours ago : test: add RED 30.1 for CatchPost edit button visibility
-* **5225ea6** - Jacqueline Delgado, 15 hours ago : feat: reject non-owner in deleteCatchReport for RED 29.8
-* **01940cc** - Jacqueline Delgado, 15 hours ago : test: add RED 29.8 for deleteCatchReport rejects non-owner
-* **9cccdb0** - Jacqueline Delgado, 15 hours ago : feat: implement deleteCatchReport owner-can-delete for RED 29.7
-* **6a7d740** - Jacqueline Delgado, 15 hours ago : test: add RED 29.7 for deleteCatchReport owner can delete
-* **486c473** - Jacqueline Delgado, 15 hours ago : feat: reject non-owner in updateCatchReport for RED 29.6
-* **a63410e** - Jacqueline Delgado, 15 hours ago : test: add RED 29.6 for updateCatchReport rejects non-owner
-* **bb0e5a4** - Jacqueline Delgado, 15 hours ago : feat: implement updateCatchReport owner-can-edit for RED 29.5
-* **eef2919** - Jacqueline Delgado, 15 hours ago : test: add RED 29.5 for updateCatchReport owner can edit
-* **b393ad5** - Jacqueline Delgado, 15 hours ago : feat: add author info to getCatchReports for RED 29.4, update 29.2 mocks for join
-* **e0b1713** - Jacqueline Delgado, 16 hours ago : test: add RED 29.4 for getCatchReports author info join
-* **4b21709** - Jacqueline Delgado, 16 hours ago : feat: order getCatchReports newest first for RED 29.3
-* **27aafef** - Jacqueline Delgado, 16 hours ago : updated nav bar with profile link and updated css
-* **14ca257** - Jacqueline Delgado, 16 hours ago : test: add RED 29.3 for getCatchReports newest-first ordering
-* **fb4a25b** - Jacqueline Delgado, 16 hours ago : feat: implement getCatchReports water type filtering for RED 29.2
-* **cb9fb3a** - Jacqueline Delgado, 16 hours ago : test: add RED 29.2 for getCatchReports water type filtering
-* **468153a** - Jacqueline Delgado, 16 hours ago : feat: implement createCatchReport for RED 29.1
-* **3aa16ac** - Jacqueline Delgado, 16 hours ago : test: add RED 29.1 for createCatchReport, add CatchReport model
-* **8770f4c** - Jacqueline Delgado, 16 hours ago : feat: implement PostButton with set up profile gate for RED 28.10
-* **a6a1ba1** - Jacqueline Delgado, 16 hours ago : test: add RED 28.10 for PostButton set up profile dialog
-* **99d8e91** - Jacqueline Delgado, 16 hours ago : feat: implement canPostCatch profile name gate for RED 28.9
-* **d44bec0** - Jacqueline Delgado, 16 hours ago : test: add RED 28.9 for canPostCatch profile name gate
-* **8b243f2** - Jacqueline Delgado, 16 hours ago : feat: render set up profile prompt in NavBar for RED 28.8
-* **6fbf020** - Jacqueline Delgado, 17 hours ago : test: add RED 28.8 for NavBar set up profile prompt
-* **5d1164c** - Jacqueline Delgado, 17 hours ago : feat: render letter avatar fallback in NavBar for RED 28.7
-* **d4c75ae** - Jacqueline Delgado, 17 hours ago : test: add RED 28.7 for NavBar letter avatar fallback
-* **96b0e30** - Jacqueline Delgado, 17 hours ago : docs: add TESTING.md plan for sections 28-31 profile and catch feed
-* **e4e4875** - Jacqueline Delgado, 17 hours ago : chore: add playwright setup for auth-gate e2e regression test
-* **f387423** - Jacqueline Delgado, 17 hours ago : feat: render profile avatar and display name in NavBar for RED 28.6
-* **19e86ea** - Jacqueline Delgado, 17 hours ago : test: add RED 28.6 for NavBar profile avatar and display name
-* **3819887** - Jacqueline Delgado, 17 hours ago : test: add RED 28.5 regression guard for NavBar brand name
-* **6c3237e** - Jacqueline Delgado, 17 hours ago : feat: implement getDisplayAvatar letter fallback for RED 28.4
-* **c9e3d2a** - Jacqueline Delgado, 17 hours ago : test: add RED 28.4 for getDisplayAvatar letter fallback
-* **1c2bc35** - Jacqueline Delgado, 17 hours ago : feat: implement getDisplayAvatar image case for RED 28.3
-* **da181e8** - Jacqueline Delgado, 17 hours ago : test: add RED 28.3 for getDisplayAvatar image case
-* **1d52768** - Jacqueline Delgado, 17 hours ago : feat: implement saveProfileImage for RED 28.2
-* **821aea6** - Jacqueline Delgado, 17 hours ago : test: add RED 28.2 for saveProfileImage, add profileImageUrl to User
-* **688e21a** - Jacqueline Delgado, 17 hours ago : feat: implement saveProfileName for RED 28.1
-* **cf9ad92** - Jacqueline Delgado, 17 hours ago : test: add RED 28.1 for saveProfileName, exclude e2e from vitest
+* **eff9fa5** - Jacqueline Delgado, 12 minutes ago : feat(rag): GREEN 34.3 — retrieveTopChunks
+* **8d20358** - Jacqueline Delgado, 13 minutes ago : test(rag): RED 34.3 — retrieveTopChunks
+* **7ee3a84** - Jacqueline Delgado, 16 minutes ago : feat(rag): GREEN 34.2 — chunkMarkdownContent
+* **5edfb1c** - Jacqueline Delgado, 17 minutes ago : test(rag): RED 34.2 — chunkMarkdownContent
+* **8c8eced** - Jacqueline Delgado, 22 minutes ago : feat(rag): GREEN 34.1 — cosineSimilarity
+* **b6cf9f2** - Jacqueline Delgado, 24 minutes ago : test(rag): RED 34.1 — cosineSimilarity returns 1 / 0 / -1
+* **ce9d386** - Jacqueline Delgado, 2 hours ago : updated test-report md file
+* **d01c681** - Jacqueline Delgado, 3 hours ago : feat: upload profile images to Vercel Blob instead of local disk
+* **71765d4** - Jacqueline Delgado, 3 hours ago : test: add RED for profile image upload via Vercel Blob
+* **0b59697** - Jacqueline Delgado, 4 hours ago : updated test-report.md file
+* **db4ca12** - Jacqueline Delgado, 4 hours ago : fix: add createdAt to CatchFeedPost type so production build type-checks
+* **7d5d87b** - Jacqueline Delgado, 4 hours ago : added prompts to PROMPTS file and updated TESTING.md file with additional plan for new features
+* **f597cdd** - Jacqueline Delgado, 4 hours ago : feat: show spinner beside login button while submitting
+* **c20e48b** - Jacqueline Delgado, 4 hours ago : feat: show MapHint between AI explanation and map on both pages
+* **8393434** - Jacqueline Delgado, 4 hours ago : feat: MapHint renders zoom guidance text
+* **71c1a83** - Jacqueline Delgado, 4 hours ago : test: add RED for MapHint zoom guidance component
+* **b9f3fd5** - Jacqueline Delgado, 4 hours ago : feat: wire waterType into SightingRateSearch on both pages, fix fetchReports return type
+* **a6c22a8** - Jacqueline Delgado, 4 hours ago : feat: Species field is a common-name dropdown that submits the scientific name
+* **fdf8059** - Jacqueline Delgado, 5 hours ago : test: add RED for Species field as common-name dropdown
+* **e47914d** - Jacqueline Delgado, 5 hours ago : fix: CatchPost exits edit mode after a successful save
+* **a9c1c95** - Jacqueline Delgado, 5 hours ago : test: add RED for CatchPost closing editor after successful save
+* **08072e4** - Jacqueline Delgado, 5 hours ago : feat: bump refreshKey after post/delete/update so feed updates instantly
+* **677acc1** - Jacqueline Delgado, 5 hours ago : feat: CatchFeed re-fetches immediately when refreshKey changes
+* **bd449dd** - Jacqueline Delgado, 5 hours ago : test: add RED for CatchFeed immediate refresh on refreshKey change
+* **67b2329** - Jacqueline Delgado, 5 hours ago : feat: minimum visible duration so action spinners are perceptible on fast actions
+* **100edb0** - Jacqueline Delgado, 5 hours ago : added prompt md and made changed to testing-report md file
+* **05e0fcd** - Jacqueline Delgado, 5 hours ago : feat: add animated spinner to post, delete, and save buttons during async actions
+* **671be81** - Jacqueline Delgado, 6 hours ago : feat: wire catch reports feed onto freshwater page
+* **1fb3dd4** - Jacqueline Delgado, 6 hours ago : feat: clear composer textarea after successful post, keep text on failure
+* **839e640** - Jacqueline Delgado, 6 hours ago : test: add RED for CatchComposer clearing textarea after successful post
+* **dd33144** - Jacqueline Delgado, 6 hours ago : polish: add gap between avatar and author name in catch posts
+* **2bf56d1** - Jacqueline Delgado, 6 hours ago : polish: space out post timestamp and show Posting state on post button
+* **2bbf0d9** - Jacqueline Delgado, 6 hours ago : feat: display relative timestamp on catch posts, add createdAt to test fixture
+* **849db7b** - Jacqueline Delgado, 6 hours ago : test: add RED for CatchPost timestamp display
+* **4c5a4f6** - Jacqueline Delgado, 6 hours ago : feat: implement formatRelativeTime helper
+* **d05557a** - Jacqueline Delgado, 6 hours ago : test: add RED for formatRelativeTime helper
+* **017f607** - Jacqueline Delgado, 6 hours ago : fix: add id and name to composer and edit textareas for accessibility
+* **eab0e2c** - Jacqueline Delgado, 6 hours ago : feat: disable delete/save buttons while in progress to prevent double-action
+* **eee79de** - Jacqueline Delgado, 6 hours ago : test: add RED for CatchPost double-delete and double-save prevention
+* **558db64** - Jacqueline Delgado, 6 hours ago : fix: full-width composer textarea and spacing between catch posts
+* **0c00993** - Jacqueline Delgado, 7 hours ago : feat: wire CatchFeed edit/delete to PATCH/DELETE routes on saltwater page
+* **ca931f9** - Jacqueline Delgado, 7 hours ago : feat: CatchFeed renders posts as CatchPost with edit/delete for 2c, fix test flush
+* **ae822d3** - Jacqueline Delgado, 7 hours ago : test: add RED for CatchFeed rendering posts as CatchPost with edit/delete
+* **73cc181** - Jacqueline Delgado, 7 hours ago : feat: PATCH catch-reports route updates post body for owner
+* **71e233b** - Jacqueline Delgado, 7 hours ago : test: add RED for PATCH catch-reports route
+* **da11013** - Jacqueline Delgado, 7 hours ago : feat: DELETE catch-reports route deletes post for owner
+* **10ec2c6** - Jacqueline Delgado, 7 hours ago : test: add RED for DELETE catch-reports route
+* **7f455c0** - Jacqueline Delgado, 7 hours ago : feat: CatchComposer disables post button while submitting to prevent double-post
+* **274bbe0** - Jacqueline Delgado, 7 hours ago : test: add RED for CatchComposer double-submit prevention
+* **f591a43** - Jacqueline Delgado, 7 hours ago : feat: add catch reports feed beside saved spots on saltwater page
+* **41e3147** - Jacqueline Delgado, 7 hours ago : feat: CatchComposer post box with profile gate
+* **acd28ab** - Jacqueline Delgado, 7 hours ago : test: add RED for CatchComposer post box with profile gate
+* **781cd50** - Jacqueline Delgado, 7 hours ago : feat: POST catch-reports route creates post for logged-in user
+* **53b2398** - Jacqueline Delgado, 7 hours ago : test: add RED for POST catch-reports route
+* **7d384b0** - Jacqueline Delgado, 7 hours ago : feat: GET catch-reports route lists posts for water type
+* **9a175a5** - Jacqueline Delgado, 7 hours ago : test: add RED for GET catch-reports route
+* **a99bdcd** - Jacqueline Delgado, 7 hours ago : fix: constrain profile image preview to thumbnail so Save button stays visible
+* **4e1a055** - Jacqueline Delgado, 8 hours ago : feat: NavBar pencil edit link to profile next to avatar
+* **3c3d994** - Jacqueline Delgado, 8 hours ago : test: add RED for NavBar pencil edit link to profile
+* **5934f2c** - Jacqueline Delgado, 8 hours ago : feat: SiteNav fetches profile and passes to NavBar for avatar display
+* **134a379** - Jacqueline Delgado, 8 hours ago : feat: GET profile route returns current user profile
+* **bfc3f2c** - Jacqueline Delgado, 8 hours ago : test: add RED for GET profile route
+* **6833d15** - Jacqueline Delgado, 8 hours ago : feat: ProfileForm shows uploaded image preview
+* **d4ff519** - Jacqueline Delgado, 8 hours ago : test: add RED for ProfileForm image preview
+* **39a9b31** - Jacqueline Delgado, 17 hours ago : chore: add public/uploads folder, ignore uploaded files
+* **f7c49d3** - Jacqueline Delgado, 17 hours ago : feat: wire ProfileForm uploadImage to image upload route on profile page
+* **c5cb9b3** - Jacqueline Delgado, 17 hours ago : feat: ProfileForm file upload with pencil for RED 33.2, fix test act flush
+* **9ec3fbf** - Jacqueline Delgado, 17 hours ago : test: rewrite RED 33.2 for ProfileForm file upload, remove URL field
+* **8062659** - Jacqueline Delgado, 17 hours ago : feat: profile image upload route writes file and returns path for RED 33.1, adapt test for jsdom
+* **cf29996** - Jacqueline Delgado, 18 hours ago : test: add RED 33.1 for profile image upload route
+* **a5597c9** - Jacqueline Delgado, 18 hours ago : feat: POST profile route saves profile for logged-in user for RED 32.4
+* **b5a8e60** - Jacqueline Delgado, 18 hours ago : test: add RED 32.4 for POST profile route
+* **0fa2e3b** - Jacqueline Delgado, 18 hours ago : feat: ProfileForm empty name validation for RED 32.3
+* **2ff1c15** - Jacqueline Delgado, 18 hours ago : test: add RED 32.3 for ProfileForm empty name validation
+* **4997b08** - Jacqueline Delgado, 18 hours ago : feat: ProfileForm submit calls onSave with values for RED 32.2
+* **874b6ab** - Jacqueline Delgado, 18 hours ago : test: add RED 32.2 for ProfileForm submit calls onSave
+* **d588e3a** - Jacqueline Delgado, 18 hours ago : feat: ProfileForm renders fields and Save button for RED 32.1
+* **c8e9587** - Jacqueline Delgado, 18 hours ago : test: add RED 32.1 for ProfileForm rendering
+* **24f2c3c** - Jacqueline Delgado, 18 hours ago : test: add RED 31.3 guarding CatchFeed stops polling on unmount (passes on arrival)
+* **66f54a8** - Jacqueline Delgado, 18 hours ago : feat: CatchFeed renders new posts on poll for RED 31.2, fix test promise flushing
+* **f41fcdd** - Jacqueline Delgado, 18 hours ago : test: add RED 31.2 for CatchFeed renders new posts
+* **beacf11** - Jacqueline Delgado, 18 hours ago : feat: CatchFeed polling interval for RED 31.1
+* **e72745c** - Jacqueline Delgado, 18 hours ago : test: add RED 31.1 for CatchFeed polling interval
+* **17fffd0** - Jacqueline Delgado, 18 hours ago : feat: CatchPost delete cancel closes dialog for RED 30.5
+* **2ea518b** - Jacqueline Delgado, 18 hours ago : test: add RED 30.5 for CatchPost delete cancel
+* **256b875** - Jacqueline Delgado, 19 hours ago : feat: CatchPost delete confirmation dialog for RED 30.4
+* **67f4520** - Jacqueline Delgado, 19 hours ago : test: add RED 30.4 for CatchPost delete confirmation
+* **a5f84e8** - Jacqueline Delgado, 19 hours ago : feat: CatchPost Save calls onUpdate with edited body for RED 30.3
+* **bacd474** - Jacqueline Delgado, 19 hours ago : test: add RED 30.3 for CatchPost Save calls onUpdate
+* **80b2e1f** - Jacqueline Delgado, 19 hours ago : feat: CatchPost edit mode textarea and Save button for RED 30.2
+* **7f1fe6c** - Jacqueline Delgado, 19 hours ago : test: add RED 30.2 for CatchPost edit mode textarea and Save
+* **c1345aa** - Jacqueline Delgado, 19 hours ago : feat: CatchPost edit button visibility for RED 30.1
+* **870bd09** - Jacqueline Delgado, 19 hours ago : test: add RED 30.1 for CatchPost edit button visibility
+* **5225ea6** - Jacqueline Delgado, 19 hours ago : feat: reject non-owner in deleteCatchReport for RED 29.8
+* **01940cc** - Jacqueline Delgado, 19 hours ago : test: add RED 29.8 for deleteCatchReport rejects non-owner
+* **9cccdb0** - Jacqueline Delgado, 19 hours ago : feat: implement deleteCatchReport owner-can-delete for RED 29.7
+* **6a7d740** - Jacqueline Delgado, 19 hours ago : test: add RED 29.7 for deleteCatchReport owner can delete
+* **486c473** - Jacqueline Delgado, 19 hours ago : feat: reject non-owner in updateCatchReport for RED 29.6
+* **a63410e** - Jacqueline Delgado, 19 hours ago : test: add RED 29.6 for updateCatchReport rejects non-owner
+* **bb0e5a4** - Jacqueline Delgado, 19 hours ago : feat: implement updateCatchReport owner-can-edit for RED 29.5
+* **eef2919** - Jacqueline Delgado, 19 hours ago : test: add RED 29.5 for updateCatchReport owner can edit
+* **b393ad5** - Jacqueline Delgado, 19 hours ago : feat: add author info to getCatchReports for RED 29.4, update 29.2 mocks for join
+* **e0b1713** - Jacqueline Delgado, 19 hours ago : test: add RED 29.4 for getCatchReports author info join
+* **4b21709** - Jacqueline Delgado, 19 hours ago : feat: order getCatchReports newest first for RED 29.3
+* **27aafef** - Jacqueline Delgado, 19 hours ago : updated nav bar with profile link and updated css
+* **14ca257** - Jacqueline Delgado, 19 hours ago : test: add RED 29.3 for getCatchReports newest-first ordering
+* **fb4a25b** - Jacqueline Delgado, 19 hours ago : feat: implement getCatchReports water type filtering for RED 29.2
+* **cb9fb3a** - Jacqueline Delgado, 19 hours ago : test: add RED 29.2 for getCatchReports water type filtering
+* **468153a** - Jacqueline Delgado, 19 hours ago : feat: implement createCatchReport for RED 29.1
+* **3aa16ac** - Jacqueline Delgado, 19 hours ago : test: add RED 29.1 for createCatchReport, add CatchReport model
+* **8770f4c** - Jacqueline Delgado, 19 hours ago : feat: implement PostButton with set up profile gate for RED 28.10
+* **a6a1ba1** - Jacqueline Delgado, 19 hours ago : test: add RED 28.10 for PostButton set up profile dialog
+* **99d8e91** - Jacqueline Delgado, 20 hours ago : feat: implement canPostCatch profile name gate for RED 28.9
+* **d44bec0** - Jacqueline Delgado, 20 hours ago : test: add RED 28.9 for canPostCatch profile name gate
+* **8b243f2** - Jacqueline Delgado, 20 hours ago : feat: render set up profile prompt in NavBar for RED 28.8
+* **6fbf020** - Jacqueline Delgado, 20 hours ago : test: add RED 28.8 for NavBar set up profile prompt
+* **5d1164c** - Jacqueline Delgado, 20 hours ago : feat: render letter avatar fallback in NavBar for RED 28.7
+* **d4c75ae** - Jacqueline Delgado, 20 hours ago : test: add RED 28.7 for NavBar letter avatar fallback
+* **96b0e30** - Jacqueline Delgado, 20 hours ago : docs: add TESTING.md plan for sections 28-31 profile and catch feed
+* **e4e4875** - Jacqueline Delgado, 20 hours ago : chore: add playwright setup for auth-gate e2e regression test
+* **f387423** - Jacqueline Delgado, 20 hours ago : feat: render profile avatar and display name in NavBar for RED 28.6
+* **19e86ea** - Jacqueline Delgado, 20 hours ago : test: add RED 28.6 for NavBar profile avatar and display name
+* **3819887** - Jacqueline Delgado, 20 hours ago : test: add RED 28.5 regression guard for NavBar brand name
+* **6c3237e** - Jacqueline Delgado, 20 hours ago : feat: implement getDisplayAvatar letter fallback for RED 28.4
+* **c9e3d2a** - Jacqueline Delgado, 20 hours ago : test: add RED 28.4 for getDisplayAvatar letter fallback
+* **1c2bc35** - Jacqueline Delgado, 20 hours ago : feat: implement getDisplayAvatar image case for RED 28.3
+* **da181e8** - Jacqueline Delgado, 20 hours ago : test: add RED 28.3 for getDisplayAvatar image case
+* **1d52768** - Jacqueline Delgado, 21 hours ago : feat: implement saveProfileImage for RED 28.2
+* **821aea6** - Jacqueline Delgado, 21 hours ago : test: add RED 28.2 for saveProfileImage, add profileImageUrl to User
+* **688e21a** - Jacqueline Delgado, 21 hours ago : feat: implement saveProfileName for RED 28.1
+* **cf9ad92** - Jacqueline Delgado, 21 hours ago : test: add RED 28.1 for saveProfileName, exclude e2e from vitest
 * **11e24a6** - Jacqueline Delgado, 3 days ago : updated readme file and added test-report.md file created by vitest reporter
 * **3f50b4c** - Jacqueline Delgado, 3 days ago : updated package json file added vitest reporter
 * **bb27118** - Jacqueline Delgado, 3 days ago : feat: add EmptyRecordsNotice no-records message
@@ -298,114 +306,11 @@
 * **c35aeb8** - Jacqueline Delgado, 10 days ago : Initial commit: TDD on emailVerification.test.ts
 
 ## 📊 Test Metrics Summary
-* **Total Tests:** 103
-* **Passed:** 😄 103
+* **Total Tests:** 0
+* **Passed:** 😄 0
 * **Failed:** 😡 0
 
 ## 📝 Detailed Test Breakdown
 
 | File | Test Case | Status | Duration |
 | :--- | :--- | :--- | :--- |
-| src/app/page.test.tsx | HomePage | ✅ Pass | 127.50475000000006ms |
-| src/components/CatchComposer.test.tsx | CatchComposer when the user has a profile name | ✅ Pass | 248.47474999999997ms |
-| src/components/CatchComposer.test.tsx | CatchComposer when the user has no profile name | ✅ Pass | 16.446208999999953ms |
-| src/components/CatchComposer.test.tsx | CatchComposer prevents double submitting | ✅ Pass | 6.307416999999987ms |
-| src/components/CatchComposer.test.tsx | CatchComposer clears after a successful post | ✅ Pass | 425.7092500000001ms |
-| src/components/CatchFeed.test.tsx | CatchFeed polling | ✅ Pass | 13.227832999999919ms |
-| src/components/CatchFeed.test.tsx | CatchFeed renders new posts | ✅ Pass | 29.912874999999985ms |
-| src/components/CatchFeed.test.tsx | CatchFeed stops polling on unmount | ✅ Pass | 5.286917000000017ms |
-| src/components/CatchFeed.test.tsx | CatchFeed renders posts as CatchPost with edit and delete | ✅ Pass | 28.216833000000065ms |
-| src/components/CatchFeed.test.tsx | CatchFeed refreshes immediately when the refresh key changes | ✅ Pass | 5.873082999999951ms |
-| src/components/CatchPost.test.tsx | CatchPost edit button visibility | ✅ Pass | 58.12454200000002ms |
-| src/components/CatchPost.test.tsx | CatchPost edit mode | ✅ Pass | 27.233041999999955ms |
-| src/components/CatchPost.test.tsx | CatchPost save | ✅ Pass | 11.66191600000002ms |
-| src/components/CatchPost.test.tsx | CatchPost delete confirmation | ✅ Pass | 17.9637909999999ms |
-| src/components/CatchPost.test.tsx | CatchPost delete cancel | ✅ Pass | 26.71895799999993ms |
-| src/components/CatchPost.test.tsx | CatchPost prevents double delete | ✅ Pass | 8.88433299999997ms |
-| src/components/CatchPost.test.tsx | CatchPost prevents double save | ✅ Pass | 5.786749999999984ms |
-| src/components/CatchPost.test.tsx | CatchPost timestamp | ✅ Pass | 1.4090830000000096ms |
-| src/components/CatchPost.test.tsx | CatchPost closes the editor after saving | ✅ Pass | 414.179042ms |
-| src/components/ConfirmDialog.test.tsx | ConfirmDialog | ✅ Pass | 158.000042ms |
-| src/components/DeleteConfirmationDialog.test.tsx | DeleteConfirmationDialog | ✅ Pass | 93.33283300000005ms |
-| src/components/EmptyRecordsNotice.test.tsx | EmptyRecordsNotice | ✅ Pass | 20.506209000000013ms |
-| src/components/HomeButtons.test.tsx | HomeButtons | ✅ Pass | 34.636166ms |
-| src/components/MapHint.test.tsx | MapHint | ✅ Pass | 13.323165999999901ms |
-| src/components/NavBar.test.tsx | NavBar | ✅ Pass | 138.04920800000002ms |
-| src/components/PasswordField.test.tsx | PasswordField | ✅ Pass | 88.03204099999994ms |
-| src/components/PasswordField.test.tsx | toggles the button label between Show password and Hide password | ✅ Pass | 58.14691699999992ms |
-| src/components/PostButton.test.tsx | PostButton | ✅ Pass | 112.44058300000006ms |
-| src/components/ProfileForm.test.tsx | ProfileForm rendering | ✅ Pass | 81.93666700000006ms |
-| src/components/ProfileForm.test.tsx | ProfileForm image upload | ✅ Pass | 3.5504999999999427ms |
-| src/components/ProfileForm.test.tsx | ProfileForm submit | ✅ Pass | 9.493791999999985ms |
-| src/components/ProfileForm.test.tsx | ProfileForm empty name validation | ✅ Pass | 11.080458000000021ms |
-| src/components/ProfileForm.test.tsx | ProfileForm image preview | ✅ Pass | 15.549832999999921ms |
-| src/components/SightingRateSearch.test.tsx | SightingRateSearch | ✅ Pass | 517.685042ms |
-| src/components/SightingRateSearch.test.tsx | SightingRateSearch species dropdown | ✅ Pass | 176.6714579999998ms |
-| src/lib/bestMonth.test.ts | findBestMonth | ✅ Pass | 2.275041999999985ms |
-| src/lib/catchReport.test.ts | createCatchReport | ✅ Pass | 3.1464169999999285ms |
-| src/lib/catchReport.test.ts | getCatchReports water type filtering | ✅ Pass | 1.42612500000007ms |
-| src/lib/catchReport.test.ts | getCatchReports ordering | ✅ Pass | 0.15300000000002ms |
-| src/lib/catchReport.test.ts | getCatchReports author info | ✅ Pass | 0.30541699999992034ms |
-| src/lib/catchReport.test.ts | updateCatchReport ownership | ✅ Pass | 0.5473749999999882ms |
-| src/lib/catchReport.test.ts | updateCatchReport rejects non-owner | ✅ Pass | 0.1989170000000513ms |
-| src/lib/catchReport.test.ts | deleteCatchReport ownership | ✅ Pass | 1.266791000000012ms |
-| src/lib/catchReport.test.ts | deleteCatchReport rejects non-owner | ✅ Pass | 0.2774580000000242ms |
-| src/lib/clearSession.test.ts | clearSession | ✅ Pass | 2.2264999999999873ms |
-| src/lib/coordinates.test.ts | parseCoordinate | ✅ Pass | 2.4165420000000495ms |
-| src/lib/distance.test.ts | computeDistance | ✅ Pass | 0.7999160000000529ms |
-| src/lib/email.test.ts | sendVerificationEmail | ✅ Pass | 4.247457999999938ms |
-| src/lib/email.test.ts | sendPasswordResetEmail | ✅ Pass | 0.6428750000000036ms |
-| src/lib/emailVerification.test.ts | createEmailVerificationCode | ✅ Pass | 1077.512917ms |
-| src/lib/eta.test.ts | checkEtaIsReasonable | ✅ Pass | 5.3064999999999145ms |
-| src/lib/forecastConditions.test.ts | fetchForecastConditions | ✅ Pass | 6.833624999999984ms |
-| src/lib/formatRelativeTime.test.ts | formatRelativeTime | ✅ Pass | 2.8085000000000946ms |
-| src/lib/homeHighlights.test.ts | getHomeHighlights | ✅ Pass | 7.9978329999999005ms |
-| src/lib/locationSpecies.test.ts | fetchSpeciesAtLocation | ✅ Pass | 3.357250000000022ms |
-| src/lib/login.test.ts | checkLoginCredentials | ✅ Pass | 4.856290999999942ms |
-| src/lib/marineConditions.test.ts | fetchMarineConditions | ✅ Pass | 7.549958999999944ms |
-| src/lib/markerStyle.test.ts | getMarkerStyle | ✅ Pass | 2.734375ms |
-| src/lib/obisFetch.test.ts | fetchObisOccurrences | ✅ Pass | 6.71895799999993ms |
-| src/lib/occurrenceFetch.test.ts | fetchOccurrenceRecords | ✅ Pass | 23.545416000000046ms |
-| src/lib/occurrenceRecords.test.ts | prepareOccurrenceRecordsForMap | ✅ Pass | 2.4415829999999232ms |
-| src/lib/passwordReset.test.ts | createPasswordResetCode | ✅ Pass | 222.83695899999998ms |
-| src/lib/passwordReset.test.ts | verifyPasswordResetCode | ✅ Pass | 390.3461249999999ms |
-| src/lib/passwordReset.test.ts | requestPasswordReset | ✅ Pass | 116.75916700000016ms |
-| src/lib/passwordReset.test.ts | resetPasswordWithCode | ✅ Pass | 836.8930000000003ms |
-| src/lib/profile.test.ts | saveProfileName | ✅ Pass | 3.1402499999999236ms |
-| src/lib/profile.test.ts | saveProfileImage | ✅ Pass | 0.5891670000000886ms |
-| src/lib/profile.test.ts | getDisplayAvatar | ✅ Pass | 0.165958000000046ms |
-| src/lib/profile.test.ts | getDisplayAvatar fallback | ✅ Pass | 0.09766700000000128ms |
-| src/lib/profile.test.ts | canPostCatch | ✅ Pass | 0.2243749999998954ms |
-| src/lib/recommendation.test.ts | createRecommendation | ✅ Pass | 2.183416999999963ms |
-| src/lib/routeGuard.test.ts | shouldRedirectToLogin | ✅ Pass | 2.0779999999999745ms |
-| src/lib/savedSpot.test.ts | SavedSpot data access | ✅ Pass | 3.2437499999999773ms |
-| src/lib/session.test.ts | session | ✅ Pass | 1.6150840000000244ms |
-| src/lib/sightingRate.test.ts | computeSightingRate | ✅ Pass | 2.982917000000043ms |
-| src/lib/sightingRateExplanation.test.ts | explainSightingRate | ✅ Pass | 4.611625000000004ms |
-| src/lib/species.test.ts | getSpeciesForWaterType | ✅ Pass | 1.7737920000000713ms |
-| src/lib/species.test.ts | getCommonName | ✅ Pass | 0.3054580000000442ms |
-| src/lib/tideConditions.test.ts | fetchTidePredictions | ✅ Pass | 5.5119170000000395ms |
-| src/lib/travelEta.test.ts | explainTravelEta | ✅ Pass | 3.098707999999988ms |
-| src/lib/userSpots.test.ts | User SavedSpot relationship | ✅ Pass | 3.41700000000003ms |
-| src/lib/usgsWaterConditions.test.ts | fetchUsgsWaterConditions | ✅ Pass | 7.501375000000053ms |
-| src/lib/verifyMessages.test.ts | messageForVerifyReason | ✅ Pass | 5.032207999999969ms |
-| src/app/login/page.test.tsx | LoginPage | ✅ Pass | 34.678ms |
-| src/app/reset-confirm/page.test.tsx | ResetConfirmPage | ✅ Pass | 118.78887499999996ms |
-| src/app/reset-request/page.test.tsx | ResetRequestPage | ✅ Pass | 144.56966699999998ms |
-| src/app/api/eta/route.test.ts | POST /api/eta | ✅ Pass | 8.82400000000007ms |
-| src/app/api/profile/route.test.ts | POST /api/profile | ✅ Pass | 11.679499999999962ms |
-| src/app/api/profile/route.test.ts | GET /api/profile | ✅ Pass | 1.1382079999999632ms |
-| src/app/api/search/route.test.ts | POST /api/search | ✅ Pass | 5.402082999999948ms |
-| src/app/api/spots/route.test.ts | /api/spots route handlers | ✅ Pass | 14.378791999999976ms |
-| src/app/api/catch-reports/route.test.ts | GET /api/catch-reports | ✅ Pass | 7.4945410000000265ms |
-| src/app/api/catch-reports/route.test.ts | POST /api/catch-reports | ✅ Pass | 1.3432500000000118ms |
-| src/app/api/catch-reports/route.test.ts | DELETE /api/catch-reports | ✅ Pass | 1.2845000000000937ms |
-| src/app/api/catch-reports/route.test.ts | PATCH /api/catch-reports | ✅ Pass | 1.5245409999999993ms |
-| src/app/api/auth/login/route.test.ts | POST /api/auth/login | ✅ Pass | 5.016832999999906ms |
-| src/app/api/auth/logout/route.test.ts | /api/auth/logout route handler | ✅ Pass | 4.350916999999981ms |
-| src/app/api/auth/me/route.test.ts | /api/auth/me route handler | ✅ Pass | 6.627500000000055ms |
-| src/app/api/auth/reset-confirm/route.test.ts | POST /api/auth/reset-confirm | ✅ Pass | 8.510374999999954ms |
-| src/app/api/auth/reset-request/route.test.ts | POST /api/auth/reset-request | ✅ Pass | 8.078750000000014ms |
-| src/app/api/auth/signup/route.test.ts | POST /api/auth/signup | ✅ Pass | 8.815208999999982ms |
-| src/app/api/auth/verify/route.test.ts | POST /api/auth/verify | ✅ Pass | 3.3743749999999864ms |
-| src/app/api/profile/image/route.test.ts | POST /api/profile/image | ✅ Pass | 6.000833999999941ms |
