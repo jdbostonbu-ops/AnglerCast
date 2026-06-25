@@ -41,6 +41,8 @@ export const CatchComposer = ({
   return (
     <div>
       <textarea
+        id="catch-composer-body"
+        name="catchBody"
         value={body}
         onChange={(event) => setBody(event.target.value)}
         style={{ width: '100%', minHeight: '80px', boxSizing: 'border-box' }}

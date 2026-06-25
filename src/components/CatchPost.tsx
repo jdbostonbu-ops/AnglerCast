@@ -109,6 +109,8 @@ export const CatchPost = ({
       {isEditing ? (
         <div>
           <textarea
+            id="catch-edit-body"
+            name="catchEditBody"
             value={editedBody}
             onChange={(event) => setEditedBody(event.target.value)}
           />
