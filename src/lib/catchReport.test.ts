@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createCatchReport, getCatchReports } from '@/lib/catchReport';
+import { createCatchReport, getCatchReports, updateCatchReport } from '@/lib/catchReport';
 import { getDisplayAvatar } from '@/lib/profile';
 
 vi.mock('@/lib/prisma', () => ({
@@ -7,6 +7,8 @@ vi.mock('@/lib/prisma', () => ({
     catchReport: {
       create: vi.fn(),
       findMany: vi.fn(),
+      findUnique: vi.fn(),
+      update: vi.fn(),
     },
   },
 }));
@@ -181,6 +183,45 @@ describe('getCatchReports author info', () => {
           avatar: expectedAvatar,
         },
       }),
+    );
+  });
+});
+
+describe('updateCatchReport ownership', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('updates the post body when the user owns the post', async () => {
+    const postId = 'catch-1';
+    const userId = 'user-1';
+    const newBody = 'Edited: it was actually a largemouth bass.';
+
+    vi.mocked(prisma.catchReport.findUnique).mockResolvedValueOnce({
+      id: postId,
+      userId,
+      waterType: 'freshwater',
+      body: 'Original body.',
+      createdAt: new Date('2026-06-25T10:00:00.000Z'),
+    } as never);
+
+    vi.mocked(prisma.catchReport.update).mockResolvedValueOnce({
+      id: postId,
+      userId,
+      waterType: 'freshwater',
+      body: newBody,
+      createdAt: new Date('2026-06-25T10:00:00.000Z'),
+    } as never);
+
+    const result = await updateCatchReport({ postId, userId, newBody });
+
+    expect(prisma.catchReport.update).toHaveBeenCalledTimes(1);
+    expect(prisma.catchReport.update).toHaveBeenCalledWith({
+      where: { id: postId },
+      data: { body: newBody },
+    });
+    expect(result).toEqual(
+      expect.objectContaining({ id: postId, body: newBody }),
     );
   });
 });
