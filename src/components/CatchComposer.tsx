@@ -43,6 +43,7 @@ export const CatchComposer = ({
       <textarea
         value={body}
         onChange={(event) => setBody(event.target.value)}
+        style={{ width: '100%', minHeight: '80px', boxSizing: 'border-box' }}
       />
       <button type="button" disabled={isPosting} onClick={handlePost}>
         Post

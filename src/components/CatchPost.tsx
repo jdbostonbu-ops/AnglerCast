@@ -40,12 +40,39 @@ export const CatchPost = ({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   return (
-    <article>
+    <article
+      style={{
+        paddingTop: '16px',
+        paddingBottom: '16px',
+        borderTop: '1px solid rgba(255,255,255,0.1)',
+        marginBottom: '8px',
+      }}
+    >
       <div>
         {post.author.avatar.kind === 'image' ? (
-          <img alt={`${post.author.profileName} avatar`} src={post.author.avatar.src} />
+          <img
+            alt={`${post.author.profileName} avatar`}
+            src={post.author.avatar.src}
+            style={{
+              width: '40px',
+              height: '40px',
+              objectFit: 'cover',
+              borderRadius: '50%',
+            }}
+          />
         ) : (
-          <span>{post.author.avatar.letter}</span>
+          <span
+            style={{
+              width: '40px',
+              height: '40px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '50%',
+            }}
+          >
+            {post.author.avatar.letter}
+          </span>
         )}
         <span>{post.author.profileName}</span>
       </div>
