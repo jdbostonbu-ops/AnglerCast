@@ -70,15 +70,18 @@ export const NavBar = ({
             ) : null}
             {displayAvatar?.kind === 'letter' ? (
               <span className="site-nav__avatar-letter">{displayAvatar.letter}</span>
-            ) : null}
-            <span>{profile.profileName}</span>
-          </div>
-        ) : null}
-        {shouldShowProfileSetup ? (
-          <div className="site-nav__profile">
-            <a href="/">Set up profile</a>
-          </div>
-        ) : null}
+          ) : null}
+          <span>{profile.profileName}</span>
+          <a href="/profile" aria-label="Edit profile">
+            <span aria-hidden="true">&#9998;</span>
+          </a>
+        </div>
+      ) : null}
+      {shouldShowProfileSetup ? (
+        <div className="site-nav__profile">
+          <a href="/profile">Set up profile</a>
+        </div>
+      ) : null}
       </div>
     </nav>
   );
