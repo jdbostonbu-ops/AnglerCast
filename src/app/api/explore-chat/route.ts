@@ -7,7 +7,13 @@ import {
 } from '@/lib/rag';
 
 export async function POST(request: Request): Promise<Response> {
-  const { question } = (await request.json()) as { question: string };
+  const body = (await request.json()) as { question?: unknown };
+  const question = body.question;
+
+  if (typeof question !== 'string' || question.trim() === '') {
+    return Response.json({ error: 'Question is required.' }, { status: 400 });
+  }
+
   const documents = loadFaqDocuments();
   const titleBySource = new Map(
     documents.map((document) => [document.source, document.title]),
