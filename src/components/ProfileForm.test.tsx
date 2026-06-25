@@ -34,3 +34,40 @@ describe('ProfileForm submit', () => {
     });
   });
 });
+
+describe('ProfileForm empty name validation', () => {
+  it('shows an error and does not call onSave when the profile name is empty', () => {
+    const onSave = vi.fn();
+
+    render(<ProfileForm onSave={onSave} />);
+
+    // Leave profile name empty; click Save
+    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+
+    expect(onSave).not.toHaveBeenCalled();
+    expect(screen.getByText(/profile name is required/i)).toBeInTheDocument();
+  });
+
+  it('does not show the error once a valid name is entered and saved', () => {
+    const onSave = vi.fn();
+
+    render(<ProfileForm onSave={onSave} />);
+
+    // First trigger the error
+    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+    expect(screen.getByText(/profile name is required/i)).toBeInTheDocument();
+
+    // Now enter a valid name and save
+    fireEvent.change(screen.getByLabelText(/profile name/i), {
+      target: { value: 'trigger' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+
+    expect(onSave).toHaveBeenCalledTimes(1);
+    expect(onSave).toHaveBeenCalledWith({
+      profileName: 'trigger',
+      profileImageUrl: '',
+    });
+    expect(screen.queryByText(/profile name is required/i)).toBeNull();
+  });
+});
