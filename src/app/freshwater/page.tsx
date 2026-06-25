@@ -59,6 +59,7 @@ const FreshwaterPage = () => {
   );
   const [userId, setUserId] = useState<string | null>(null);
   const [profileName, setProfileName] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
   const [lastSearch, setLastSearch] = useState<SearchValues | null>(null);
 
   useEffect(() => {
@@ -133,6 +134,7 @@ const FreshwaterPage = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ waterType: 'freshwater', body }),
     });
+    setRefreshKey((previous) => previous + 1);
   };
 
   const onDeletePost = async (postId: string): Promise<void> => {
@@ -141,6 +143,7 @@ const FreshwaterPage = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: postId }),
     });
+    setRefreshKey((previous) => previous + 1);
   };
 
   const onUpdatePost = async (
@@ -152,6 +155,7 @@ const FreshwaterPage = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: postId, body: newBody }),
     });
+    setRefreshKey((previous) => previous + 1);
   };
 
   return (
@@ -244,6 +248,7 @@ const FreshwaterPage = () => {
               currentUserId={userId ?? ''}
               onUpdate={onUpdatePost}
               onDelete={onDeletePost}
+              refreshKey={refreshKey}
             />
           </div>
         </div>
