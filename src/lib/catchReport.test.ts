@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createCatchReport } from '@/lib/catchReport';
+import { createCatchReport, getCatchReports } from '@/lib/catchReport';
 
 vi.mock('@/lib/prisma', () => ({
   prisma: {
     catchReport: {
       create: vi.fn(),
+      findMany: vi.fn(),
     },
   },
 }));
@@ -44,5 +45,54 @@ describe('createCatchReport', () => {
       body,
       createdAt,
     });
+  });
+});
+
+describe('getCatchReports water type filtering', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('returns only freshwater posts when waterType is freshwater', async () => {
+    const freshwaterPosts = [
+      {
+        id: 'catch-1',
+        userId: 'user-1',
+        waterType: 'freshwater',
+        body: 'Trout at the lake.',
+        createdAt: new Date('2026-06-25T10:00:00.000Z'),
+      },
+    ];
+
+    vi.mocked(prisma.catchReport.findMany).mockResolvedValueOnce(freshwaterPosts as never);
+
+    const result = await getCatchReports({ waterType: 'freshwater' });
+
+    expect(prisma.catchReport.findMany).toHaveBeenCalledTimes(1);
+    expect(prisma.catchReport.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { waterType: 'freshwater' } }),
+    );
+    expect(result).toEqual(freshwaterPosts);
+  });
+
+  it('returns only saltwater posts when waterType is saltwater', async () => {
+    const saltwaterPosts = [
+      {
+        id: 'catch-2',
+        userId: 'user-2',
+        waterType: 'saltwater',
+        body: 'Striped bass in the sound.',
+        createdAt: new Date('2026-06-25T11:00:00.000Z'),
+      },
+    ];
+
+    vi.mocked(prisma.catchReport.findMany).mockResolvedValueOnce(saltwaterPosts as never);
+
+    const result = await getCatchReports({ waterType: 'saltwater' });
+
+    expect(prisma.catchReport.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { waterType: 'saltwater' } }),
+    );
+    expect(result).toEqual(saltwaterPosts);
   });
 });
