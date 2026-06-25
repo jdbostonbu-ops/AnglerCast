@@ -22,4 +22,5 @@ export const createCatchReport = ({
 export const getCatchReports = ({ waterType }: GetCatchReportsInput) =>
   prisma.catchReport.findMany({
     where: { waterType },
+    orderBy: { createdAt: 'desc' },
   });
