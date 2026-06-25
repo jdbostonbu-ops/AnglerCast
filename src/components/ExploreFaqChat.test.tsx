@@ -83,6 +83,25 @@ describe('ExploreFaqChat', () => {
       expect(firstSource).toBeInTheDocument();
       expect(secondSource).toBeInTheDocument();
     });
+
+    it('displays an error message when the API call fails', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Network down')));
+
+      const user = userEvent.setup();
+      render(<ExploreFaqChat />);
+
+      const input = screen.getByLabelText(/question/i);
+      const submitButton = screen.getByRole('button', { name: /ask/i });
+
+      await user.type(input, 'What is sighting rate?');
+      await user.click(submitButton);
+
+      const errorMessage = await screen.findByText(
+        /something went wrong/i,
+      );
+
+      expect(errorMessage).toBeInTheDocument();
+    });
   });
 });
 
