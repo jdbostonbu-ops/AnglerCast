@@ -24,8 +24,8 @@ type CatchPostProps = {
     };
   };
   currentUserId: string;
-  onUpdate: (newBody: string) => void;
-  onDelete: () => void;
+  onUpdate: (newBody: string) => void | Promise<void>;
+  onDelete: () => void | Promise<void>;
 };
 
 export const CatchPost = ({
@@ -38,6 +38,36 @@ export const CatchPost = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editedBody, setEditedBody] = useState(post.body);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleSave = async (): Promise<void> => {
+    if (isSaving) {
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      await onUpdate(editedBody);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleConfirmDelete = async (): Promise<void> => {
+    if (isDeleting) {
+      return;
+    }
+
+    setIsDeleting(true);
+
+    try {
+      await onDelete();
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <article
@@ -82,7 +112,7 @@ export const CatchPost = ({
             value={editedBody}
             onChange={(event) => setEditedBody(event.target.value)}
           />
-          <button type="button" onClick={() => onUpdate(editedBody)}>
+          <button type="button" disabled={isSaving} onClick={handleSave}>
             Save
           </button>
         </div>
@@ -101,7 +131,7 @@ export const CatchPost = ({
       ) : null}
       {isDeleteDialogOpen ? (
         <div role="dialog">
-          <button type="button" onClick={onDelete}>
+          <button type="button" disabled={isDeleting} onClick={handleConfirmDelete}>
             Confirm
           </button>
           <button type="button" onClick={() => setIsDeleteDialogOpen(false)}>
