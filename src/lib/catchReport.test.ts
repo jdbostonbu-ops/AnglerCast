@@ -290,3 +290,28 @@ describe('deleteCatchReport ownership', () => {
     expect(result).toEqual({ ok: true });
   });
 });
+
+describe('deleteCatchReport rejects non-owner', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('does not delete and reports failure when the user does not own the post', async () => {
+    const postId = 'catch-1';
+    const ownerId = 'user-1';
+    const otherUserId = 'user-999';
+
+    vi.mocked(prisma.catchReport.findUnique).mockResolvedValueOnce({
+      id: postId,
+      userId: ownerId,
+      waterType: 'freshwater',
+      body: 'A post owned by someone else.',
+      createdAt: new Date('2026-06-25T10:00:00.000Z'),
+    } as never);
+
+    const result = await deleteCatchReport({ postId, userId: otherUserId });
+
+    expect(prisma.catchReport.delete).not.toHaveBeenCalled();
+    expect(result).toEqual({ ok: false, reason: 'not your post' });
+  });
+});
