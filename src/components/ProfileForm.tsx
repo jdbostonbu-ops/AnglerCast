@@ -10,6 +10,17 @@ type ProfileFormProps = {
 export const ProfileForm = ({ onSave }: ProfileFormProps): ReactElement => {
   const [profileName, setProfileName] = useState('');
   const [profileImageUrl, setProfileImageUrl] = useState('');
+  const [showProfileNameError, setShowProfileNameError] = useState(false);
+
+  const handleSave = (): void => {
+    if (profileName.trim() === '') {
+      setShowProfileNameError(true);
+      return;
+    }
+
+    setShowProfileNameError(false);
+    onSave({ profileName, profileImageUrl });
+  };
 
   return (
     <div>
@@ -31,10 +42,11 @@ export const ProfileForm = ({ onSave }: ProfileFormProps): ReactElement => {
 
       <button
         type="button"
-        onClick={() => onSave({ profileName, profileImageUrl })}
+        onClick={handleSave}
       >
         Save
       </button>
+      {showProfileNameError ? <p>Profile name is required</p> : null}
     </div>
   );
 };
