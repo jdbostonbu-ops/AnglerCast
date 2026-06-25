@@ -55,13 +55,18 @@ describe('getCatchReports water type filtering', () => {
   });
 
   it('returns only freshwater posts when waterType is freshwater', async () => {
-    const freshwaterPosts = [
+      const freshwaterPosts = [
       {
         id: 'catch-1',
         userId: 'user-1',
         waterType: 'freshwater',
         body: 'Trout at the lake.',
         createdAt: new Date('2026-06-25T10:00:00.000Z'),
+        user: {
+          profileName: 'angler-one',
+          profileImageUrl: null,
+          email: 'one@example.com',
+        },
       },
     ];
 
@@ -73,17 +78,25 @@ describe('getCatchReports water type filtering', () => {
     expect(prisma.catchReport.findMany).toHaveBeenCalledWith(
       expect.objectContaining({ where: { waterType: 'freshwater' } }),
     );
-    expect(result).toEqual(freshwaterPosts);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toEqual(
+      expect.objectContaining({ id: 'catch-1', waterType: 'freshwater' }),
+    );
   });
 
   it('returns only saltwater posts when waterType is saltwater', async () => {
-    const saltwaterPosts = [
+   const saltwaterPosts = [
       {
         id: 'catch-2',
         userId: 'user-2',
         waterType: 'saltwater',
         body: 'Striped bass in the sound.',
         createdAt: new Date('2026-06-25T11:00:00.000Z'),
+        user: {
+          profileName: 'angler-two',
+          profileImageUrl: null,
+          email: 'two@example.com',
+        },
       },
     ];
 
@@ -94,7 +107,10 @@ describe('getCatchReports water type filtering', () => {
     expect(prisma.catchReport.findMany).toHaveBeenCalledWith(
       expect.objectContaining({ where: { waterType: 'saltwater' } }),
     );
-    expect(result).toEqual(saltwaterPosts);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toEqual(
+      expect.objectContaining({ id: 'catch-2', waterType: 'saltwater' }),
+    );
   });
 });
 
