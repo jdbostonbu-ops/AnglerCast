@@ -210,3 +210,24 @@ describe('CatchPost prevents double save', () => {
     resolveUpdate?.();
   });
 });
+
+describe('CatchPost timestamp', () => {
+  it('shows a relative time for when the post was created', () => {
+    const postWithDate = {
+      ...basePost,
+      createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000), // 3 hours ago
+    };
+
+    render(
+      <CatchPost
+        post={postWithDate}
+        currentUserId="user-1"
+        onUpdate={() => {}}
+        onDelete={() => {}}
+      />,
+    );
+
+    expect(screen.getByText(/ago/i)).toBeInTheDocument();
+    expect(screen.getByText(/3 hours ago/i)).toBeInTheDocument();
+  });
+});
