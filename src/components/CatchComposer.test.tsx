@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { CatchComposer } from '@/components/CatchComposer';
 
@@ -79,5 +79,49 @@ describe('CatchComposer prevents double submitting', () => {
 
     // Finish the post
     resolvePost?.();
+  });
+});
+
+describe('CatchComposer clears after a successful post', () => {
+  it('empties the textarea once onPost resolves', async () => {
+    const onPost = vi.fn().mockResolvedValue(undefined);
+
+    render(<CatchComposer profileName="trigger" onPost={onPost} />);
+
+    const textarea = screen.getByRole('textbox');
+    fireEvent.change(textarea, {
+      target: { value: 'Caught a striper at the reef.' },
+    });
+    expect(textarea).toHaveValue('Caught a striper at the reef.');
+
+    fireEvent.click(screen.getByRole('button', { name: /post/i }));
+
+    // Wait for the async onPost to resolve and the textarea to clear
+    await waitFor(() => {
+      expect(textarea).toHaveValue('');
+    });
+
+    expect(onPost).toHaveBeenCalledWith('Caught a striper at the reef.');
+  });
+
+  it('keeps the text when the post fails', async () => {
+    const onPost = vi.fn().mockRejectedValue(new Error('network error'));
+
+    render(<CatchComposer profileName="trigger" onPost={onPost} />);
+
+    const textarea = screen.getByRole('textbox');
+    fireEvent.change(textarea, {
+      target: { value: 'This should stay if it fails.' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /post/i }));
+
+    // Give the rejected promise a chance to settle
+    await waitFor(() => {
+      expect(onPost).toHaveBeenCalled();
+    });
+
+    // Text is preserved because the post failed
+    expect(textarea).toHaveValue('This should stay if it fails.');
   });
 });
