@@ -1,10 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const mockEmbeddingsCreate = vi.fn();
-const mockChatCompletionsCreate = vi.fn();
+const { mockEmbeddingsCreate, mockChatCompletionsCreate } = vi.hoisted(() => ({
+  mockEmbeddingsCreate: vi.fn(),
+  mockChatCompletionsCreate: vi.fn(),
+}));
 
 vi.mock('openai', () => ({
-  default: vi.fn().mockImplementation(() => ({
+  default: vi.fn(() => ({
     embeddings: { create: mockEmbeddingsCreate },
     chat: { completions: { create: mockChatCompletionsCreate } },
   })),
