@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createCatchReport, getCatchReports, updateCatchReport } from '@/lib/catchReport';
+import { createCatchReport, getCatchReports, updateCatchReport, deleteCatchReport } from '@/lib/catchReport';
 import { getDisplayAvatar } from '@/lib/profile';
 
 vi.mock('@/lib/prisma', () => ({
@@ -9,6 +9,7 @@ vi.mock('@/lib/prisma', () => ({
       findMany: vi.fn(),
       findUnique: vi.fn(),
       update: vi.fn(),
+      delete: vi.fn(),
     },
   },
 }));
@@ -252,5 +253,40 @@ describe('updateCatchReport rejects non-owner', () => {
 
     expect(prisma.catchReport.update).not.toHaveBeenCalled();
     expect(result).toEqual({ ok: false, reason: 'not your post' });
+  });
+});
+
+describe('deleteCatchReport ownership', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('deletes the post when the user owns it', async () => {
+    const postId = 'catch-1';
+    const userId = 'user-1';
+
+    vi.mocked(prisma.catchReport.findUnique).mockResolvedValueOnce({
+      id: postId,
+      userId,
+      waterType: 'freshwater',
+      body: 'A post to delete.',
+      createdAt: new Date('2026-06-25T10:00:00.000Z'),
+    } as never);
+
+    vi.mocked(prisma.catchReport.delete).mockResolvedValueOnce({
+      id: postId,
+      userId,
+      waterType: 'freshwater',
+      body: 'A post to delete.',
+      createdAt: new Date('2026-06-25T10:00:00.000Z'),
+    } as never);
+
+    const result = await deleteCatchReport({ postId, userId });
+
+    expect(prisma.catchReport.delete).toHaveBeenCalledTimes(1);
+    expect(prisma.catchReport.delete).toHaveBeenCalledWith({
+      where: { id: postId },
+    });
+    expect(result).toEqual({ ok: true });
   });
 });
