@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { CatchPost } from '@/components/CatchPost';
 
@@ -230,5 +230,39 @@ describe('CatchPost timestamp', () => {
 
     expect(screen.getByText(/ago/i)).toBeInTheDocument();
     expect(screen.getByText(/3 hours ago/i)).toBeInTheDocument();
+  });
+});
+
+describe('CatchPost closes the editor after saving', () => {
+  it('exits edit mode and shows the post body once the update succeeds', async () => {
+    const onUpdate = vi.fn().mockResolvedValue(undefined);
+
+    render(
+      <CatchPost
+        post={basePost}
+        currentUserId="user-1"
+        onUpdate={onUpdate}
+        onDelete={() => {}}
+      />,
+    );
+
+    // Enter edit mode
+    fireEvent.click(screen.getByRole('button', { name: /edit/i }));
+    // The editable textarea is showing
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+
+    // Change and save
+    fireEvent.change(screen.getByRole('textbox'), {
+      target: { value: 'Updated catch text.' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+
+    // After the update resolves, the editor closes: textarea gone, Save button gone
+    await waitFor(() => {
+      expect(screen.queryByRole('textbox')).toBeNull();
+    });
+    expect(screen.queryByRole('button', { name: /save/i })).toBeNull();
+
+    expect(onUpdate).toHaveBeenCalledWith('Updated catch text.');
   });
 });
