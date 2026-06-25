@@ -8,6 +8,7 @@ import { SpeciesList } from '@/components/SpeciesList';
 import { SavedSpotsSection } from '@/components/SavedSpotsSection';
 import { CatchComposer } from '@/components/CatchComposer';
 import { CatchFeed } from '@/components/CatchFeed';
+import { MapHint } from '@/components/MapHint';
 
 // Leaflet needs the browser, so load the map client-side only (no server-side render).
 const OccurrenceMap = dynamic(
@@ -219,11 +220,14 @@ const SaltwaterPage = () => {
             <p className="disclaimer">{result.explanation}</p>
 
             {searchCenter ? (
-              <OccurrenceMap
-                records={result.occurrences}
-                centerLatitude={searchCenter.latitude}
-                centerLongitude={searchCenter.longitude}
-              />
+              <>
+                <MapHint />
+                <OccurrenceMap
+                  records={result.occurrences}
+                  centerLatitude={searchCenter.latitude}
+                  centerLongitude={searchCenter.longitude}
+                />
+              </>
             ) : null}
           </>
         ) : null}
