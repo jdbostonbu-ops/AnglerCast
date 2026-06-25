@@ -58,5 +58,5 @@ export const updateCatchReport = async ({
     });
   }
 
-  return null;
+  return { ok: false, reason: 'not your post' };
 };
