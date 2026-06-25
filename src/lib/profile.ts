@@ -25,6 +25,19 @@ type DisplayAvatar =
       letter: string;
     };
 
+type CanPostCatchInput = {
+  profileName: string | null;
+};
+
+type CanPostCatchResult =
+  | {
+      allowed: true;
+    }
+  | {
+      allowed: false;
+      reason: 'no profile name';
+    };
+
 export const saveProfileName = async ({
   userId,
   name,
@@ -54,4 +67,14 @@ export const getDisplayAvatar = ({
   }
 
   return { kind: 'letter', letter: email.charAt(0).toUpperCase() };
+};
+
+export const canPostCatch = ({
+  profileName,
+}: CanPostCatchInput): CanPostCatchResult => {
+  if (!profileName) {
+    return { allowed: false, reason: 'no profile name' };
+  }
+
+  return { allowed: true };
 };
