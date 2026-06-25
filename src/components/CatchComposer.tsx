@@ -2,6 +2,7 @@
 
 import { useState, type ReactElement } from 'react';
 import { canPostCatch } from '@/lib/profile';
+import { withMinimumDuration } from '@/lib/withMinimumDuration';
 import { Spinner } from '@/components/Spinner';
 
 type CatchComposerProps = {
@@ -33,7 +34,7 @@ export const CatchComposer = ({
     setIsPosting(true);
 
     try {
-      await onPost(body);
+      await withMinimumDuration(Promise.resolve(onPost(body)));
       setBody('');
     } catch {
       // Keep the typed text when posting fails.

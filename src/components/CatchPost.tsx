@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { ReactElement } from 'react';
 import { formatRelativeTime } from '@/lib/formatRelativeTime';
+import { withMinimumDuration } from '@/lib/withMinimumDuration';
 import { Spinner } from '@/components/Spinner';
 
 type CatchPostAvatar =
@@ -53,7 +54,7 @@ export const CatchPost = ({
     setIsSaving(true);
 
     try {
-      await onUpdate(editedBody);
+      await withMinimumDuration(Promise.resolve(onUpdate(editedBody)));
     } finally {
       setIsSaving(false);
     }
@@ -67,7 +68,7 @@ export const CatchPost = ({
     setIsDeleting(true);
 
     try {
-      await onDelete();
+      await withMinimumDuration(Promise.resolve(onDelete()));
     } finally {
       setIsDeleting(false);
     }
