@@ -96,3 +96,19 @@ describe('getCatchReports water type filtering', () => {
     expect(result).toEqual(saltwaterPosts);
   });
 });
+
+describe('getCatchReports ordering', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('requests posts ordered by createdAt descending (newest first)', async () => {
+    vi.mocked(prisma.catchReport.findMany).mockResolvedValueOnce([] as never);
+
+    await getCatchReports({ waterType: 'freshwater' });
+
+    expect(prisma.catchReport.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ orderBy: { createdAt: 'desc' } }),
+    );
+  });
+});
