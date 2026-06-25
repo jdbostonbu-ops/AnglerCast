@@ -148,3 +148,32 @@ describe('CatchFeed renders posts as CatchPost with edit and delete', () => {
   });
 });
 
+describe('CatchFeed refreshes immediately when the refresh key changes', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('re-fetches right away when refreshKey changes, without waiting for the poll interval', async () => {
+    const fetchReports = vi.fn().mockResolvedValue([]);
+
+    const { rerender } = render(
+      <CatchFeed waterType="saltwater" fetchReports={fetchReports} refreshKey={0} />,
+    );
+
+    // Mount fetch
+    await vi.advanceTimersByTimeAsync(0);
+    expect(fetchReports).toHaveBeenCalledTimes(1);
+
+    // Change the refresh key (simulating a successful post) WITHOUT advancing the 10s timer
+    rerender(
+      <CatchFeed waterType="saltwater" fetchReports={fetchReports} refreshKey={1} />,
+    );
+    await vi.advanceTimersByTimeAsync(0);
+
+    // It fetched again immediately because the key changed (not because the interval elapsed)
+    expect(fetchReports).toHaveBeenCalledTimes(2);
+  });
+});
