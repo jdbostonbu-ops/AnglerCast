@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { CatchPost } from '@/components/CatchPost';
 
 const basePost = {
@@ -57,5 +57,34 @@ describe('CatchPost edit mode', () => {
     expect(textarea).toHaveValue('Caught a smallmouth bass at dawn.');
 
     expect(screen.getByRole('button', { name: /save/i })).toBeInTheDocument();
+  });
+});
+
+describe('CatchPost save', () => {
+  it('calls onUpdate once with the edited body when Save is clicked', () => {
+    const onUpdate = vi.fn();
+
+    render(
+      <CatchPost
+        post={basePost}
+        currentUserId="user-1"
+        onUpdate={onUpdate}
+        onDelete={() => {}}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /edit/i }));
+
+    const textarea = screen.getByRole('textbox');
+    fireEvent.change(textarea, {
+      target: { value: 'Edited: it was a largemouth, not a smallmouth.' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+
+    expect(onUpdate).toHaveBeenCalledTimes(1);
+    expect(onUpdate).toHaveBeenCalledWith(
+      'Edited: it was a largemouth, not a smallmouth.',
+    );
   });
 });
