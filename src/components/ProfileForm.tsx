@@ -63,7 +63,16 @@ export const ProfileForm = ({
         Change image
       </button>
       {profileImageUrl ? (
-        <img alt="Profile image preview" src={profileImageUrl} />
+        <img
+          alt="Profile image preview"
+          src={profileImageUrl}
+          style={{
+            width: '120px',
+            height: '120px',
+            objectFit: 'cover',
+            borderRadius: '50%',
+          }}
+        />
       ) : null}
 
       <button

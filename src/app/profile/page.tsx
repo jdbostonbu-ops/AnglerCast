@@ -12,7 +12,7 @@ type UploadImageResponse = {
 };
 
 export default function ProfilePage() {
-  const handleSave = async ({
+ const handleSave = async ({
     profileName,
     profileImageUrl,
   }: ProfileFormData): Promise<void> => {
@@ -21,7 +21,6 @@ export default function ProfilePage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ profileName, profileImageUrl }),
     });
-
     if (response.ok) {
       window.location.href = '/';
     }
