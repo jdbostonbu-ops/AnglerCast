@@ -103,6 +103,33 @@ a {
   color: var(--color-accent-brass);
 }
 
+.site-nav__right {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+.site-nav__profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.site-nav__profile img,
+.site-nav__avatar-letter {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.site-nav__avatar-letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent-brass);
+  color: var(--color-bg-deep, #0b1f33);
+  font-weight: 600;
+}
+
+
 /* ---- Hero ---- */
 .hero {
   position: relative;

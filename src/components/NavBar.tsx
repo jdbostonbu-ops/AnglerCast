@@ -50,34 +50,36 @@ export const NavBar = ({
         </span>
         <span className="site-nav__name">AnglerCast</span>
       </div>
-      <div className="site-nav__links">
-        {links.map((link) => (
-          <a key={link.href} href={link.href}>
-            {link.label}
-          </a>
-        ))}
-        {isLoggedIn ? (
-          <button type="button" onClick={onLogout}>
-            Log out
-          </button>
+      <div className="site-nav__right">
+        <div className="site-nav__links">
+          {links.map((link) => (
+            <a key={link.href} href={link.href}>
+              {link.label}
+            </a>
+          ))}
+          {isLoggedIn ? (
+            <button type="button" onClick={onLogout}>
+              Log out
+            </button>
+          ) : null}
+        </div>
+        {profile && hasProfileName ? (
+          <div className="site-nav__profile">
+            {displayAvatar?.kind === 'image' ? (
+              <img alt="Profile avatar" src={displayAvatar.src} />
+            ) : null}
+            {displayAvatar?.kind === 'letter' ? (
+              <span className="site-nav__avatar-letter">{displayAvatar.letter}</span>
+            ) : null}
+            <span>{profile.profileName}</span>
+          </div>
+        ) : null}
+        {shouldShowProfileSetup ? (
+          <div className="site-nav__profile">
+            <a href="/">Set up profile</a>
+          </div>
         ) : null}
       </div>
-      {profile && hasProfileName ? (
-        <div className="site-nav__profile">
-          {displayAvatar?.kind === 'image' ? (
-            <img alt="Profile avatar" src={displayAvatar.src} />
-          ) : null}
-          {displayAvatar?.kind === 'letter' ? (
-            <span className="site-nav__avatar-letter">{displayAvatar.letter}</span>
-          ) : null}
-          <span>{profile.profileName}</span>
-        </div>
-      ) : null}
-      {shouldShowProfileSetup ? (
-        <div className="site-nav__profile">
-          <a href="/">Set up profile</a>
-        </div>
-      ) : null}
     </nav>
   );
 };
