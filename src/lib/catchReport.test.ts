@@ -225,3 +225,32 @@ describe('updateCatchReport ownership', () => {
     );
   });
 });
+
+describe('updateCatchReport rejects non-owner', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('does not update and reports failure when the user does not own the post', async () => {
+    const postId = 'catch-1';
+    const ownerId = 'user-1';
+    const otherUserId = 'user-999';
+
+    vi.mocked(prisma.catchReport.findUnique).mockResolvedValueOnce({
+      id: postId,
+      userId: ownerId,
+      waterType: 'freshwater',
+      body: 'Original body.',
+      createdAt: new Date('2026-06-25T10:00:00.000Z'),
+    } as never);
+
+    const result = await updateCatchReport({
+      postId,
+      userId: otherUserId,
+      newBody: 'Trying to edit a post I do not own.',
+    });
+
+    expect(prisma.catchReport.update).not.toHaveBeenCalled();
+    expect(result).toEqual({ ok: false, reason: 'not your post' });
+  });
+});
