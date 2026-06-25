@@ -80,4 +80,14 @@ it('renders the AnglerCast brand name', () => {
     expect(screen.getByText('J')).toBeInTheDocument();
     expect(screen.getByText('trigger')).toBeInTheDocument();
   });
+
+  it('renders a "Set up profile" prompt when the user is logged in but has no profile name', () => {
+    render(<NavBar isLoggedIn />);
+
+    expect(
+      screen.getByRole('link', { name: /set up profile/i }),
+    ).toHaveAttribute('href', '/');
+
+    expect(screen.queryByRole('img', { name: /profile avatar/i })).toBeNull();
+  });
 });
