@@ -7,6 +7,7 @@ type CatchFeedPost = {
   id: string;
   userId: string;
   body: string;
+  createdAt: Date;
   author: {
     profileName: string;
     avatar:
