@@ -78,5 +78,5 @@ export const deleteCatchReport = async ({
     return { ok: true };
   }
 
-  return null;
+  return { ok: false, reason: 'not your post' };
 };
