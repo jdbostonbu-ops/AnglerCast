@@ -1,16 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { ReactElement } from 'react';
 
 type ProfileFormProps = {
   onSave: (data: { profileName: string; profileImageUrl: string }) => void;
+  uploadImage: (file: File) => Promise<string>;
 };
 
-export const ProfileForm = ({ onSave }: ProfileFormProps): ReactElement => {
+export const ProfileForm = ({
+  onSave,
+  uploadImage,
+}: ProfileFormProps): ReactElement => {
   const [profileName, setProfileName] = useState('');
   const [profileImageUrl, setProfileImageUrl] = useState('');
   const [showProfileNameError, setShowProfileNameError] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSave = (): void => {
     if (profileName.trim() === '') {
@@ -20,6 +25,20 @@ export const ProfileForm = ({ onSave }: ProfileFormProps): ReactElement => {
 
     setShowProfileNameError(false);
     onSave({ profileName, profileImageUrl });
+  };
+
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const uploadedPath = await uploadImage(file);
+
+    setProfileImageUrl(uploadedPath);
   };
 
   return (
@@ -32,13 +51,17 @@ export const ProfileForm = ({ onSave }: ProfileFormProps): ReactElement => {
         onChange={(event) => setProfileName(event.target.value)}
       />
 
-      <label htmlFor="profile-image-url">Image URL</label>
       <input
-        id="profile-image-url"
-        type="text"
-        value={profileImageUrl}
-        onChange={(event) => setProfileImageUrl(event.target.value)}
+        ref={fileInputRef}
+        data-testid="profile-image-input"
+        type="file"
+        accept="image/*"
+        hidden
+        onChange={handleImageChange}
       />
+      <button type="button" onClick={() => fileInputRef.current?.click()}>
+        Change image
+      </button>
 
       <button
         type="button"

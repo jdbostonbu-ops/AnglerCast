@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { ProfileForm } from '@/components/ProfileForm';
 
@@ -59,8 +59,11 @@ describe('ProfileForm submit', () => {
     fireEvent.change(input, { target: { files: [file] } });
 
     // let the upload promise resolve so the path is stored
-    await Promise.resolve();
-    await Promise.resolve();
+   // let the upload promise resolve and the state update flush
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
 
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
 
