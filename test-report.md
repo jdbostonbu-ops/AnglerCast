@@ -1,20 +1,22 @@
 # Test Run & Git Summary Report
-**Generated on:** 6/25/2026, 6:00:51 PM
+**Generated on:** 6/25/2026, 6:02:33 PM
 
 ## 🕒 Recent Git Commit Log
-* **fd3bf03** - Jacqueline Delgado, 20 minutes ago : feat(explore): wire FAQ chat onto Explore page + add FAQ corpus
-* **bab7c4c** - Jacqueline Delgado, 66 minutes ago : feat(faq-chat): GREEN 34.10 — shows error message when API call fails
-* **7573afe** - Jacqueline Delgado, 67 minutes ago : test(faq-chat): RED 34.10 — shows error message when API call fails
-* **fd3da48** - Jacqueline Delgado, 70 minutes ago : feat(faq-chat): GREEN 34.9 — displays source titles under the answer
-* **547b1b9** - Jacqueline Delgado, 71 minutes ago : test(faq-chat): RED 34.9 — displays source titles under the answer
-* **963ecb0** - Jacqueline Delgado, 75 minutes ago : feat(faq-chat): GREEN 34.8 — displays answer after submission
-* **dc02496** - Jacqueline Delgado, 76 minutes ago : test(faq-chat): RED 34.8 — displays answer after submission
-* **fdc93fb** - Jacqueline Delgado, 78 minutes ago : feat(faq-chat): GREEN 34.7 — renders input and submit button
-* **d65296f** - Jacqueline Delgado, 80 minutes ago : test(faq-chat): RED 34.7 — renders input and submit button
-* **c404fc2** - Jacqueline Delgado, 82 minutes ago : feat(explore-chat): GREEN 34.6 — returns 'I don't know...' when top score below threshold
-* **a20078d** - Jacqueline Delgado, 83 minutes ago : test(explore-chat): RED 34.6 — returns 'I don't know...' when top score below threshold
-* **3a34534** - Jacqueline Delgado, 85 minutes ago : feat(explore-chat): GREEN 34.5 — POST returns 400 for missing or empty question
-* **57b26ec** - Jacqueline Delgado, 86 minutes ago : test(explore-chat): RED 34.5 — POST returns 400 for missing or empty question
+* **7763620** - Jacqueline Delgado, 33 seconds ago : added 34.11 in testing md and updated test-report md files
+* **05c1205** - Jacqueline Delgado, 73 seconds ago : test(rag): RED 34.11 — chunkMarkdownContent prepends heading context
+* **fd3bf03** - Jacqueline Delgado, 22 minutes ago : feat(explore): wire FAQ chat onto Explore page + add FAQ corpus
+* **bab7c4c** - Jacqueline Delgado, 68 minutes ago : feat(faq-chat): GREEN 34.10 — shows error message when API call fails
+* **7573afe** - Jacqueline Delgado, 68 minutes ago : test(faq-chat): RED 34.10 — shows error message when API call fails
+* **fd3da48** - Jacqueline Delgado, 72 minutes ago : feat(faq-chat): GREEN 34.9 — displays source titles under the answer
+* **547b1b9** - Jacqueline Delgado, 73 minutes ago : test(faq-chat): RED 34.9 — displays source titles under the answer
+* **963ecb0** - Jacqueline Delgado, 76 minutes ago : feat(faq-chat): GREEN 34.8 — displays answer after submission
+* **dc02496** - Jacqueline Delgado, 77 minutes ago : test(faq-chat): RED 34.8 — displays answer after submission
+* **fdc93fb** - Jacqueline Delgado, 80 minutes ago : feat(faq-chat): GREEN 34.7 — renders input and submit button
+* **d65296f** - Jacqueline Delgado, 82 minutes ago : test(faq-chat): RED 34.7 — renders input and submit button
+* **c404fc2** - Jacqueline Delgado, 84 minutes ago : feat(explore-chat): GREEN 34.6 — returns 'I don't know...' when top score below threshold
+* **a20078d** - Jacqueline Delgado, 85 minutes ago : test(explore-chat): RED 34.6 — returns 'I don't know...' when top score below threshold
+* **3a34534** - Jacqueline Delgado, 86 minutes ago : feat(explore-chat): GREEN 34.5 — POST returns 400 for missing or empty question
+* **57b26ec** - Jacqueline Delgado, 87 minutes ago : test(explore-chat): RED 34.5 — POST returns 400 for missing or empty question
 * **7d0c45c** - Jacqueline Delgado, 2 hours ago : feat(explore-chat): GREEN 34.4 — POST returns answer + sources, grounds model
 * **d93bc00** - Jacqueline Delgado, 2 hours ago : updated package json
 * **4fc1d12** - Jacqueline Delgado, 2 hours ago : test(explore-chat): RED 34.4 — POST returns answer + sources, grounds model
@@ -24,7 +26,7 @@
 * **5edfb1c** - Jacqueline Delgado, 2 hours ago : test(rag): RED 34.2 — chunkMarkdownContent
 * **8c8eced** - Jacqueline Delgado, 2 hours ago : feat(rag): GREEN 34.1 — cosineSimilarity
 * **b6cf9f2** - Jacqueline Delgado, 2 hours ago : test(rag): RED 34.1 — cosineSimilarity returns 1 / 0 / -1
-* **ce9d386** - Jacqueline Delgado, 3 hours ago : updated test-report md file
+* **ce9d386** - Jacqueline Delgado, 4 hours ago : updated test-report md file
 * **d01c681** - Jacqueline Delgado, 5 hours ago : feat: upload profile images to Vercel Blob instead of local disk
 * **71765d4** - Jacqueline Delgado, 5 hours ago : test: add RED for profile image upload via Vercel Blob
 * **0b59697** - Jacqueline Delgado, 6 hours ago : updated test-report.md file
@@ -109,8 +111,8 @@
 * **bacd474** - Jacqueline Delgado, 20 hours ago : test: add RED 30.3 for CatchPost Save calls onUpdate
 * **80b2e1f** - Jacqueline Delgado, 20 hours ago : feat: CatchPost edit mode textarea and Save button for RED 30.2
 * **7f1fe6c** - Jacqueline Delgado, 20 hours ago : test: add RED 30.2 for CatchPost edit mode textarea and Save
-* **c1345aa** - Jacqueline Delgado, 20 hours ago : feat: CatchPost edit button visibility for RED 30.1
-* **870bd09** - Jacqueline Delgado, 20 hours ago : test: add RED 30.1 for CatchPost edit button visibility
+* **c1345aa** - Jacqueline Delgado, 21 hours ago : feat: CatchPost edit button visibility for RED 30.1
+* **870bd09** - Jacqueline Delgado, 21 hours ago : test: add RED 30.1 for CatchPost edit button visibility
 * **5225ea6** - Jacqueline Delgado, 21 hours ago : feat: reject non-owner in deleteCatchReport for RED 29.8
 * **01940cc** - Jacqueline Delgado, 21 hours ago : test: add RED 29.8 for deleteCatchReport rejects non-owner
 * **9cccdb0** - Jacqueline Delgado, 21 hours ago : feat: implement deleteCatchReport owner-can-delete for RED 29.7
@@ -147,7 +149,7 @@
 * **da181e8** - Jacqueline Delgado, 22 hours ago : test: add RED 28.3 for getDisplayAvatar image case
 * **1d52768** - Jacqueline Delgado, 22 hours ago : feat: implement saveProfileImage for RED 28.2
 * **821aea6** - Jacqueline Delgado, 22 hours ago : test: add RED 28.2 for saveProfileImage, add profileImageUrl to User
-* **688e21a** - Jacqueline Delgado, 22 hours ago : feat: implement saveProfileName for RED 28.1
+* **688e21a** - Jacqueline Delgado, 23 hours ago : feat: implement saveProfileName for RED 28.1
 * **cf9ad92** - Jacqueline Delgado, 23 hours ago : test: add RED 28.1 for saveProfileName, exclude e2e from vitest
 * **11e24a6** - Jacqueline Delgado, 3 days ago : updated readme file and added test-report.md file created by vitest reporter
 * **3f50b4c** - Jacqueline Delgado, 3 days ago : updated package json file added vitest reporter
@@ -323,14 +325,14 @@
 
 ## 📊 Test Metrics Summary
 * **Total Tests:** 4
-* **Passed:** 😄 3
-* **Failed:** 😡 1
+* **Passed:** 😄 4
+* **Failed:** 😡 0
 
 ## 📝 Detailed Test Breakdown
 
 | File | Test Case | Status | Duration |
 | :--- | :--- | :--- | :--- |
-| src/lib/rag.test.ts | cosineSimilarity | ✅ Pass | 0.9251659999999902ms |
-| src/lib/rag.test.ts | chunkMarkdownContent | ✅ Pass | 0.8414589999999862ms |
-| src/lib/rag.test.ts | retrieveTopChunks | ✅ Pass | 0.4107500000000073ms |
-| src/lib/rag.test.ts | chunkMarkdownContent — heading context | ❌ Fail | 3.065499999999986ms |
+| src/lib/rag.test.ts | cosineSimilarity | ✅ Pass | 0.9096660000000156ms |
+| src/lib/rag.test.ts | chunkMarkdownContent | ✅ Pass | 0.866375000000005ms |
+| src/lib/rag.test.ts | retrieveTopChunks | ✅ Pass | 0.40116699999998673ms |
+| src/lib/rag.test.ts | chunkMarkdownContent — heading context | ✅ Pass | 0.28737499999999727ms |
