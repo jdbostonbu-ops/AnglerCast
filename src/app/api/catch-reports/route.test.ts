@@ -1,11 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { GET, POST } from '@/app/api/catch-reports/route';
-import { getCatchReports, createCatchReport } from '@/lib/catchReport';
+import { GET, POST, DELETE } from '@/app/api/catch-reports/route';
+import { getCatchReports, createCatchReport, deleteCatchReport } from '@/lib/catchReport';
 import { getSessionUserId } from '@/lib/session';
 
 vi.mock('@/lib/catchReport', () => ({
   getCatchReports: vi.fn(),
   createCatchReport: vi.fn(),
+  deleteCatchReport: vi.fn(),
 }));
 
 vi.mock('@/lib/session', () => ({
@@ -96,6 +97,41 @@ describe('POST /api/catch-reports', () => {
     );
 
     expect(createCatchReport).not.toHaveBeenCalled();
+    expect(response.status).toBe(401);
+  });
+});
+
+const makeDeleteRequest = (body: unknown): Request =>
+  new Request('http://localhost/api/catch-reports', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+
+describe('DELETE /api/catch-reports', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('deletes the post for the logged-in user', async () => {
+    vi.mocked(getSessionUserId).mockResolvedValueOnce('user-1');
+    vi.mocked(deleteCatchReport).mockResolvedValueOnce({ ok: true } as never);
+
+    const response = await DELETE(makeDeleteRequest({ id: 'catch-1' }));
+
+    expect(deleteCatchReport).toHaveBeenCalledWith({
+      postId: 'catch-1',
+      userId: 'user-1',
+    });
+    expect(response.status).toBe(200);
+  });
+
+  it('returns 401 and deletes nothing when there is no logged-in user', async () => {
+    vi.mocked(getSessionUserId).mockResolvedValueOnce(null);
+
+    const response = await DELETE(makeDeleteRequest({ id: 'catch-1' }));
+
+    expect(deleteCatchReport).not.toHaveBeenCalled();
     expect(response.status).toBe(401);
   });
 });
