@@ -71,6 +71,7 @@ describe('CatchFeed renders new posts', () => {
 
     // Advance to the next poll and flush its promise
     await vi.advanceTimersByTimeAsync(10000);
+    await vi.advanceTimersByTimeAsync(0);
     expect(
       screen.getByText('A brand new catch just came in.'),
     ).toBeInTheDocument();
