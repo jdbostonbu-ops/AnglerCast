@@ -33,6 +33,9 @@ export const CatchComposer = ({
 
     try {
       await onPost(body);
+      setBody('');
+    } catch {
+      // Keep the typed text when posting fails.
     } finally {
       setIsPosting(false);
     }
