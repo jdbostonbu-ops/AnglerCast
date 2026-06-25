@@ -48,7 +48,7 @@ export const CatchComposer = ({
         style={{ width: '100%', minHeight: '80px', boxSizing: 'border-box' }}
       />
       <button type="button" disabled={isPosting} onClick={handlePost}>
-        Post
+        {isPosting ? 'Posting...' : 'Post'}
       </button>
       {showProfilePrompt ? <a href="/profile">Set up profile</a> : null}
     </div>

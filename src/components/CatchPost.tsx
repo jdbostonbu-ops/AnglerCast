@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { ReactElement } from 'react';
+import { formatRelativeTime } from '@/lib/formatRelativeTime';
 
 type CatchPostAvatar =
   | {
@@ -18,6 +19,7 @@ type CatchPostProps = {
     id: string;
     userId: string;
     body: string;
+    createdAt: Date;
     author: {
       profileName: string;
       avatar: CatchPostAvatar;
@@ -40,6 +42,7 @@ export const CatchPost = ({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const relativeTime = formatRelativeTime(post.createdAt, new Date());
 
   const handleSave = async (): Promise<void> => {
     if (isSaving) {
@@ -105,6 +108,9 @@ export const CatchPost = ({
           </span>
         )}
         <span>{post.author.profileName}</span>
+        <span style={{ marginLeft: '8px', opacity: 0.7, fontSize: '0.85em' }}>
+          {relativeTime}
+        </span>
       </div>
       {isEditing ? (
         <div>
