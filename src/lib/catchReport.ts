@@ -11,6 +11,12 @@ type GetCatchReportsInput = {
   waterType: string;
 };
 
+type UpdateCatchReportInput = {
+  postId: string;
+  userId: string;
+  newBody: string;
+};
+
 export const createCatchReport = ({
   userId,
   waterType,
@@ -37,3 +43,20 @@ export const getCatchReports = ({ waterType }: GetCatchReportsInput) =>
       },
     })),
   );
+
+export const updateCatchReport = async ({
+  postId,
+  userId,
+  newBody,
+}: UpdateCatchReportInput) => {
+  const post = await prisma.catchReport.findUnique({ where: { id: postId } });
+
+  if (post?.userId === userId) {
+    return prisma.catchReport.update({
+      where: { id: postId },
+      data: { body: newBody },
+    });
+  }
+
+  return null;
+};
