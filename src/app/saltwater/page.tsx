@@ -135,6 +135,25 @@ const SaltwaterPage = () => {
     });
   };
 
+  const onDeletePost = async (postId: string): Promise<void> => {
+    await fetch('/api/catch-reports', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: postId }),
+    });
+  };
+
+  const onUpdatePost = async (
+    postId: string,
+    newBody: string,
+  ): Promise<void> => {
+    await fetch('/api/catch-reports', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: postId, body: newBody }),
+    });
+  };
+
   return (
     <>
       <SiteNav />
@@ -219,7 +238,13 @@ const SaltwaterPage = () => {
         <div style={{ flex: '1 1 320px', minWidth: '300px' }}>
           <h2>Catch reports</h2>
           <CatchComposer profileName={profileName} onPost={onPost} />
-          <CatchFeed waterType="saltwater" fetchReports={fetchReports} />
+          <CatchFeed
+            waterType="saltwater"
+            fetchReports={fetchReports}
+            currentUserId={userId ?? ''}
+            onUpdate={onUpdatePost}
+            onDelete={onDeletePost}
+          />
         </div>
       </div>
     </main>
