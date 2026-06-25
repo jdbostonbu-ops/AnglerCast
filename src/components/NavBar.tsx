@@ -33,7 +33,9 @@ export const NavBar = ({
   const links = hideWaterLinks
     ? navLinks.filter((link) => !waterHrefs.includes(link.href))
     : navLinks;
-  const displayAvatar = profile
+  const hasProfileName = Boolean(profile?.profileName);
+  const shouldShowProfileSetup = isLoggedIn && !hasProfileName;
+  const displayAvatar = profile && hasProfileName
     ? getDisplayAvatar({
         profileImageUrl: profile.profileImageUrl,
         email: profile.email,
@@ -60,7 +62,7 @@ export const NavBar = ({
           </button>
         ) : null}
       </div>
-      {profile ? (
+      {profile && hasProfileName ? (
         <div className="site-nav__profile">
           {displayAvatar?.kind === 'image' ? (
             <img alt="Profile avatar" src={displayAvatar.src} />
@@ -69,6 +71,11 @@ export const NavBar = ({
             <span className="site-nav__avatar-letter">{displayAvatar.letter}</span>
           ) : null}
           <span>{profile.profileName}</span>
+        </div>
+      ) : null}
+      {shouldShowProfileSetup ? (
+        <div className="site-nav__profile">
+          <a href="/">Set up profile</a>
         </div>
       ) : null}
     </nav>
