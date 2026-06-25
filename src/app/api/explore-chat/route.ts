@@ -6,6 +6,8 @@ import {
   type EmbeddedChunk,
 } from '@/lib/rag';
 
+const RELEVANCE_THRESHOLD = 0.2;
+
 export async function POST(request: Request): Promise<Response> {
   const body = (await request.json()) as { question?: unknown };
   const question = body.question;
@@ -33,6 +35,20 @@ export async function POST(request: Request): Promise<Response> {
     embedding: embeddingResponse.data[index + 1]?.embedding ?? [],
   }));
   const rankedChunks = retrieveTopChunks(questionEmbedding, embeddedChunks, 3);
+
+  if (
+    rankedChunks.length === 0 ||
+    rankedChunks[0].score < RELEVANCE_THRESHOLD
+  ) {
+    return Response.json(
+      {
+        answer: "I don't know based on the provided documents.",
+        sources: [],
+      },
+      { status: 200 },
+    );
+  }
+
   const context = rankedChunks
     .map((chunk) => {
       const title = titleBySource.get(chunk.source) ?? chunk.source;
