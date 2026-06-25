@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cosineSimilarity } from '@/lib/rag';
-import { chunkMarkdownContent } from '@/lib/rag';
+import { chunkMarkdownContent, cosineSimilarity, retrieveTopChunks } from '@/lib/rag';
 
 describe('cosineSimilarity', () => {
   it('returns 1 for identical vectors', () => {
@@ -72,6 +71,56 @@ describe('chunkMarkdownContent', () => {
 
   it('returns an empty array for empty input', () => {
     const result = chunkMarkdownContent('', 'test.md');
+
+    expect(result).toEqual([]);
+  });
+});
+
+describe('retrieveTopChunks', () => {
+  it('returns topK chunks sorted by cosine similarity, highest first', () => {
+    const questionEmbedding = [1, 0, 0];
+    const chunks = [
+      { source: 'orthogonal.md', text: 'orthogonal chunk', embedding: [0, 1, 0] },
+      { source: 'identical.md', text: 'identical chunk', embedding: [1, 0, 0] },
+      { source: 'opposite.md', text: 'opposite chunk', embedding: [-1, 0, 0] },
+    ];
+
+    const result = retrieveTopChunks(questionEmbedding, chunks, 2);
+
+    expect(result).toHaveLength(2);
+    expect(result[0].source).toBe('identical.md');
+    expect(result[1].source).toBe('orthogonal.md');
+  });
+
+  it('attaches a numeric score to each returned chunk', () => {
+    const questionEmbedding = [1, 0];
+    const chunks = [
+      { source: 'a.md', text: 'chunk a', embedding: [1, 0] },
+      { source: 'b.md', text: 'chunk b', embedding: [0, 1] },
+    ];
+
+    const result = retrieveTopChunks(questionEmbedding, chunks, 2);
+
+    expect(result[0].score).toBeCloseTo(1, 10);
+    expect(result[1].score).toBeCloseTo(0, 10);
+  });
+
+  it('returns at most topK chunks even when more chunks are provided', () => {
+    const questionEmbedding = [1, 0];
+    const chunks = [
+      { source: 'a.md', text: 'chunk a', embedding: [1, 0] },
+      { source: 'b.md', text: 'chunk b', embedding: [0.9, 0.1] },
+      { source: 'c.md', text: 'chunk c', embedding: [0.8, 0.2] },
+      { source: 'd.md', text: 'chunk d', embedding: [0.7, 0.3] },
+    ];
+
+    const result = retrieveTopChunks(questionEmbedding, chunks, 2);
+
+    expect(result).toHaveLength(2);
+  });
+
+  it('returns an empty array when no chunks are provided', () => {
+    const result = retrieveTopChunks([1, 0, 0], [], 5);
 
     expect(result).toEqual([]);
   });
