@@ -55,6 +55,34 @@ describe('ExploreFaqChat', () => {
 
       expect(answer).toBeInTheDocument();
     });
+
+    it('displays the source titles returned from the API beneath the answer', async () => {
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockResolvedValue({
+          ok: true,
+          json: async () => ({
+            answer: 'An answer drawing from multiple FAQ docs.',
+            sources: ['How Sighting Rate Works', 'Why Month Matters'],
+          }),
+        }),
+      );
+
+      const user = userEvent.setup();
+      render(<ExploreFaqChat />);
+
+      const input = screen.getByLabelText(/question/i);
+      const submitButton = screen.getByRole('button', { name: /ask/i });
+
+      await user.type(input, 'Tell me about sighting rate and months');
+      await user.click(submitButton);
+
+      const firstSource = await screen.findByText(/how sighting rate works/i);
+      const secondSource = await screen.findByText(/why month matters/i);
+
+      expect(firstSource).toBeInTheDocument();
+      expect(secondSource).toBeInTheDocument();
+    });
   });
 });
 
