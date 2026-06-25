@@ -5,3 +5,16 @@ export const cosineSimilarity = (a: number[], b: number[]): number => {
 
   return dotProduct / (magnitudeA * magnitudeB);
 };
+
+export const chunkMarkdownContent = (
+  text: string,
+  source: string,
+): { source: string; text: string }[] =>
+  text
+    .split(/\n\s*\n+/)
+    .map((paragraph) => paragraph.trim())
+    .filter((paragraph) => paragraph.length >= 50)
+    .map((paragraph) => ({
+      source,
+      text: paragraph,
+    }));
