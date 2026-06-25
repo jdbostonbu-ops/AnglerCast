@@ -17,6 +17,11 @@ type UpdateCatchReportInput = {
   newBody: string;
 };
 
+type DeleteCatchReportInput = {
+  postId: string;
+  userId: string;
+};
+
 export const createCatchReport = ({
   userId,
   waterType,
@@ -59,4 +64,19 @@ export const updateCatchReport = async ({
   }
 
   return { ok: false, reason: 'not your post' };
+};
+
+export const deleteCatchReport = async ({
+  postId,
+  userId,
+}: DeleteCatchReportInput) => {
+  const post = await prisma.catchReport.findUnique({ where: { id: postId } });
+
+  if (post?.userId === userId) {
+    await prisma.catchReport.delete({ where: { id: postId } });
+
+    return { ok: true };
+  }
+
+  return null;
 };
