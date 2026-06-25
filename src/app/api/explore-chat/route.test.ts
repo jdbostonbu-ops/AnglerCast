@@ -128,4 +128,31 @@ beforeEach(() => {
     expect(mockEmbeddingsCreate).not.toHaveBeenCalled();
     expect(mockChatCompletionsCreate).not.toHaveBeenCalled();
   });
+
+  it('returns "I don\'t know based on the provided documents" when no chunk scores above the threshold', async () => {
+    vi.mocked(loadFaqDocuments).mockReturnValue([
+      {
+        source: 'sighting-rate.md',
+        title: 'How Sighting Rate Works',
+        text: 'Sighting rate measures how often a species is recorded in a given month at a given location, computed from real GBIF occurrence records.',
+      },
+    ]);
+
+    // Question embedding is orthogonal to all chunk embeddings → cosine score 0 for every chunk.
+    // 0 is below the threshold, so the route should short-circuit and never call chat completions.
+    mockEmbeddingsCreate.mockResolvedValue({
+      data: [
+        { embedding: [1, 0, 0] }, // question
+        { embedding: [0, 1, 0] }, // chunk 1
+      ],
+    });
+
+    const response = await POST(buildRequest({ question: 'Something totally unrelated.' }));
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.answer).toBe("I don't know based on the provided documents.");
+    expect(data.sources).toEqual([]);
+    expect(mockChatCompletionsCreate).not.toHaveBeenCalled();
+  });
 });
