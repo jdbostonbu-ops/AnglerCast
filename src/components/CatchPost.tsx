@@ -77,6 +77,9 @@ export const CatchPost = ({
           <button type="button" onClick={onDelete}>
             Confirm
           </button>
+          <button type="button" onClick={() => setIsDeleteDialogOpen(false)}>
+            Cancel
+          </button>
         </div>
       ) : null}
     </article>
