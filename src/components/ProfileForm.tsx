@@ -62,6 +62,9 @@ export const ProfileForm = ({
       <button type="button" onClick={() => fileInputRef.current?.click()}>
         Change image
       </button>
+      {profileImageUrl ? (
+        <img alt="Profile image preview" src={profileImageUrl} />
+      ) : null}
 
       <button
         type="button"
