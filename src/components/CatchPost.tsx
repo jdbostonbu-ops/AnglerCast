@@ -31,6 +31,7 @@ type CatchPostProps = {
 export const CatchPost = ({
   post,
   currentUserId,
+  onUpdate,
 }: CatchPostProps): ReactElement => {
   const isOwnPost = currentUserId === post.userId;
   const [isEditing, setIsEditing] = useState(false);
@@ -52,7 +53,9 @@ export const CatchPost = ({
             value={editedBody}
             onChange={(event) => setEditedBody(event.target.value)}
           />
-          <button type="button">Save</button>
+          <button type="button" onClick={() => onUpdate(editedBody)}>
+            Save
+          </button>
         </div>
       ) : (
         <p>{post.body}</p>
