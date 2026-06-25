@@ -759,6 +759,19 @@ The ExploreFaqChat component is placed on the Explore page below the
 ETA result block (the spot-cards section), so users see it after their
 travel-time/conditions/species result. Verified by eye.
 
+RED 34.11 — chunkMarkdownContent prepends the most recent heading to each chunk
+- What it checks: When chunkMarkdownContent processes a markdown file
+  that contains headings (e.g. "# Title" or "## Section"), each chunk
+  that follows a heading has the heading text prepended to its text
+  field. When a new heading appears in the text, subsequent chunks
+  use the new heading and not the previous one. Chunks before any
+  heading are returned without prepended context.
+- Why it fails first; expected behavior: the current
+  chunkMarkdownContent implementation only splits on double newlines
+  and filters by length; it does not track heading state or prepend
+  headings to chunk text, so paragraphs lose their semantic context
+  when retrieved by the RAG pipeline.
+
 ---
 
 # 2. Run the tests (expect RED)
