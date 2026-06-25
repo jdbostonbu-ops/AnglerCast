@@ -32,10 +32,12 @@ export const CatchPost = ({
   post,
   currentUserId,
   onUpdate,
+  onDelete,
 }: CatchPostProps): ReactElement => {
   const isOwnPost = currentUserId === post.userId;
   const [isEditing, setIsEditing] = useState(false);
   const [editedBody, setEditedBody] = useState(post.body);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   return (
     <article>
@@ -61,9 +63,21 @@ export const CatchPost = ({
         <p>{post.body}</p>
       )}
       {isOwnPost ? (
-        <button type="button" onClick={() => setIsEditing(true)}>
-          Edit
-        </button>
+        <div>
+          <button type="button" onClick={() => setIsEditing(true)}>
+            Edit
+          </button>
+          <button type="button" onClick={() => setIsDeleteDialogOpen(true)}>
+            Delete
+          </button>
+        </div>
+      ) : null}
+      {isDeleteDialogOpen ? (
+        <div role="dialog">
+          <button type="button" onClick={onDelete}>
+            Confirm
+          </button>
+        </div>
       ) : null}
     </article>
   );
