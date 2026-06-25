@@ -5,7 +5,7 @@ import { canPostCatch } from '@/lib/profile';
 
 type CatchComposerProps = {
   profileName: string | null;
-  onPost: (body: string) => void;
+  onPost: (body: string) => void | Promise<void>;
 };
 
 export const CatchComposer = ({
@@ -14,8 +14,13 @@ export const CatchComposer = ({
 }: CatchComposerProps): ReactElement => {
   const [body, setBody] = useState('');
   const [showProfilePrompt, setShowProfilePrompt] = useState(false);
+  const [isPosting, setIsPosting] = useState(false);
 
-  const handlePost = (): void => {
+  const handlePost = async (): Promise<void> => {
+    if (isPosting) {
+      return;
+    }
+
     const postStatus = canPostCatch({ profileName });
 
     if (!postStatus.allowed) {
@@ -24,7 +29,13 @@ export const CatchComposer = ({
     }
 
     setShowProfilePrompt(false);
-    onPost(body);
+    setIsPosting(true);
+
+    try {
+      await onPost(body);
+    } finally {
+      setIsPosting(false);
+    }
   };
 
   return (
@@ -33,7 +44,7 @@ export const CatchComposer = ({
         value={body}
         onChange={(event) => setBody(event.target.value)}
       />
-      <button type="button" onClick={handlePost}>
+      <button type="button" disabled={isPosting} onClick={handlePost}>
         Post
       </button>
       {showProfilePrompt ? <a href="/profile">Set up profile</a> : null}
