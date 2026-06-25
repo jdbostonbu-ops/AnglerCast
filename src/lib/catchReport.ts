@@ -6,6 +6,10 @@ type CreateCatchReportInput = {
   body: string;
 };
 
+type GetCatchReportsInput = {
+  waterType: string;
+};
+
 export const createCatchReport = ({
   userId,
   waterType,
@@ -13,4 +17,9 @@ export const createCatchReport = ({
 }: CreateCatchReportInput) =>
   prisma.catchReport.create({
     data: { userId, waterType, body },
+  });
+
+export const getCatchReports = ({ waterType }: GetCatchReportsInput) =>
+  prisma.catchReport.findMany({
+    where: { waterType },
   });
