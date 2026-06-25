@@ -86,8 +86,24 @@ it('renders the AnglerCast brand name', () => {
 
     expect(
       screen.getByRole('link', { name: /set up profile/i }),
-    ).toHaveAttribute('href', '/');
+    ).toHaveAttribute('href', '/profile');
 
     expect(screen.queryByRole('img', { name: /profile avatar/i })).toBeNull();
+  });
+
+  it('renders a pencil edit link to /profile next to the avatar when a profile is set', () => {
+    render(
+      <NavBar
+        isLoggedIn
+        profile={{
+          profileName: 'trigger',
+          profileImageUrl: '/uploads/abc.png',
+          email: 'jdboston@example.com',
+        }}
+      />,
+    );
+
+    const editLink = screen.getByRole('link', { name: /edit profile/i });
+    expect(editLink).toHaveAttribute('href', '/profile');
   });
 });
