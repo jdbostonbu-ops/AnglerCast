@@ -65,6 +65,9 @@ export const NavBar = ({
           {displayAvatar?.kind === 'image' ? (
             <img alt="Profile avatar" src={displayAvatar.src} />
           ) : null}
+          {displayAvatar?.kind === 'letter' ? (
+            <span className="site-nav__avatar-letter">{displayAvatar.letter}</span>
+          ) : null}
           <span>{profile.profileName}</span>
         </div>
       ) : null}
