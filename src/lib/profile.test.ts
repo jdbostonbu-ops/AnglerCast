@@ -1,6 +1,6 @@
 // src/lib/profile.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { saveProfileName, saveProfileImage, getDisplayAvatar } from '@/lib/profile';
+import { saveProfileName, saveProfileImage, getDisplayAvatar, canPostCatch } from '@/lib/profile';
 
 vi.mock('@/lib/prisma', () => ({
   prisma: {
@@ -110,5 +110,22 @@ describe('getDisplayAvatar fallback', () => {
       kind: 'letter',
       letter: 'J',
     });
+  });
+});
+
+describe('canPostCatch', () => {
+  it('returns not allowed when the profile name is null', () => {
+    const result = canPostCatch({ profileName: null });
+    expect(result).toEqual({ allowed: false, reason: 'no profile name' });
+  });
+
+  it('returns not allowed when the profile name is an empty string', () => {
+    const result = canPostCatch({ profileName: '' });
+    expect(result).toEqual({ allowed: false, reason: 'no profile name' });
+  });
+
+  it('returns allowed when a profile name is set', () => {
+    const result = canPostCatch({ profileName: 'trigger' });
+    expect(result).toEqual({ allowed: true });
   });
 });
