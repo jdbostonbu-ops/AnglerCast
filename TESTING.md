@@ -685,18 +685,20 @@ RED 34.3 — retrieveTopChunks returns topK chunks sorted by similarity, highest
 - Why it fails first; expected behavior: the retrieveTopChunks function
   doesn't exist yet in src/lib/rag.ts, so the import fails.
 
-RED 34.4 — POST /api/explore-chat returns answer + sources for a valid question
-- What it checks: POST to /api/explore-chat with a JSON body
-  { question: "what is sighting rate?" } returns a 200 response with a
+RED 34.4 — POST /api/explore-chat returns answer + sources and grounds the model
+- What it checks: (1) POST to /api/explore-chat with a JSON body
+  { question: "What is sighting rate?" } returns a 200 response with a
   JSON body containing answer (non-empty string) and sources (array of
-  source titles such as "How Sighting Rate Works"). OpenAI embeddings
-  are mocked to return fixed vectors. OpenAI chat completion is mocked
-  to return a fixed answer string. The FAQ content read from disk is
-  mocked or provided as a test fixture so the test is deterministic and
-  does not touch the real network or filesystem.
+  source titles such as "How Sighting Rate Works"). (2) The system
+  prompt sent to OpenAI instructs the model to ground answers in the
+  retrieved context and to say "I don't know based on the provided
+  documents." when the answer is not in the retrieved context. OpenAI
+  embeddings and chat completion are mocked; the FAQ loader is mocked
+  to return fixture documents so the test is deterministic and does
+  not touch the real network or filesystem.
 - Why it fails first; expected behavior: the route file
-  src/app/api/explore-chat/route.ts doesn't exist yet, so POST returns
-  404 (or the import fails).
+  src/app/api/explore-chat/route.ts doesn't exist yet, so the import
+  of POST fails to resolve.
 
 RED 34.5 — POST /api/explore-chat returns 400 for missing or empty question
 - What it checks: POST to /api/explore-chat with a JSON body where
