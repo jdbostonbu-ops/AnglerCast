@@ -5,8 +5,7 @@ import { SightingRateSearch } from '@/components/SightingRateSearch';
 
 describe('SightingRateSearch', () => {
   it('renders species, latitude, longitude, and month inputs with a Search button', () => {
-    render(<SightingRateSearch onSearch={vi.fn()} />);
-
+    render(<SightingRateSearch onSearch={vi.fn()} waterType="saltwater" />);
     expect(screen.getByLabelText('Species')).toBeInTheDocument();
     expect(screen.getByLabelText('Latitude')).toBeInTheDocument();
     expect(screen.getByLabelText('Longitude')).toBeInTheDocument();
@@ -17,15 +16,13 @@ describe('SightingRateSearch', () => {
   it('submits full-precision coordinates and the selected month to onSearch', async () => {
     const user = userEvent.setup();
     const onSearch = vi.fn();
-
-    render(<SightingRateSearch onSearch={onSearch} />);
-
-    await user.type(screen.getByLabelText('Species'), 'Morone saxatilis');
+    render(<SightingRateSearch onSearch={onSearch} waterType="saltwater" />);
+    // Select a common name; its value is the scientific name
+    await user.selectOptions(screen.getByLabelText('Species'), 'Morone saxatilis');
     await user.type(screen.getByLabelText('Latitude'), '41.063500123456');
     await user.type(screen.getByLabelText('Longitude'), '-71.862800987654');
     await user.type(screen.getByLabelText('Month'), '6');
     await user.click(screen.getByRole('button', { name: 'Search' }));
-
     expect(onSearch).toHaveBeenCalledWith({
       species: 'Morone saxatilis',
       latitude: 41.063500123456,
@@ -37,15 +34,12 @@ describe('SightingRateSearch', () => {
   it('treats a typographic minus sign in longitude as a valid negative coordinate', async () => {
     const user = userEvent.setup();
     const onSearch = vi.fn();
-
-    render(<SightingRateSearch onSearch={onSearch} />);
-
-    await user.type(screen.getByLabelText('Species'), 'Morone saxatilis');
+    render(<SightingRateSearch onSearch={onSearch} waterType="saltwater" />);
+    await user.selectOptions(screen.getByLabelText('Species'), 'Morone saxatilis');
     await user.type(screen.getByLabelText('Latitude'), '41.0635001');
     await user.type(screen.getByLabelText('Longitude'), '−72.0739658');
     await user.type(screen.getByLabelText('Month'), '6');
     await user.click(screen.getByRole('button', { name: 'Search' }));
-
     expect(onSearch).toHaveBeenCalledWith({
       species: 'Morone saxatilis',
       latitude: 41.0635001,
@@ -57,18 +51,76 @@ describe('SightingRateSearch', () => {
   it('shows a clear error and does not call onSearch for invalid or out-of-range coordinates', async () => {
     const user = userEvent.setup();
     const onSearch = vi.fn();
-
-    render(<SightingRateSearch onSearch={onSearch} />);
-
-    await user.type(screen.getByLabelText('Species'), 'Morone saxatilis');
+    render(<SightingRateSearch onSearch={onSearch} waterType="saltwater" />);
+    await user.selectOptions(screen.getByLabelText('Species'), 'Morone saxatilis');
     await user.type(screen.getByLabelText('Latitude'), 'abc');
     await user.type(screen.getByLabelText('Longitude'), '-181');
     await user.type(screen.getByLabelText('Month'), '6');
     await user.click(screen.getByRole('button', { name: 'Search' }));
-
     expect(
       screen.getByText('Enter valid coordinates: latitude must be -90 to 90 and longitude must be -180 to 180.'),
     ).toBeInTheDocument();
     expect(onSearch).not.toHaveBeenCalled();
+  });
+});
+
+describe('SightingRateSearch species dropdown', () => {
+  it('renders the Species field as a dropdown of common names for the water type', () => {
+    render(<SightingRateSearch onSearch={vi.fn()} waterType="saltwater" />);
+
+    const speciesField = screen.getByLabelText('Species');
+    // It is a select element
+    expect(speciesField.tagName).toBe('SELECT');
+    // Common names from the saltwater list appear as options
+    expect(
+      screen.getByRole('option', { name: 'Striped Bass' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('option', { name: 'Bluefish' }),
+    ).toBeInTheDocument();
+  });
+
+  it('uses the scientific name as the value of each common-name option', async () => {
+    const user = userEvent.setup();
+    const onSearch = vi.fn();
+    render(<SightingRateSearch onSearch={onSearch} waterType="saltwater" />);
+
+    // Select by the common name's value, which must be the scientific name
+    await user.selectOptions(screen.getByLabelText('Species'), 'Morone saxatilis');
+    await user.type(screen.getByLabelText('Latitude'), '41.0');
+    await user.type(screen.getByLabelText('Longitude'), '-71.5');
+    await user.type(screen.getByLabelText('Month'), '6');
+    await user.click(screen.getByRole('button', { name: 'Search' }));
+
+    // The submitted species is the scientific name, not the common name
+    expect(onSearch).toHaveBeenCalledWith(
+      expect.objectContaining({ species: 'Morone saxatilis' }),
+    );
+  });
+
+  it('reflects a selectedSpecies (scientific name set by a list click) as the chosen option', () => {
+    render(
+      <SightingRateSearch
+        onSearch={vi.fn()}
+        waterType="saltwater"
+        selectedSpecies="Tautoga onitis"
+      />,
+    );
+
+    const speciesField = screen.getByLabelText('Species') as HTMLSelectElement;
+    // The dropdown shows the list-clicked species as selected
+    expect(speciesField.value).toBe('Tautoga onitis');
+  });
+
+  it('lists freshwater common names when the water type is freshwater', () => {
+    render(<SightingRateSearch onSearch={vi.fn()} waterType="freshwater" />);
+
+    expect(
+      screen.getByRole('option', { name: 'Brook Trout' }),
+    ).toBeInTheDocument();
+    // A saltwater-only species should not be a freshwater option
+    expect(
+      screen.queryByRole('option', { name: 'Bluefish' }),
+    ).toBeNull();
   });
 });
