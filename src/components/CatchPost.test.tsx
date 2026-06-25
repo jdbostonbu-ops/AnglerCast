@@ -6,6 +6,7 @@ const basePost = {
   id: 'catch-1',
   userId: 'user-1',
   body: 'Caught a smallmouth bass at dawn.',
+  createdAt: new Date('2026-06-25T12:00:00.000Z'),
   author: {
     profileName: 'trigger',
     avatar: { kind: 'letter' as const, letter: 'T' },
