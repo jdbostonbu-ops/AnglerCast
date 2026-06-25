@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { type KeyboardEvent, useState } from 'react';
 
 type ExploreChatResponse = {
   answer: string;
@@ -15,6 +15,10 @@ export const ExploreFaqChat = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAskClick = async () => {
+    if (isLoading) {
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -44,32 +48,56 @@ export const ExploreFaqChat = () => {
     }
   };
 
+  const handleQuestionKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') {
+      return;
+    }
+
+    event.preventDefault();
+    void handleAskClick();
+  };
+
   return (
-    <form>
-      <label htmlFor="explore-faq-question">Your question</label>
-      <input
-        id="explore-faq-question"
-        type="text"
-        value={question}
-        onChange={(event) => setQuestion(event.target.value)}
-      />
-      <button type="button" onClick={handleAskClick} disabled={isLoading}>
-        Ask
-      </button>
-      {errorMessage !== null ? <p>{errorMessage}</p> : null}
-      {errorMessage === null && answer !== null && answer !== '' ? (
-        <p>{answer}</p>
-      ) : null}
-      {errorMessage === null && sources.length > 0 ? (
-        <div>
-          <p>Sources</p>
-          <ul>
-            {sources.map((title) => (
-              <li key={title}>{title}</li>
-            ))}
-          </ul>
+    <div className="faq-chat">
+      <form className="faq-chat__form">
+        <div className="faq-chat__field">
+          <label className="faq-chat__label" htmlFor="explore-faq-question">
+            Your question
+          </label>
+          <input
+            className="faq-chat__input"
+            id="explore-faq-question"
+            type="text"
+            value={question}
+            onChange={(event) => setQuestion(event.target.value)}
+            onKeyDown={handleQuestionKeyDown}
+          />
         </div>
-      ) : null}
-    </form>
+        <button
+          className="faq-chat__submit"
+          type="button"
+          onClick={handleAskClick}
+          disabled={isLoading}
+        >
+          Ask
+        </button>
+        {errorMessage !== null ? (
+          <p className="faq-chat__error">{errorMessage}</p>
+        ) : null}
+        {errorMessage === null && answer !== null && answer !== '' ? (
+          <p className="faq-chat__answer">{answer}</p>
+        ) : null}
+        {errorMessage === null && sources.length > 0 ? (
+          <div className="faq-chat__sources">
+            <p>Sources</p>
+            <ul>
+              {sources.map((title) => (
+                <li key={title}>{title}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+      </form>
+    </div>
   );
 };
