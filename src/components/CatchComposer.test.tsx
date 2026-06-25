@@ -47,3 +47,37 @@ describe('CatchComposer when the user has no profile name', () => {
     ).toHaveAttribute('href', '/profile');
   });
 });
+
+describe('CatchComposer prevents double submitting', () => {
+  it('does not call onPost again while a previous post is still in progress', async () => {
+    // onPost that stays pending until we resolve it
+    let resolvePost: (() => void) | undefined;
+    const onPost = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolvePost = resolve;
+        }),
+    );
+
+    render(<CatchComposer profileName="trigger" onPost={onPost} />);
+
+    fireEvent.change(screen.getByRole('textbox'), {
+      target: { value: 'Striped bass at dawn.' },
+    });
+
+    const postButton = screen.getByRole('button', { name: /post/i });
+
+    // First click starts the post (stays pending)
+    fireEvent.click(postButton);
+    // Second click while still pending should be ignored
+    fireEvent.click(postButton);
+
+    expect(onPost).toHaveBeenCalledTimes(1);
+
+    // The button is disabled while posting
+    expect(postButton).toBeDisabled();
+
+    // Finish the post
+    resolvePost?.();
+  });
+});
