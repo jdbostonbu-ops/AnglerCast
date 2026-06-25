@@ -1,9 +1,13 @@
-import { createCatchReport, getCatchReports } from '@/lib/catchReport';
+import { createCatchReport, deleteCatchReport, getCatchReports } from '@/lib/catchReport';
 import { getSessionUserId } from '@/lib/session';
 
 type CreateCatchReportRequestBody = {
   waterType: string;
   body: string;
+};
+
+type DeleteCatchReportRequestBody = {
+  id: string;
 };
 
 export async function GET(request: Request): Promise<Response> {
@@ -34,4 +38,17 @@ export async function POST(request: Request): Promise<Response> {
   });
 
   return Response.json(catchReport, { status: 200 });
+}
+
+export async function DELETE(request: Request): Promise<Response> {
+  const userId = await getSessionUserId();
+
+  if (userId === null) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const body = (await request.json()) as DeleteCatchReportRequestBody;
+  const result = await deleteCatchReport({ postId: body.id, userId });
+
+  return Response.json(result, { status: 200 });
 }
