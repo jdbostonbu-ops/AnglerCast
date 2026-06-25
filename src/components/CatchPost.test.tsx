@@ -111,3 +111,30 @@ describe('CatchPost delete confirmation', () => {
     expect(onDelete).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('CatchPost delete cancel', () => {
+  it('does not call onDelete and closes the dialog when Cancel is clicked', () => {
+    const onDelete = vi.fn();
+
+    render(
+      <CatchPost
+        post={basePost}
+        currentUserId="user-1"
+        onUpdate={() => {}}
+        onDelete={onDelete}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /delete/i }));
+
+    // Confirm button is visible while the dialog is open
+    expect(screen.getByRole('button', { name: /confirm/i })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /cancel/i }));
+
+    // onDelete never fires
+    expect(onDelete).not.toHaveBeenCalled();
+    // Dialog is closed — the Confirm button is gone
+    expect(screen.queryByRole('button', { name: /confirm/i })).toBeNull();
+  });
+});
