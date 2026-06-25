@@ -138,3 +138,75 @@ describe('CatchPost delete cancel', () => {
     expect(screen.queryByRole('button', { name: /confirm/i })).toBeNull();
   });
 });
+
+describe('CatchPost prevents double delete', () => {
+  it('disables Confirm and does not call onDelete twice while deleting', async () => {
+    let resolveDelete: (() => void) | undefined;
+    const onDelete = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveDelete = resolve;
+        }),
+    );
+
+    render(
+      <CatchPost
+        post={basePost}
+        currentUserId="user-1"
+        onUpdate={() => {}}
+        onDelete={onDelete}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /delete/i }));
+    const confirmButton = screen.getByRole('button', { name: /confirm/i });
+
+    // First confirm starts the delete (stays pending)
+    fireEvent.click(confirmButton);
+    // Second click while pending should be ignored
+    fireEvent.click(confirmButton);
+
+    expect(onDelete).toHaveBeenCalledTimes(1);
+    expect(confirmButton).toBeDisabled();
+
+    resolveDelete?.();
+  });
+});
+
+describe('CatchPost prevents double save', () => {
+  it('disables Save and does not call onUpdate twice while saving', async () => {
+    let resolveUpdate: (() => void) | undefined;
+    const onUpdate = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveUpdate = resolve;
+        }),
+    );
+
+    render(
+      <CatchPost
+        post={basePost}
+        currentUserId="user-1"
+        onUpdate={onUpdate}
+        onDelete={() => {}}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /edit/i }));
+    fireEvent.change(screen.getByRole('textbox'), {
+      target: { value: 'Edited catch.' },
+    });
+
+    const saveButton = screen.getByRole('button', { name: /save/i });
+
+    // First save starts the update (stays pending)
+    fireEvent.click(saveButton);
+    // Second click while pending should be ignored
+    fireEvent.click(saveButton);
+
+    expect(onUpdate).toHaveBeenCalledTimes(1);
+    expect(saveButton).toBeDisabled();
+
+    resolveUpdate?.();
+  });
+});

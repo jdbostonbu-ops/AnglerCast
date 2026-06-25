@@ -147,3 +147,4 @@ describe('CatchFeed renders posts as CatchPost with edit and delete', () => {
     expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument();
   });
 });
+
