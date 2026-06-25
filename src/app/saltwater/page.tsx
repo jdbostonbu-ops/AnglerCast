@@ -6,6 +6,8 @@ import { SiteNav } from '@/components/SiteNav';
 import { SightingRateSearch } from '@/components/SightingRateSearch';
 import { SpeciesList } from '@/components/SpeciesList';
 import { SavedSpotsSection } from '@/components/SavedSpotsSection';
+import { CatchComposer } from '@/components/CatchComposer';
+import { CatchFeed } from '@/components/CatchFeed';
 
 // Leaflet needs the browser, so load the map client-side only (no server-side render).
 const OccurrenceMap = dynamic(
@@ -56,6 +58,7 @@ const SaltwaterPage = () => {
     null,
   );
   const [userId, setUserId] = useState<string | null>(null);
+  const [profileName, setProfileName] = useState<string | null>(null);
   const [lastSearch, setLastSearch] = useState<SearchValues | null>(null);
 
   useEffect(() => {
@@ -93,6 +96,44 @@ const SaltwaterPage = () => {
   };
 
   const ratePercent = result === null ? 0 : Math.round(result.rate.rate * 100);
+
+  useEffect(() => {
+    const loadProfile = async (): Promise<void> => {
+      const response = await fetch('/api/profile');
+
+      if (!response.ok) {
+        return;
+      }
+
+      const profile = (await response.json()) as { profileName: string | null };
+
+      setProfileName(profile.profileName);
+    };
+
+    void loadProfile();
+  }, []);
+
+  const fetchReports = async ({
+    waterType,
+  }: {
+    waterType: string;
+  }): Promise<unknown[]> => {
+    const response = await fetch(`/api/catch-reports?waterType=${waterType}`);
+
+    if (!response.ok) {
+      return [];
+    }
+
+    return (await response.json()) as unknown[];
+  };
+
+  const onPost = async (body: string): Promise<void> => {
+    await fetch('/api/catch-reports', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ waterType: 'saltwater', body }),
+    });
+  };
 
   return (
     <>
@@ -164,15 +205,24 @@ const SaltwaterPage = () => {
             ) : null}
           </>
         ) : null}
-        <SavedSpotsSection
-          userId={userId}
-          waterType="saltwater"
-          canSave={result !== null && lastSearch !== null}
-          prefillSpecies={lastSearch?.species}
-          prefillLatitude={lastSearch?.latitude}
-          prefillLongitude={lastSearch?.longitude}
-        />
-      </main>
+      <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+        <div style={{ flex: '1 1 320px', minWidth: '300px' }}>
+          <SavedSpotsSection
+            userId={userId}
+            waterType="saltwater"
+            canSave={result !== null && lastSearch !== null}
+            prefillSpecies={lastSearch?.species}
+            prefillLatitude={lastSearch?.latitude}
+            prefillLongitude={lastSearch?.longitude}
+          />
+        </div>
+        <div style={{ flex: '1 1 320px', minWidth: '300px' }}>
+          <h2>Catch reports</h2>
+          <CatchComposer profileName={profileName} onPost={onPost} />
+          <CatchFeed waterType="saltwater" fetchReports={fetchReports} />
+        </div>
+      </div>
+    </main>
     </>
   );
 };
