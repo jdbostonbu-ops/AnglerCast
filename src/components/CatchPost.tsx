@@ -55,6 +55,7 @@ export const CatchPost = ({
 
     try {
       await withMinimumDuration(Promise.resolve(onUpdate(editedBody)));
+      setIsEditing(false);
     } finally {
       setIsSaving(false);
     }
@@ -122,15 +123,12 @@ export const CatchPost = ({
             value={editedBody}
             onChange={(event) => setEditedBody(event.target.value)}
           />
-          <button type="button" disabled={isSaving} onClick={handleSave}>
-            {isSaving ? (
-              <>
-                <Spinner /> Save
-              </>
-            ) : (
-              'Save'
-            )}
-          </button>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            <button type="button" disabled={isSaving} onClick={handleSave}>
+              Save
+            </button>
+            {isSaving ? <Spinner /> : null}
+          </span>
         </div>
       ) : (
         <p>{post.body}</p>
@@ -147,15 +145,12 @@ export const CatchPost = ({
       ) : null}
       {isDeleteDialogOpen ? (
         <div role="dialog">
-          <button type="button" disabled={isDeleting} onClick={handleConfirmDelete}>
-            {isDeleting ? (
-              <>
-                <Spinner /> Confirm
-              </>
-            ) : (
-              'Confirm'
-            )}
-          </button>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            <button type="button" disabled={isDeleting} onClick={handleConfirmDelete}>
+              Confirm
+            </button>
+            {isDeleting ? <Spinner /> : null}
+          </span>
           <button type="button" onClick={() => setIsDeleteDialogOpen(false)}>
             Cancel
           </button>
