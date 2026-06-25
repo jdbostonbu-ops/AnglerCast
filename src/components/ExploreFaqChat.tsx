@@ -10,7 +10,7 @@ type ExploreChatResponse = {
 export const ExploreFaqChat = () => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState<string | null>(null);
-  const [, setSources] = useState<string[]>([]);
+  const [sources, setSources] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAskClick = async () => {
@@ -43,6 +43,16 @@ export const ExploreFaqChat = () => {
         Ask
       </button>
       {answer !== null && answer !== '' ? <p>{answer}</p> : null}
+      {sources.length > 0 ? (
+        <div>
+          <p>Sources</p>
+          <ul>
+            {sources.map((title) => (
+              <li key={title}>{title}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
     </form>
   );
 };
