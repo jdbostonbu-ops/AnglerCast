@@ -4,8 +4,11 @@ vi.mock('@/lib/session', () => ({
   getSessionUserId: vi.fn(),
 }));
 
+const { writeFileMock } = vi.hoisted(() => ({ writeFileMock: vi.fn() }));
+
 vi.mock('node:fs/promises', () => ({
-  writeFile: vi.fn(),
+  default: { writeFile: writeFileMock },
+  writeFile: writeFileMock,
 }));
 
 import { POST } from '@/app/api/profile/image/route';
@@ -14,13 +17,23 @@ import { writeFile } from 'node:fs/promises';
 
 const makeRequestWithFile = (fileName: string, bytes: Uint8Array): Request => {
   const formData = new FormData();
-  const file = new File([bytes], fileName, { type: 'image/png' });
+  const file = new File([bytes.buffer as ArrayBuffer], fileName, { type: 'image/png' });
+  // jsdom's File lacks arrayBuffer(); provide one that returns the bytes.
+  file.arrayBuffer = async (): Promise<ArrayBuffer> => {
+    const copy = new Uint8Array(bytes);
+    return copy.buffer;
+  };
   formData.append('image', file);
 
-  return new Request('http://localhost/api/profile/image', {
+  // jsdom can't round-trip a multipart body through request.formData(),
+  // so we stub formData() to return the FormData directly. The route still
+  // calls request.formData() and gets a real FormData with the real File.
+  const request = new Request('http://localhost/api/profile/image', {
     method: 'POST',
-    body: formData,
   });
+  request.formData = async (): Promise<FormData> => formData;
+
+  return request;
 };
 
 describe('POST /api/profile/image', () => {
