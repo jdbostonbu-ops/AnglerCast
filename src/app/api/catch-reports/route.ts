@@ -1,4 +1,9 @@
-import { createCatchReport, deleteCatchReport, getCatchReports } from '@/lib/catchReport';
+import {
+  createCatchReport,
+  deleteCatchReport,
+  getCatchReports,
+  updateCatchReport,
+} from '@/lib/catchReport';
 import { getSessionUserId } from '@/lib/session';
 
 type CreateCatchReportRequestBody = {
@@ -8,6 +13,11 @@ type CreateCatchReportRequestBody = {
 
 type DeleteCatchReportRequestBody = {
   id: string;
+};
+
+type UpdateCatchReportRequestBody = {
+  id: string;
+  body: string;
 };
 
 export async function GET(request: Request): Promise<Response> {
@@ -49,6 +59,23 @@ export async function DELETE(request: Request): Promise<Response> {
 
   const body = (await request.json()) as DeleteCatchReportRequestBody;
   const result = await deleteCatchReport({ postId: body.id, userId });
+
+  return Response.json(result, { status: 200 });
+}
+
+export async function PATCH(request: Request): Promise<Response> {
+  const userId = await getSessionUserId();
+
+  if (userId === null) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const body = (await request.json()) as UpdateCatchReportRequestBody;
+  const result = await updateCatchReport({
+    postId: body.id,
+    userId,
+    newBody: body.body,
+  });
 
   return Response.json(result, { status: 200 });
 }
