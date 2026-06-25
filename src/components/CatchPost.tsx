@@ -81,7 +81,7 @@ export const CatchPost = ({
         marginBottom: '8px',
       }}
     >
-      <div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         {post.author.avatar.kind === 'image' ? (
           <img
             alt={`${post.author.profileName} avatar`}
