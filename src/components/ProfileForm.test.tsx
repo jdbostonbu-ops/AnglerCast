@@ -2,27 +2,82 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { ProfileForm } from '@/components/ProfileForm';
 
+const noopUpload = async (): Promise<string> => '';
+
 describe('ProfileForm rendering', () => {
-  it('renders a profile name field, an image URL field, and a Save button', () => {
-    render(<ProfileForm onSave={() => {}} />);
+  it('renders a profile name field, an image picker control, and a Save button', () => {
+    render(<ProfileForm onSave={() => {}} uploadImage={noopUpload} />);
 
     expect(screen.getByLabelText(/profile name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/image url/i)).toBeInTheDocument();
+    // The pencil button that opens the image picker
+    expect(
+      screen.getByRole('button', { name: /change image/i }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /save/i })).toBeInTheDocument();
+  });
+
+  it('does not render an image URL text field', () => {
+    render(<ProfileForm onSave={() => {}} uploadImage={noopUpload} />);
+
+    expect(screen.queryByLabelText(/image url/i)).toBeNull();
+  });
+});
+
+describe('ProfileForm image upload', () => {
+  it('calls uploadImage with the picked file when an image is selected', async () => {
+    const uploadImage = vi.fn().mockResolvedValue('/uploads/abc.png');
+
+    render(<ProfileForm onSave={() => {}} uploadImage={uploadImage} />);
+
+    const file = new File([new Uint8Array([1, 2, 3])], 'photo.png', {
+      type: 'image/png',
+    });
+
+    const input = screen.getByTestId('profile-image-input') as HTMLInputElement;
+    fireEvent.change(input, { target: { files: [file] } });
+
+    expect(uploadImage).toHaveBeenCalledTimes(1);
+    expect(uploadImage).toHaveBeenCalledWith(file);
   });
 });
 
 describe('ProfileForm submit', () => {
-  it('calls onSave once with the entered profile name and image URL', () => {
+  it('calls onSave with the profile name and the uploaded image path', async () => {
     const onSave = vi.fn();
+    const uploadImage = vi.fn().mockResolvedValue('/uploads/abc.png');
 
-    render(<ProfileForm onSave={onSave} />);
+    render(<ProfileForm onSave={onSave} uploadImage={uploadImage} />);
 
     fireEvent.change(screen.getByLabelText(/profile name/i), {
       target: { value: 'trigger' },
     });
-    fireEvent.change(screen.getByLabelText(/image url/i), {
-      target: { value: 'https://example.com/avatar.png' },
+
+    const file = new File([new Uint8Array([1, 2, 3])], 'photo.png', {
+      type: 'image/png',
+    });
+    const input = screen.getByTestId('profile-image-input') as HTMLInputElement;
+    fireEvent.change(input, { target: { files: [file] } });
+
+    // let the upload promise resolve so the path is stored
+    await Promise.resolve();
+    await Promise.resolve();
+
+    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+
+    expect(onSave).toHaveBeenCalledTimes(1);
+    expect(onSave).toHaveBeenCalledWith({
+      profileName: 'trigger',
+      profileImageUrl: '/uploads/abc.png',
+    });
+  });
+
+  it('calls onSave with an empty image path when no image was picked', () => {
+    const onSave = vi.fn();
+
+    render(<ProfileForm onSave={onSave} uploadImage={noopUpload} />);
+
+    fireEvent.change(screen.getByLabelText(/profile name/i), {
+      target: { value: 'trigger' },
     });
 
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
@@ -30,7 +85,7 @@ describe('ProfileForm submit', () => {
     expect(onSave).toHaveBeenCalledTimes(1);
     expect(onSave).toHaveBeenCalledWith({
       profileName: 'trigger',
-      profileImageUrl: 'https://example.com/avatar.png',
+      profileImageUrl: '',
     });
   });
 });
@@ -39,9 +94,8 @@ describe('ProfileForm empty name validation', () => {
   it('shows an error and does not call onSave when the profile name is empty', () => {
     const onSave = vi.fn();
 
-    render(<ProfileForm onSave={onSave} />);
+    render(<ProfileForm onSave={onSave} uploadImage={noopUpload} />);
 
-    // Leave profile name empty; click Save
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
 
     expect(onSave).not.toHaveBeenCalled();
@@ -51,23 +105,17 @@ describe('ProfileForm empty name validation', () => {
   it('does not show the error once a valid name is entered and saved', () => {
     const onSave = vi.fn();
 
-    render(<ProfileForm onSave={onSave} />);
+    render(<ProfileForm onSave={onSave} uploadImage={noopUpload} />);
 
-    // First trigger the error
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
     expect(screen.getByText(/profile name is required/i)).toBeInTheDocument();
 
-    // Now enter a valid name and save
     fireEvent.change(screen.getByLabelText(/profile name/i), {
       target: { value: 'trigger' },
     });
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
 
     expect(onSave).toHaveBeenCalledTimes(1);
-    expect(onSave).toHaveBeenCalledWith({
-      profileName: 'trigger',
-      profileImageUrl: '',
-    });
     expect(screen.queryByText(/profile name is required/i)).toBeNull();
   });
 });
