@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import type { ReactElement } from 'react';
 
 type CatchPostAvatar =
@@ -32,6 +33,8 @@ export const CatchPost = ({
   currentUserId,
 }: CatchPostProps): ReactElement => {
   const isOwnPost = currentUserId === post.userId;
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedBody, setEditedBody] = useState(post.body);
 
   return (
     <article>
@@ -43,8 +46,22 @@ export const CatchPost = ({
         )}
         <span>{post.author.profileName}</span>
       </div>
-      <p>{post.body}</p>
-      {isOwnPost ? <button type="button">Edit</button> : null}
+      {isEditing ? (
+        <div>
+          <textarea
+            value={editedBody}
+            onChange={(event) => setEditedBody(event.target.value)}
+          />
+          <button type="button">Save</button>
+        </div>
+      ) : (
+        <p>{post.body}</p>
+      )}
+      {isOwnPost ? (
+        <button type="button" onClick={() => setIsEditing(true)}>
+          Edit
+        </button>
+      ) : null}
     </article>
   );
 };
