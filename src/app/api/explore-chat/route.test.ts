@@ -27,8 +27,17 @@ const buildRequest = (body: unknown): Request =>
   });
 
 describe('POST /api/explore-chat', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
+beforeEach(() => {
+    mockEmbeddingsCreate.mockReset();
+    mockChatCompletionsCreate.mockReset();
+    vi.mocked(loadFaqDocuments).mockReset();
+
+    // Safe defaults so the route doesn't crash if it incorrectly
+    // calls OpenAI when it shouldn't. Each test can override these.
+    mockEmbeddingsCreate.mockResolvedValue({ data: [{ embedding: [1, 0, 0] }] });
+    mockChatCompletionsCreate.mockResolvedValue({
+      choices: [{ message: { content: 'placeholder' } }],
+    });
   });
 
   it('instructs the model to ground answers in the retrieved context and decline if the answer is not present', async () => {
@@ -97,5 +106,26 @@ describe('POST /api/explore-chat', () => {
     expect(data.answer.length).toBeGreaterThan(0);
     expect(Array.isArray(data.sources)).toBe(true);
     expect(data.sources).toContain('How Sighting Rate Works');
+  });
+
+  it('returns 400 when the question is missing from the body', async () => {
+    vi.mocked(loadFaqDocuments).mockReturnValue([]);
+    const response = await POST(buildRequest({}));
+
+    expect(response.status).toBe(400);
+    expect(mockEmbeddingsCreate).not.toHaveBeenCalled();
+    expect(mockChatCompletionsCreate).not.toHaveBeenCalled();
+  });
+
+  it('returns 400 when the question is empty or whitespace only', async () => {
+    vi.mocked(loadFaqDocuments).mockReturnValue([]);
+
+    const responseEmpty = await POST(buildRequest({ question: '' }));
+    const responseWhitespace = await POST(buildRequest({ question: '   \n  ' }));
+
+    expect(responseEmpty.status).toBe(400);
+    expect(responseWhitespace.status).toBe(400);
+    expect(mockEmbeddingsCreate).not.toHaveBeenCalled();
+    expect(mockChatCompletionsCreate).not.toHaveBeenCalled();
   });
 });
