@@ -1,82 +1,77 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import type { ReactElement } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
+
 import { NavBar } from '@/components/NavBar';
+
 
 type SiteNavProps = {
   hideWaterLinks?: boolean;
 };
 
-type CurrentUserResponse = {
+type AuthResponse = {
   userId: string | null;
 };
 
-const navLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'Freshwater', href: '/freshwater' },
-  { label: 'Saltwater', href: '/saltwater' },
-  { label: 'Explore', href: '/explore' },
-  { label: 'Contact', href: '/contact' },
-] as const;
+type ProfileResponse = {
+  profileName: string | null;
+  profileImageUrl: string | null;
+  email: string;
+};
 
-const waterHrefs = ['/freshwater', '/saltwater'];
+export const SiteNav = ({
+  hideWaterLinks = false,
+}: SiteNavProps): ReactElement => {
+  const [userId, setUserId] = useState<string | null>(null);
+  const [profile, setProfile] = useState<ProfileResponse | null>(null);
 
-export const SiteNav = ({ hideWaterLinks }: SiteNavProps): ReactElement => {
-  const [userId, setUserId] = useState<string | null | undefined>(undefined);
 
   useEffect(() => {
     const loadCurrentUser = async (): Promise<void> => {
       const response = await fetch('/api/auth/me');
-      const currentUser = (await response.json()) as CurrentUserResponse;
+      const body = (await response.json()) as AuthResponse;
 
-      setUserId(currentUser.userId);
+      setUserId(body.userId);
 
-      if (currentUser.userId === null) {
+      if (body.userId === null) {
+        setProfile(null);
         window.location.href = '/login';
+        return;
+      }
+
+      const profileResponse = await fetch('/api/profile');
+
+      if (profileResponse.ok) {
+        const fetchedProfile = (await profileResponse.json()) as ProfileResponse;
+
+        setProfile(fetchedProfile);
       }
     };
 
     void loadCurrentUser();
-  }, []);
+    }, []);
 
   const handleLogout = async (): Promise<void> => {
-    await fetch('/api/auth/logout', {
-      method: 'POST',
-    });
+    await fetch('/api/auth/logout', { method: 'POST' });
     setUserId(null);
+    setProfile(null);
     window.location.href = '/login';
   };
 
-  if (userId !== null) {
-    return (
-      <NavBar
-        hideWaterLinks={hideWaterLinks}
-        isLoggedIn={userId !== undefined}
-        onLogout={handleLogout}
-      />
-    );
-  }
-
-  const links = hideWaterLinks
-    ? navLinks.filter((link) => !waterHrefs.includes(link.href))
-    : navLinks;
-
   return (
-    <nav aria-label="Main navigation" className="site-nav">
-      <div className="site-nav__brand">
-        <span className="site-nav__mark" aria-hidden="true">
-          &#9875;
-        </span>
-        <span className="site-nav__name">AnglerCast</span>
-      </div>
-      <div className="site-nav__links">
-        {links.map((link) => (
-          <a key={link.href} href={link.href}>
-            {link.label}
-          </a>
-        ))}
-      </div>
-    </nav>
+    <NavBar
+      hideWaterLinks={hideWaterLinks}
+      isLoggedIn={userId !== null}
+      onLogout={handleLogout}
+      profile={
+        profile?.profileName
+          ? {
+              profileName: profile.profileName,
+              profileImageUrl: profile.profileImageUrl,
+              email: profile.email,
+            }
+          : undefined
+      }
+    />
   );
 };
