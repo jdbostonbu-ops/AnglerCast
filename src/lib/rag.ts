@@ -9,15 +9,36 @@ export const cosineSimilarity = (a: number[], b: number[]): number => {
 export const chunkMarkdownContent = (
   text: string,
   source: string,
-): { source: string; text: string }[] =>
-  text
-    .split(/\n\s*\n+/)
-    .map((paragraph) => paragraph.trim())
-    .filter((paragraph) => paragraph.length >= 50)
-    .map((paragraph) => ({
-      source,
-      text: paragraph,
-    }));
+): { source: string; text: string }[] => {
+  let currentHeading: string | null = null;
+
+  return text.split(/\n\s*\n+/).reduce<{ source: string; text: string }[]>(
+    (chunks, paragraph) => {
+      const trimmedParagraph = paragraph.trim();
+      const headingMatch = trimmedParagraph.match(/^#+\s+(.+)$/m);
+
+      if (headingMatch !== null && trimmedParagraph.startsWith(headingMatch[0])) {
+        currentHeading = headingMatch[1].trim();
+        return chunks;
+      }
+
+      if (trimmedParagraph.length < 50) {
+        return chunks;
+      }
+
+      chunks.push({
+        source,
+        text:
+          currentHeading === null
+            ? trimmedParagraph
+            : `${currentHeading}\n\n${trimmedParagraph}`,
+      });
+
+      return chunks;
+    },
+    [],
+  );
+};
 
 export type EmbeddedChunk = {
   source: string;
