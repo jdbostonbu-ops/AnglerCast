@@ -77,3 +77,34 @@ describe('CatchFeed renders new posts', () => {
     ).toBeInTheDocument();
   });
 });
+
+describe('CatchFeed stops polling on unmount', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('does not fetch again after the component unmounts', async () => {
+    const fetchReports = vi.fn().mockResolvedValue([]);
+
+    const { unmount } = render(
+      <CatchFeed waterType="freshwater" fetchReports={fetchReports} />,
+    );
+
+    // Mount fetch happened once
+    await vi.advanceTimersByTimeAsync(0);
+    expect(fetchReports).toHaveBeenCalledTimes(1);
+
+    // Unmount the feed
+    unmount();
+
+    // Advance well past several polling intervals
+    await vi.advanceTimersByTimeAsync(30000);
+
+    // No further fetches — the interval was cleared on unmount
+    expect(fetchReports).toHaveBeenCalledTimes(1);
+  });
+});
