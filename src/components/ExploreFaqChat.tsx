@@ -11,23 +11,37 @@ export const ExploreFaqChat = () => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState<string | null>(null);
   const [sources, setSources] = useState<string[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAskClick = async () => {
     setIsLoading(true);
 
-    const response = await fetch('/api/explore-chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ question }),
-    });
-    const data = (await response.json()) as ExploreChatResponse;
+    try {
+      const response = await fetch('/api/explore-chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question }),
+      });
 
-    setAnswer(data.answer);
-    setSources(data.sources);
-    setIsLoading(false);
+      if (!response.ok) {
+        throw new Error('Explore chat request failed.');
+      }
+
+      const data = (await response.json()) as ExploreChatResponse;
+
+      setAnswer(data.answer);
+      setSources(data.sources);
+      setErrorMessage(null);
+    } catch {
+      setAnswer(null);
+      setSources([]);
+      setErrorMessage('Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -42,8 +56,11 @@ export const ExploreFaqChat = () => {
       <button type="button" onClick={handleAskClick} disabled={isLoading}>
         Ask
       </button>
-      {answer !== null && answer !== '' ? <p>{answer}</p> : null}
-      {sources.length > 0 ? (
+      {errorMessage !== null ? <p>{errorMessage}</p> : null}
+      {errorMessage === null && answer !== null && answer !== '' ? (
+        <p>{answer}</p>
+      ) : null}
+      {errorMessage === null && sources.length > 0 ? (
         <div>
           <p>Sources</p>
           <ul>
