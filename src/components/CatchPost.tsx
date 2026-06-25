@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { ReactElement } from 'react';
 import { formatRelativeTime } from '@/lib/formatRelativeTime';
+import { Spinner } from '@/components/Spinner';
 
 type CatchPostAvatar =
   | {
@@ -121,7 +122,13 @@ export const CatchPost = ({
             onChange={(event) => setEditedBody(event.target.value)}
           />
           <button type="button" disabled={isSaving} onClick={handleSave}>
-            Save
+            {isSaving ? (
+              <>
+                <Spinner /> Save
+              </>
+            ) : (
+              'Save'
+            )}
           </button>
         </div>
       ) : (
@@ -140,7 +147,13 @@ export const CatchPost = ({
       {isDeleteDialogOpen ? (
         <div role="dialog">
           <button type="button" disabled={isDeleting} onClick={handleConfirmDelete}>
-            Confirm
+            {isDeleting ? (
+              <>
+                <Spinner /> Confirm
+              </>
+            ) : (
+              'Confirm'
+            )}
           </button>
           <button type="button" onClick={() => setIsDeleteDialogOpen(false)}>
             Cancel

@@ -2,6 +2,7 @@
 
 import { useState, type ReactElement } from 'react';
 import { canPostCatch } from '@/lib/profile';
+import { Spinner } from '@/components/Spinner';
 
 type CatchComposerProps = {
   profileName: string | null;
@@ -51,7 +52,13 @@ export const CatchComposer = ({
         style={{ width: '100%', minHeight: '80px', boxSizing: 'border-box' }}
       />
       <button type="button" disabled={isPosting} onClick={handlePost}>
-        {isPosting ? 'Posting...' : 'Post'}
+        {isPosting ? (
+          <>
+            <Spinner /> Posting...
+          </>
+        ) : (
+          'Post'
+        )}
       </button>
       {showProfilePrompt ? <a href="/profile">Set up profile</a> : null}
     </div>
