@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createCatchReport, getCatchReports } from '@/lib/catchReport';
+import { getDisplayAvatar } from '@/lib/profile';
 
 vi.mock('@/lib/prisma', () => ({
   prisma: {
@@ -109,6 +110,61 @@ describe('getCatchReports ordering', () => {
 
     expect(prisma.catchReport.findMany).toHaveBeenCalledWith(
       expect.objectContaining({ orderBy: { createdAt: 'desc' } }),
+    );
+  });
+});
+
+describe('getCatchReports author info', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('includes the author display name and resolved avatar on each post', async () => {
+    const rawPostsFromDb = [
+      {
+        id: 'catch-1',
+        userId: 'user-1',
+        waterType: 'freshwater',
+        body: 'Trout at the lake.',
+        createdAt: new Date('2026-06-25T10:00:00.000Z'),
+        user: {
+          profileName: 'trigger',
+          profileImageUrl: null,
+          email: 'jdboston@example.com',
+        },
+      },
+    ];
+
+    vi.mocked(prisma.catchReport.findMany).mockResolvedValueOnce(rawPostsFromDb as never);
+
+    const result = await getCatchReports({ waterType: 'freshwater' });
+
+    // findMany must include the related user's profile fields
+    expect(prisma.catchReport.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        include: {
+          user: {
+            select: { profileName: true, profileImageUrl: true, email: true },
+          },
+        },
+      }),
+    );
+
+    const expectedAvatar = getDisplayAvatar({
+      profileImageUrl: null,
+      email: 'jdboston@example.com',
+    });
+
+    expect(result).toHaveLength(1);
+    expect(result[0]).toEqual(
+      expect.objectContaining({
+        id: 'catch-1',
+        body: 'Trout at the lake.',
+        author: {
+          profileName: 'trigger',
+          avatar: expectedAvatar,
+        },
+      }),
     );
   });
 });
