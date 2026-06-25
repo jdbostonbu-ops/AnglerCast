@@ -641,6 +641,124 @@ The MapHint is placed on the saltwater and freshwater pages between the AI expla
 
 ---
 
+## 34 — FAQ chat on Explore page (RAG)
+
+A FAQ chat below the ETA result on the Explore page. Users ask
+natural-language fishing questions and the AI answers grounded in
+src/lib/faq/*.md. The FAQ corpus contains two kinds of docs: concept docs
+(how sighting rate works, why month matters, tide reading, conditions,
+safety, gear, ethics) and how-to-use-AnglerCast docs that route seasonality
+questions to the live Saltwater and Freshwater search tools. The RAG
+pipeline chunks the markdown, embeds chunks with OpenAI, retrieves the
+most similar chunks for the user's question, and the AI answers using only
+those chunks. Each answer shows the friendly titles of the FAQ docs it
+drew from. If no chunks score high enough, the AI says "I don't have that
+information" — the honest-data thesis is preserved (the AI does not invent
+fishing advice, and it does not duplicate the live seasonality data that
+already lives in /api/search).
+
+RED 34.1 — cosineSimilarity returns 1 for identical, 0 for orthogonal, -1 for opposite vectors
+- What it checks: cosineSimilarity(a, b) in src/lib/rag.ts returns 1
+  (within floating-point tolerance) when a and b are the same vector,
+  0 when they are orthogonal (e.g. [1, 0] and [0, 1]), and -1 when one
+  is the negation of the other.
+- Why it fails first; expected behavior: the cosineSimilarity function
+  doesn't exist yet in src/lib/rag.ts, so the import fails.
+
+RED 34.2 — chunkMarkdownContent splits on double newlines and drops chunks under 50 chars
+- What it checks: chunkMarkdownContent(text, source) in src/lib/rag.ts
+  takes a markdown string and a source identifier, splits the text on
+  double newlines, drops any resulting paragraph shorter than 50
+  characters after trimming, and returns an array of { source, text }
+  objects where each text is the trimmed paragraph. Empty input returns
+  an empty array.
+- Why it fails first; expected behavior: the chunkMarkdownContent
+  function doesn't exist yet in src/lib/rag.ts, so the import fails.
+
+RED 34.3 — retrieveTopChunks returns topK chunks sorted by similarity, highest first
+- What it checks: retrieveTopChunks(questionEmbedding, chunks, topK) in
+  src/lib/rag.ts takes a question embedding, an array of chunks each
+  with an embedding, and a number topK; it returns at most topK chunks
+  sorted in descending order of cosine similarity to the question
+  embedding, with each returned chunk including a numeric score field.
+  Empty chunk input returns an empty array.
+- Why it fails first; expected behavior: the retrieveTopChunks function
+  doesn't exist yet in src/lib/rag.ts, so the import fails.
+
+RED 34.4 — POST /api/explore-chat returns answer + sources for a valid question
+- What it checks: POST to /api/explore-chat with a JSON body
+  { question: "what is sighting rate?" } returns a 200 response with a
+  JSON body containing answer (non-empty string) and sources (array of
+  source titles such as "How Sighting Rate Works"). OpenAI embeddings
+  are mocked to return fixed vectors. OpenAI chat completion is mocked
+  to return a fixed answer string. The FAQ content read from disk is
+  mocked or provided as a test fixture so the test is deterministic and
+  does not touch the real network or filesystem.
+- Why it fails first; expected behavior: the route file
+  src/app/api/explore-chat/route.ts doesn't exist yet, so POST returns
+  404 (or the import fails).
+
+RED 34.5 — POST /api/explore-chat returns 400 for missing or empty question
+- What it checks: POST to /api/explore-chat with a JSON body where
+  question is missing, an empty string, or whitespace-only returns a
+  400 status with a JSON body containing an error message. No OpenAI
+  calls are made.
+- Why it fails first; expected behavior: the route doesn't exist yet,
+  so the validation guard isn't in place.
+
+RED 34.6 — POST /api/explore-chat returns "I don't have that information" when top score is below threshold
+- What it checks: When the mocked OpenAI embedding returns a question
+  vector that has very low cosine similarity to all FAQ chunks (top
+  score below the configured threshold, e.g. 0.2), POST to
+  /api/explore-chat returns a 200 response with answer equal to
+  "I don't have that information." and sources as an empty array. The
+  OpenAI chat completion is NOT called (there is nothing relevant to
+  ground in).
+- Why it fails first; expected behavior: the route doesn't exist yet,
+  and there is no threshold check logic.
+
+RED 34.7 — ExploreFaqChat component renders the question input and submit button
+- What it checks: The ExploreFaqChat component (a new component in
+  src/components/) renders a labeled text input for the user's question
+  and a submit button (e.g. "Ask"). Both elements are present on
+  initial render with no result yet.
+- Why it fails first; expected behavior: the ExploreFaqChat component
+  doesn't exist yet, so the import fails.
+
+RED 34.8 — ExploreFaqChat displays the answer after a successful submission
+- What it checks: When the user types a question into ExploreFaqChat,
+  clicks submit, and the mocked fetch to /api/explore-chat resolves
+  with { answer: "Sighting rate is...", sources: ["How Sighting Rate Works"] },
+  the component displays the answer text. The /api/explore-chat fetch
+  call is mocked.
+- Why it fails first; expected behavior: the component doesn't exist
+  or doesn't yet wire the API call to a rendered answer.
+
+RED 34.9 — ExploreFaqChat displays the source titles under the answer
+- What it checks: When the mocked /api/explore-chat fetch resolves with
+  sources like ["How Sighting Rate Works", "Why Month Matters"], the
+  component displays each source title in a sources area beneath the
+  answer (e.g. labeled "Sources:" or "From:"). The /api/explore-chat
+  fetch call is mocked.
+- Why it fails first; expected behavior: the component does not yet
+  render the sources array, only the answer.
+
+RED 34.10 — ExploreFaqChat shows an error message when the API call fails
+- What it checks: When the mocked fetch to /api/explore-chat rejects or
+  returns a non-200 response, the component displays a clear,
+  user-friendly error message (e.g. "Something went wrong. Please try
+  again.") instead of an answer. The /api/explore-chat fetch call is
+  mocked.
+- Why it fails first; expected behavior: the component does not yet
+  handle fetch errors and has no error state.
+
+Visual/wiring part (eyeball-verified):
+The ExploreFaqChat component is placed on the Explore page below the
+ETA result block (the spot-cards section), so users see it after their
+travel-time/conditions/species result. Verified by eye.
+
+---
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.
