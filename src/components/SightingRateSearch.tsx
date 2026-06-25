@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useState } from 'react';
 import { parseCoordinate } from '@/lib/coordinates';
+import { getSpeciesForWaterType, WaterType } from '@/lib/species';
 
 type SightingRateSearchInput = {
   species: string;
@@ -12,6 +13,7 @@ type SightingRateSearchInput = {
 
 type SightingRateSearchProps = {
   onSearch: (searchInput: SightingRateSearchInput) => void;
+  waterType: WaterType;
   selectedSpecies?: string;
   selectedLatitude?: number;
   selectedLongitude?: number;
@@ -22,6 +24,7 @@ const coordinateErrorMessage =
 
 export const SightingRateSearch = ({
   onSearch,
+  waterType,
   selectedSpecies,
   selectedLatitude,
   selectedLongitude,
@@ -49,6 +52,8 @@ export const SightingRateSearch = ({
       setLongitude(String(selectedLongitude));
     }
   }, [selectedLongitude]);
+
+  const speciesOptions = getSpeciesForWaterType(waterType);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -82,13 +87,19 @@ export const SightingRateSearch = ({
     <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="sighting-rate-species">Species</label>
-        <input
+        <select
           id="sighting-rate-species"
           name="species"
-          type="text"
           value={species}
           onChange={(event) => setSpecies(event.target.value)}
-        />
+        >
+          <option value="">Select a species</option>
+          {speciesOptions.map((fish) => (
+            <option key={fish.scientificName} value={fish.scientificName}>
+              {fish.commonName}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>
