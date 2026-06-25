@@ -118,14 +118,12 @@ const SaltwaterPage = () => {
     waterType,
   }: {
     waterType: string;
-  }): Promise<unknown[]> => {
+  }) => {
     const response = await fetch(`/api/catch-reports?waterType=${waterType}`);
-
     if (!response.ok) {
       return [];
     }
-
-    return (await response.json()) as unknown[];
+    return await response.json();
   };
 
   const onPost = async (body: string): Promise<void> => {
@@ -184,6 +182,7 @@ const SaltwaterPage = () => {
         <div className="search-layout">
           <SightingRateSearch
             onSearch={handleSearch}
+            waterType="saltwater"
             selectedSpecies={selectedSpecies}
             selectedLatitude={selectedLatitude}
             selectedLongitude={selectedLongitude}
