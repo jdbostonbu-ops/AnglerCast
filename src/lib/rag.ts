@@ -18,3 +18,24 @@ export const chunkMarkdownContent = (
       source,
       text: paragraph,
     }));
+
+export type EmbeddedChunk = {
+  source: string;
+  text: string;
+  embedding: number[];
+};
+
+export type RankedChunk = EmbeddedChunk & { score: number };
+
+export const retrieveTopChunks = (
+  questionEmbedding: number[],
+  chunks: EmbeddedChunk[],
+  topK: number,
+): RankedChunk[] =>
+  chunks
+    .map((chunk) => ({
+      ...chunk,
+      score: cosineSimilarity(questionEmbedding, chunk.embedding),
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, topK);
