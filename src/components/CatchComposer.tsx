@@ -52,15 +52,12 @@ export const CatchComposer = ({
         onChange={(event) => setBody(event.target.value)}
         style={{ width: '100%', minHeight: '80px', boxSizing: 'border-box' }}
       />
-      <button type="button" disabled={isPosting} onClick={handlePost}>
-        {isPosting ? (
-          <>
-            <Spinner /> Posting...
-          </>
-        ) : (
-          'Post'
-        )}
-      </button>
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+        <button type="button" disabled={isPosting} onClick={handlePost}>
+          Post
+        </button>
+        {isPosting ? <Spinner /> : null}
+      </span>
       {showProfilePrompt ? <a href="/profile">Set up profile</a> : null}
     </div>
   );

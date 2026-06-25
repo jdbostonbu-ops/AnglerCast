@@ -605,6 +605,42 @@ RED 31.3 — Polling stops when the component unmounts
 - What it checks: when the CatchFeed component unmounts, the polling interval is cleared so it doesn't keep firing or leak memory.
 - Why it fails first; expected behavior: no cleanup exists yet.
 
+---
+
+## 32 — Species dropdown (common names) on the sighting-rate search
+
+The Species field is currently a free-text input. Users type a common name (e.g. "Striped Bass"), but the search needs the scientific name (e.g. "Morone saxatilis"), so typing fails and returns 0%. This replaces the free-text input with a dropdown of common names whose selected value is the scientific name — mirroring what clicking the right-hand species list already does.
+
+RED 32.1 — The Species field renders as a dropdown of the water type's common names
+- What it checks: SightingRateSearch, given a waterType, renders a select control whose options are the common names of the species for that water type (from getSpeciesForWaterType). A blank/placeholder option is present as the default.
+- Why it fails first; expected behavior: the Species field is currently a free-text input, not a select, so there is no dropdown with common-name options to find.
+
+RED 32.2 — Selecting a common name sets the species to its scientific name
+- What it checks: when the user selects a common name from the dropdown, the value submitted as `species` is the corresponding scientific name (not the common name). Submitting the form calls onSearch with the scientific name. The species-to-scientific mapping comes from getSpeciesForWaterType.
+- Why it fails first; expected behavior: there is no dropdown and no common-name-to-scientific mapping in the field yet, so selecting a common name cannot set the scientific name.
+
+RED 32.3 — A list-click selection is reflected in the dropdown
+- What it checks: when selectedSpecies (a scientific name, set by clicking the right-hand SpeciesList) is provided to SightingRateSearch, the dropdown shows that species as the selected option, keeping the two selection methods in sync.
+- Why it fails first; expected behavior: the field has no dropdown to reflect a selected option yet.
+
+Visual/wiring part (eyeball-verified):
+The saltwater and freshwater pages pass their waterType into SightingRateSearch so the dropdown lists the correct species. Selecting a species via the dropdown populates the search the same way a list-click does, and the search returns a real rate instead of 0%. Verified by eye.
+
+---
+
+## 33 — Map zoom hint
+
+A short hint appears between the AI explanation and the occurrence map, telling the user they can zoom in and out to see more occurrences, encouraging map interaction.
+
+RED 33.1 — The MapHint renders the zoom guidance text
+- What it checks: the MapHint component renders a message telling the user to zoom in and out on the map to see more occurrences.
+- Why it fails first; expected behavior: the MapHint component doesn't exist yet, so there is nothing to import or render.
+
+Visual/wiring part (eyeball-verified):
+The MapHint is placed on the saltwater and freshwater pages between the AI explanation paragraph and the OccurrenceMap, and only shows when a result/map is showing. Verified by eye.
+
+---
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.

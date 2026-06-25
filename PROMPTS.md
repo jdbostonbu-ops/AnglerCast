@@ -249,3 +249,169 @@ Add ONLY a POST export to the existing route file src/app/api/catch-reports/rout
 ## 42. Prompt Markdown File
 
 Create a prompt mark down file in the root folder and add all prompts in there in order.
+
+## 43. CatchComposer RED
+
+Read AGENTS.md and TESTING.md in the repository root, and follow them strictly. We are working through TESTING.md in sequence, and the current test is the CatchComposer RED.
+
+Create ONLY the component file src/components/CatchComposer.tsx so users can type a catch report, submit through onPost, and see a Set up profile link when canPostCatch blocks posting.
+
+## 44. Saltwater Catch Reports Page Wiring
+
+Read AGENTS.md and follow it strictly. This is integration/page-wiring that is verified by eye.
+
+Add a Catch reports feed to src/app/saltwater/page.tsx, placed side by side with the existing Saved Spots section, using CatchComposer, CatchFeed, and the catch report/profile routes.
+
+## 45. Saltwater SavedSpotsSection Wrapping
+
+Here is the exact bottom section of src/app/saltwater/page.tsx containing the SavedSpotsSection.
+
+Replace only the SavedSpotsSection element by wrapping it and a new Catch reports column in a side-by-side two-column flex container.
+
+## 46. CatchComposer Double-Submit Prevention RED
+
+Read AGENTS.md and TESTING.md in the repository root, and follow them strictly. We are working through TESTING.md in sequence, and the current test is the CatchComposer double-submit prevention RED.
+
+Modify ONLY src/components/CatchComposer.tsx so while a post is in progress, the Post button is disabled and a second click does not call onPost again.
+
+## 47. DELETE /api/catch-reports RED
+
+Read AGENTS.md and TESTING.md in the repository root, and follow them strictly. We are working through TESTING.md in sequence, and the current test is the DELETE /api/catch-reports RED.
+
+Add ONLY a DELETE export to src/app/api/catch-reports/route.ts that session-checks and calls deleteCatchReport.
+
+## 48. PATCH /api/catch-reports RED
+
+Read AGENTS.md and TESTING.md in the repository root, and follow them strictly. We are working through TESTING.md in sequence, and the current test is the PATCH /api/catch-reports RED.
+
+Add ONLY a PATCH export to src/app/api/catch-reports/route.ts that session-checks and calls updateCatchReport.
+
+## 49. CatchFeed Renders CatchPost RED
+
+Read AGENTS.md and TESTING.md in the repository root, and follow them strictly. We are working through TESTING.md in sequence, and the current test is the CatchFeed renders posts as CatchPost RED.
+
+Modify ONLY src/components/CatchFeed.tsx so posts render through CatchPost with optional currentUserId, onUpdate, and onDelete props.
+
+## 50. Saltwater Edit/Delete Feed Wiring
+
+Read AGENTS.md and follow it strictly. This is integration/page-wiring that is verified by eye.
+
+Wire the CatchFeed on src/app/saltwater/page.tsx so the current user can edit and delete their own posts through PATCH and DELETE /api/catch-reports.
+
+## 51. CatchPost Avatar Size Visual Fix
+
+Read AGENTS.md and follow it strictly. This is a visual/CSS fix verified by eye.
+
+Constrain the author avatar image in src/components/CatchPost.tsx to a small round 40px avatar, and optionally match the letter avatar dimensions.
+
+## 52. Catch Feed Textarea and Post Spacing Visual Fix
+
+Read AGENTS.md and follow it strictly. This is a visual/CSS fix verified by eye.
+
+Make the CatchComposer textarea full width with a reasonable height, and add padding/divider spacing to each CatchPost article.
+
+## 53. CatchPost Double Save/Delete Prevention RED
+
+Read AGENTS.md and TESTING.md in the repository root, and follow them strictly. We are working through TESTING.md in sequence, and the current test is the CatchPost double-delete and double-save prevention RED.
+
+Modify ONLY src/components/CatchPost.tsx so slow save/delete actions cannot be triggered twice and their buttons are disabled while pending.
+
+## 54. Textarea id/name Accessibility Fix
+
+Read AGENTS.md and follow it strictly. This is an accessibility/correctness fix verified by eye.
+
+Add id and name attributes to the CatchComposer textarea and CatchPost edit textarea without changing their behavior.
+
+## 55. formatRelativeTime RED
+
+Read AGENTS.md and TESTING.md in the repository root, and follow them strictly. We are working through TESTING.md in sequence, and the current test is the formatRelativeTime RED.
+
+Create ONLY src/lib/formatRelativeTime.ts to return relative time strings like just now, minutes ago, hours ago, and days ago.
+
+## 56. CatchPost Timestamp RED
+
+Read AGENTS.md and TESTING.md in the repository root, and follow them strictly. We are working through TESTING.md in sequence, and the current test is the CatchPost timestamp RED.
+
+Modify ONLY src/components/CatchPost.tsx to render a visible relative time string using post.createdAt and formatRelativeTime.
+
+## 57. CatchPost Name/Time Spacing Visual Fix
+
+Read AGENTS.md and follow it strictly. This is a visual/CSS polish fix verified by eye.
+
+Add spacing and subtle styling between the CatchPost author name and relative-time span, and show Posting... while CatchComposer is posting.
+
+## 58. CatchPost Avatar/Name Spacing Visual Fix
+
+Read AGENTS.md and follow it strictly. This is a visual/CSS polish fix verified by eye.
+
+Add flex alignment and an 8px gap to the CatchPost avatar/name container.
+
+## 59. CatchComposer Clears After Successful Post RED
+
+Read AGENTS.md and TESTING.md in the repository root, and follow them strictly. We are working through TESTING.md in sequence, and the current test is the CatchComposer clears after a successful post RED.
+
+Modify ONLY src/components/CatchComposer.tsx so successful posts clear the textarea, while failed posts keep the text.
+
+## 60. Freshwater Catch Reports Page Wiring
+
+Read AGENTS.md and follow it strictly. This is integration/page-wiring that is verified by eye.
+
+Wire the catch reports feed onto src/app/freshwater/page.tsx, mirroring the saltwater page but using waterType="freshwater".
+
+## 61. Spinner Component Visual Fix
+
+Read AGENTS.md and follow it strictly. This is a visual fix verified by eye.
+
+Create src/components/Spinner.tsx and render it while CatchComposer, CatchPost save, and CatchPost delete async actions are pending.
+
+## 62. Minimum Spinner Duration UX Refinement
+
+Read AGENTS.md and follow it strictly. This is a UX timing refinement verified by eye.
+
+Create src/lib/withMinimumDuration.ts and wrap posting, saving, and deleting actions so the spinner remains visible for at least about 400ms.
+
+## 63. Spinner Global CSS Animation Fix
+
+Read AGENTS.md and follow it strictly. This is a visual fix verified by eye.
+
+Move the spinner keyframes and class into src/app/globals.css and simplify src/components/Spinner.tsx to use the global class.
+
+## 64. Spinner Beside Button Visual Fix
+
+Read AGENTS.md and follow it strictly. This is a visual fix verified by eye.
+
+Make the spinner larger/gold and move it beside the Post, Save, and Confirm buttons while keeping the button labels stable.
+
+## 65. CatchFeed refreshKey RED
+
+Read AGENTS.md and TESTING.md in the repository root, and follow them strictly. We are working through TESTING.md in sequence, and the current test is the CatchFeed immediate refresh on refreshKey change RED.
+
+Modify ONLY src/components/CatchFeed.tsx to accept refreshKey and refetch immediately when it changes without double-fetching on mount.
+
+## 66. Saltwater and Freshwater refreshKey Wiring
+
+Read AGENTS.md and follow it strictly. This is integration/page-wiring verified by eye.
+
+Wire refreshKey into both saltwater and freshwater pages so post, update, and delete actions immediately refresh CatchFeed.
+
+## 67. CatchPost Closes Editor After Saving RED
+
+Read AGENTS.md and TESTING.md in the repository root, and follow them strictly. We are working through TESTING.md in sequence, and the current test is the CatchPost closes the editor after saving RED.
+
+Modify ONLY src/components/CatchPost.tsx so a successful save exits edit mode.
+
+## 68. Species Dropdown RED
+
+Read AGENTS.md and TESTING.md in the repository root, and follow them strictly. We are working through TESTING.md in sequence, and the current test is the Species dropdown RED.
+
+Modify ONLY src/components/SightingRateSearch.tsx so the Species field becomes a select dropdown populated from getSpeciesForWaterType.
+
+## 69. SightingRateSearch Specific Dropdown Edit
+
+Read AGENTS.md and TESTING.md and follow them strictly. Modify ONLY src/components/SightingRateSearch.tsx.
+
+Add waterType, import getSpeciesForWaterType and WaterType, compute speciesOptions, and replace the Species input with a select whose option labels are common names and values are scientific names.
+
+## 70. Append Missing Prompts Without Duplicates
+
+Add the prompts in the PROMPTS.md file no duplicates.
