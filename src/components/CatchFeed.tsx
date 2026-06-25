@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, type ReactElement } from 'react';
+import { CatchPost } from '@/components/CatchPost';
 
 type CatchFeedPost = {
   id: string;
@@ -23,11 +24,17 @@ type CatchFeedPost = {
 type CatchFeedProps = {
   waterType: string;
   fetchReports: (args: { waterType: string }) => Promise<CatchFeedPost[]>;
+  currentUserId?: string;
+  onUpdate?: (postId: string, newBody: string) => void;
+  onDelete?: (postId: string) => void;
 };
 
 export const CatchFeed = ({
   waterType,
   fetchReports,
+  currentUserId,
+  onUpdate,
+  onDelete,
 }: CatchFeedProps): ReactElement => {
   const [posts, setPosts] = useState<CatchFeedPost[]>([]);
 
@@ -52,9 +59,13 @@ export const CatchFeed = ({
   return (
     <div>
       {posts.map((post) => (
-        <article key={post.id}>
-          <p>{post.body}</p>
-        </article>
+        <CatchPost
+          key={post.id}
+          post={post}
+          currentUserId={currentUserId ?? ''}
+          onUpdate={(newBody) => onUpdate?.(post.id, newBody)}
+          onDelete={() => onDelete?.(post.id)}
+        />
       ))}
     </div>
   );

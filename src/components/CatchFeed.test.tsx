@@ -139,6 +139,7 @@ describe('CatchFeed renders posts as CatchPost with edit and delete', () => {
     );
 
     await vi.advanceTimersByTimeAsync(0);
+    await vi.advanceTimersByTimeAsync(0);
 
     expect(screen.getByText('My own catch.')).toBeInTheDocument();
     // CatchPost shows edit + delete buttons on the owner's posts
