@@ -108,3 +108,41 @@ describe('CatchFeed stops polling on unmount', () => {
     expect(fetchReports).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('CatchFeed renders posts as CatchPost with edit and delete', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('shows edit and delete controls on the current user\'s own posts', async () => {
+    const posts = [
+      {
+        id: 'catch-1',
+        userId: 'user-1',
+        body: 'My own catch.',
+        author: { profileName: 'trigger', avatar: { kind: 'letter', letter: 'T' } },
+      },
+    ];
+    const fetchReports = vi.fn().mockResolvedValue(posts);
+
+    render(
+      <CatchFeed
+        waterType="saltwater"
+        fetchReports={fetchReports}
+        currentUserId="user-1"
+        onUpdate={() => {}}
+        onDelete={() => {}}
+      />,
+    );
+
+    await vi.advanceTimersByTimeAsync(0);
+
+    expect(screen.getByText('My own catch.')).toBeInTheDocument();
+    // CatchPost shows edit + delete buttons on the owner's posts
+    expect(screen.getByRole('button', { name: /edit/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument();
+  });
+});
