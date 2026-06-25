@@ -122,3 +122,34 @@ describe('ProfileForm empty name validation', () => {
     expect(screen.queryByText(/profile name is required/i)).toBeNull();
   });
 });
+
+describe('ProfileForm image preview', () => {
+  it('shows a preview image of the uploaded file after an image is picked', async () => {
+    const uploadImage = vi.fn().mockResolvedValue('/uploads/abc.png');
+
+    render(<ProfileForm onSave={() => {}} uploadImage={uploadImage} />);
+
+    const file = new File([new Uint8Array([1, 2, 3])], 'photo.png', {
+      type: 'image/png',
+    });
+    const input = screen.getByTestId('profile-image-input') as HTMLInputElement;
+    fireEvent.change(input, { target: { files: [file] } });
+
+    // let the upload resolve and state flush
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    const preview = screen.getByRole('img', { name: /profile image preview/i });
+    expect(preview).toHaveAttribute('src', '/uploads/abc.png');
+  });
+
+  it('does not show a preview image before any file is picked', () => {
+    render(<ProfileForm onSave={() => {}} uploadImage={async () => ''} />);
+
+    expect(
+      screen.queryByRole('img', { name: /profile image preview/i }),
+    ).toBeNull();
+  });
+});
