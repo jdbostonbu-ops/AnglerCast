@@ -2,6 +2,7 @@
 
 import { type FormEvent, useState } from 'react';
 import { SiteNav } from '@/components/SiteNav';
+import { ExploreFaqChat } from '@/components/ExploreFaqChat';
 
 type WaterType = 'saltwater' | 'freshwater';
 
@@ -242,6 +243,7 @@ const ExplorePage = () => {
           The numbers are real occurrence records. We say it like anglers do — but a record 
           isn't a promise. The water decides.
         </p>
+        <ExploreFaqChat />
       </main>
     </>
   );
