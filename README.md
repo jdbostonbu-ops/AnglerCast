@@ -122,6 +122,37 @@ Built in this order, each test-first:
 
 ---
 
+## 👤 User Profile
+
+A logged-in angler can set a profile that appears in the nav bar and on every catch they post — a display name and an optional profile image.
+
+- 🪪 **Display name** — saved to the user record via `saveProfileName`. Required before posting a catch.
+- 🖼️ **Profile image (optional)** — a URL is stored on the user record via `saveProfileImage`. Image uploads themselves are handled separately; only the resolved URL is persisted.
+- 🅰️ **Avatar fallback** — `getDisplayAvatar` returns the image when one is set, and falls back to the **uppercase first letter of the user's email** when none is set.
+- 🧭 **Nav bar integration** — when a profile is set, the right side of the nav shows the avatar + display name. When it isn't, a **"Set up profile"** prompt appears instead.
+- 🛑 **Post-gate** — `canPostCatch({ profileName })` returns `{ allowed: false, reason: "no profile name" }` when the user has no display name. Clicking **Post** on the catch feed without a profile name opens a "Set up profile" dialog instead of submitting — every angler in the feed has a name and an avatar by construction.
+
+> The profile is a small piece of identity that makes the catch feed feel human. The data layer is tested directly; the nav-bar and dialog wiring is eyeball-verified on top of green logic.
+
+---
+
+## 💬 Ask AnglerCast — RAG-Powered FAQ
+
+The **Explore** page includes an AI chat that answers fishing questions grounded in a curated knowledge base. Users type any question — how sighting rate works, why month matters, what gear to bring, safety on the water, how to read tide charts — and get an answer drawn from real documents, not invented.
+
+How it works:
+
+- 📚 **Curated corpus.** 12 fishing FAQ markdown files in `src/lib/faq/` cover concept explanations (sighting rate, tides, conditions) and "how to use AnglerCast" guides (best month per species, where to fish today). Each doc is grounded in NOAA, USGS, USCG, GBIF, and other authoritative sources.
+- ✂️ **Chunking with heading context.** `chunkMarkdownContent` splits each doc on blank lines, filters out paragraphs under 50 characters, and prepends the most recent heading to each chunk so semantic context survives retrieval.
+- 🧮 **Embedding + cosine similarity.** Each chunk is embedded with OpenAI's `text-embedding-3-small`. At query time, the user's question is embedded against the corpus and the top 3 chunks are retrieved by cosine similarity.
+- 🎯 **Grounded answer.** The retrieved chunks are injected into the LLM prompt with strict grounding instructions — the system prompt requires the model to answer **only** from the retrieved context.
+- 🚫 **Honest refusal.** If the top retrieved chunk's similarity score falls below threshold, the LLM is never called — the route short-circuits and returns *"I don't know based on the provided documents."* No hallucinated fishing advice.
+- 🔍 **Sources shown.** Every answer displays the friendly titles of the FAQ documents it drew from, so you can verify what the answer was based on.
+
+> The RAG layer is grounded the same way the rest of AnglerCast is grounded: real text in, real answers out. The AI does not invent fishing knowledge — it explains what the curated docs already say.
+
+---
+
 ## 🔌 Data Sources & APIs
 
 Every fact comes from a real source. The AI explains and assembles; it does not invent.
