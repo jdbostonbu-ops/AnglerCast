@@ -36,3 +36,6 @@ next-env.d.ts
 # editor
 .idea
 .vscode/*
+# uploaded user content (keep the folder, ignore the files)
+/public/uploads/*
+!/public/uploads/.gitkeep
