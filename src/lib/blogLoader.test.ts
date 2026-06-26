@@ -135,3 +135,44 @@ describe('getLatestBlogPost', () => {
     expect(latest).toBeNull();
   });
 });
+
+describe('getLatestBlogPost — Apps Script JSON endpoint (Section 36)', () => {
+  const ORIGINAL_ENV = process.env.BLOG_JSON_URL;
+  const FIXTURE_URL = 'https://script.google.com/macros/s/FIXTURE/exec';
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    process.env.BLOG_JSON_URL = FIXTURE_URL;
+    global.fetch = vi.fn();
+  });
+
+  afterEach(() => {
+    if (ORIGINAL_ENV === undefined) {
+      delete process.env.BLOG_JSON_URL;
+    } else {
+      process.env.BLOG_JSON_URL = ORIGINAL_ENV;
+    }
+  });
+
+  it('fetches BLOG_JSON_URL and returns a BlogPost with slug derived from date', async () => {
+    const mockFetch = global.fetch as ReturnType<typeof vi.fn>;
+    mockFetch.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        title: 'Welcome to AnglerCast',
+        date: '2026-06-25T04:00:00.000Z',
+        body: '## Where the fish actually are\n\nReal records, real talk.',
+      }),
+    });
+
+    const post = await getLatestBlogPost();
+
+    expect(mockFetch).toHaveBeenCalledWith(FIXTURE_URL);
+    expect(post).not.toBeNull();
+    expect(post?.title).toBe('Welcome to AnglerCast');
+    expect(post?.date).toBe('2026-06-25T04:00:00.000Z');
+    expect(post?.slug).toBe('2026-06-25');
+    expect(post?.body).toContain('Real records, real talk.');
+  });
+});

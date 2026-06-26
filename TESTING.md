@@ -857,6 +857,75 @@ should be at least the same size as the disclaimer paragraph beneath
 the data cards. Verified by eye after wiring.
 ---
 
+## 36 — Refactor blog to fetch from Google Apps Script JSON endpoint
+
+Section 35 built the blog feature against local markdown files in
+src/lib/blog/. This section refactors getLatestBlogPost to fetch the
+current blog post from a Google Apps Script Web App that serves a
+single sheet row as JSON. The Apps Script URL is stored in the
+BLOG_JSON_URL environment variable. The endpoint returns a JSON object
+with the shape { title: string, date: string, body: string } where
+body is markdown content. With this in place, a future Zapier Zap can
+update the blog by writing new values into the sheet (Schedule → AI
+generate post → Google Sheets row update), and the change appears on
+Home on the next page load without any redeploy. The existing
+LatestBlogPost component (Section 35) does not change — only the
+data source underneath it changes. The BlogPost type remains
+{ slug: string; title: string; date: string; body: string }; the slug
+field is derived from the date in YYYY-MM-DD form when read from the
+endpoint (since the sheet does not carry a slug column).
+
+RED 36.1 — getLatestBlogPost fetches the BLOG_JSON_URL and returns the post
+- What it checks: getLatestBlogPost() in src/lib/blogLoader.ts calls
+  fetch with the URL stored in process.env.BLOG_JSON_URL and returns
+  a BlogPost object built from the JSON response. The response has
+  the shape { title, date, body }. The returned BlogPost has its
+  slug derived from the date in YYYY-MM-DD form (e.g. a date of
+  "2026-06-25T04:00:00.000Z" produces slug "2026-06-25"). The
+  global fetch is mocked to return a Response-like object whose
+  json() method resolves with a fixture { title, date, body }.
+  process.env.BLOG_JSON_URL is set to a fixture URL in the test and
+  the test asserts fetch was called with that URL.
+- Why it fails first; expected behavior: the current
+  getLatestBlogPost reads from the filesystem via loadBlogPosts and
+  does not call fetch at all, so the assertion that fetch was called
+  with BLOG_JSON_URL fails.
+
+RED 36.2 — getLatestBlogPost returns null when the fetch fails
+- What it checks: When the global fetch rejects with a network error
+  or resolves with a non-ok response (e.g. status 500),
+  getLatestBlogPost() returns null instead of throwing. The fetch
+  mock is configured to reject in one variation and to resolve with
+  { ok: false, status: 500 } in another, and both variations result
+  in null being returned. process.env.BLOG_JSON_URL is set so the
+  function does attempt a fetch.
+- Why it fails first; expected behavior: the current
+  getLatestBlogPost does not call fetch and has no error handling
+  around it, so this contract does not yet exist.
+
+RED 36.3 — getLatestBlogPost returns null when BLOG_JSON_URL is not set
+- What it checks: When process.env.BLOG_JSON_URL is undefined or
+  empty, getLatestBlogPost() returns null without calling fetch.
+  The test deletes the env var (or sets it to ""), calls the
+  function, and asserts both that the return value is null and that
+  the global fetch mock was never invoked. This protects the build
+  in environments where the env var has not been configured yet.
+- Why it fails first; expected behavior: the current
+  getLatestBlogPost ignores process.env.BLOG_JSON_URL entirely, so
+  the early-return-on-missing-env-var behavior does not yet exist.
+
+Visual/wiring part (eyeball-verified):
+After GREEN 36.3, with BLOG_JSON_URL set in .env to the live Apps
+Script URL, the Home page renders the welcome blog post under the
+% cards exactly as it did under Section 35 — same title, same body,
+same styling — but the data is now coming from the Google Sheet via
+the Apps Script JSON endpoint, not from the local markdown file in
+src/lib/blog/. Confirmed by reload of the Home page on the dev
+server. Once verified, the file src/lib/blog/2026-06-25-welcome-to-anglercast.md
+can be deleted along with the now-unused loadBlogPosts helper.
+
+---
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.
