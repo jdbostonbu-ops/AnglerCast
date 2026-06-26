@@ -153,6 +153,18 @@ How it works:
 
 ---
 
+## 📰 Weekly Blog — AI-Written, Source-Grounded
+
+The home page features a **weekly fishing blog post** that publishes itself. Every Friday, an automated **Zapier** pipeline writes a fresh, source-grounded article and surfaces it below the seasonal data cards — no manual posting, no redeploy.
+
+The pipeline keeps content generation **decoupled** from the app:
+
+- 📅 **Zapier Schedule** — a weekly trigger fires every Friday at 2 PM.
+- ✍️ **AI by Zapier** — the post rotates through eight angler themes (conservation & water health, fishing skills, seasonal tips, community stories, gear & care, weather on the water, boating safety, tackle matchmaking). It is constrained to **reliable sources only** — NOAA, USGS, EPA, state Fish & Wildlife agencies, university extension programs, and peer-reviewed work — and forbidden from inventing statistics, species behavior, or species-specific predictions. The honest-data thesis extends to the written word.
+- 📄 **Storage** — Zapier writes the post into a Google Sheet (title, date, body), and a Google Apps Script **Web App** serves that row as a public JSON endpoint.
+
+---
+
 ## 🔌 Data Sources & APIs
 
 Every fact comes from a real source. The AI explains and assembles; it does not invent.
