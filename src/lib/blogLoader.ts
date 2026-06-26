@@ -98,3 +98,9 @@ export const loadBlogPosts = async (): Promise<BlogPost[]> => {
 
   return posts.sort((a, b) => b.date.localeCompare(a.date));
 };
+
+export const getLatestBlogPost = async (): Promise<BlogPost | null> => {
+  const posts = await loadBlogPosts();
+
+  return posts[0] ?? null;
+};
