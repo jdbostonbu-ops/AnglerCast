@@ -43,4 +43,12 @@ describe('LatestBlogPost', () => {
       screen.getByText(/Anglers across the Northeast/)
     ).toBeInTheDocument();
   });
+
+  it('renders nothing when no posts exist', async () => {
+    mockGetLatestBlogPost.mockResolvedValue(null);
+
+    const ui = await LatestBlogPost();
+
+    expect(ui).toBeNull();
+  });
 });
