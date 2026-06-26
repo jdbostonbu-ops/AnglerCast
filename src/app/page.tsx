@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { SiteNav } from '@/components/SiteNav';
 import { getHomeHighlights } from '@/lib/homeHighlights';
-
+import { LatestBlogPost } from '@/components/LatestBlogPost';
 // Real occurrence data, recomputed automatically once a week (7 days in seconds).
 export const revalidate = 604800;
 
@@ -86,6 +86,10 @@ const HomePage = async () => {
           history isn't a promise — every angler knows that. That's why they call it fishing, not catching.
         </p>
       </main>
+
+      <section className="section">
+        <LatestBlogPost />
+      </section>
 
       <footer className="site-footer">
         AnglerCast · Real occurrence data from GBIF, OBIS, Open-Meteo, USGS · NOAA · AI explains, never

@@ -1,156 +1,171 @@
 # Test Run & Git Summary Report
-**Generated on:** 6/25/2026, 6:02:33 PM
+**Generated on:** 6/25/2026, 10:48:39 PM
 
 ## 🕒 Recent Git Commit Log
-* **7763620** - Jacqueline Delgado, 33 seconds ago : added 34.11 in testing md and updated test-report md files
-* **05c1205** - Jacqueline Delgado, 73 seconds ago : test(rag): RED 34.11 — chunkMarkdownContent prepends heading context
-* **fd3bf03** - Jacqueline Delgado, 22 minutes ago : feat(explore): wire FAQ chat onto Explore page + add FAQ corpus
-* **bab7c4c** - Jacqueline Delgado, 68 minutes ago : feat(faq-chat): GREEN 34.10 — shows error message when API call fails
-* **7573afe** - Jacqueline Delgado, 68 minutes ago : test(faq-chat): RED 34.10 — shows error message when API call fails
-* **fd3da48** - Jacqueline Delgado, 72 minutes ago : feat(faq-chat): GREEN 34.9 — displays source titles under the answer
-* **547b1b9** - Jacqueline Delgado, 73 minutes ago : test(faq-chat): RED 34.9 — displays source titles under the answer
-* **963ecb0** - Jacqueline Delgado, 76 minutes ago : feat(faq-chat): GREEN 34.8 — displays answer after submission
-* **dc02496** - Jacqueline Delgado, 77 minutes ago : test(faq-chat): RED 34.8 — displays answer after submission
-* **fdc93fb** - Jacqueline Delgado, 80 minutes ago : feat(faq-chat): GREEN 34.7 — renders input and submit button
-* **d65296f** - Jacqueline Delgado, 82 minutes ago : test(faq-chat): RED 34.7 — renders input and submit button
-* **c404fc2** - Jacqueline Delgado, 84 minutes ago : feat(explore-chat): GREEN 34.6 — returns 'I don't know...' when top score below threshold
-* **a20078d** - Jacqueline Delgado, 85 minutes ago : test(explore-chat): RED 34.6 — returns 'I don't know...' when top score below threshold
-* **3a34534** - Jacqueline Delgado, 86 minutes ago : feat(explore-chat): GREEN 34.5 — POST returns 400 for missing or empty question
-* **57b26ec** - Jacqueline Delgado, 87 minutes ago : test(explore-chat): RED 34.5 — POST returns 400 for missing or empty question
-* **7d0c45c** - Jacqueline Delgado, 2 hours ago : feat(explore-chat): GREEN 34.4 — POST returns answer + sources, grounds model
-* **d93bc00** - Jacqueline Delgado, 2 hours ago : updated package json
-* **4fc1d12** - Jacqueline Delgado, 2 hours ago : test(explore-chat): RED 34.4 — POST returns answer + sources, grounds model
-* **eff9fa5** - Jacqueline Delgado, 2 hours ago : feat(rag): GREEN 34.3 — retrieveTopChunks
-* **8d20358** - Jacqueline Delgado, 2 hours ago : test(rag): RED 34.3 — retrieveTopChunks
-* **7ee3a84** - Jacqueline Delgado, 2 hours ago : feat(rag): GREEN 34.2 — chunkMarkdownContent
-* **5edfb1c** - Jacqueline Delgado, 2 hours ago : test(rag): RED 34.2 — chunkMarkdownContent
-* **8c8eced** - Jacqueline Delgado, 2 hours ago : feat(rag): GREEN 34.1 — cosineSimilarity
-* **b6cf9f2** - Jacqueline Delgado, 2 hours ago : test(rag): RED 34.1 — cosineSimilarity returns 1 / 0 / -1
-* **ce9d386** - Jacqueline Delgado, 4 hours ago : updated test-report md file
-* **d01c681** - Jacqueline Delgado, 5 hours ago : feat: upload profile images to Vercel Blob instead of local disk
-* **71765d4** - Jacqueline Delgado, 5 hours ago : test: add RED for profile image upload via Vercel Blob
-* **0b59697** - Jacqueline Delgado, 6 hours ago : updated test-report.md file
-* **db4ca12** - Jacqueline Delgado, 6 hours ago : fix: add createdAt to CatchFeedPost type so production build type-checks
-* **7d5d87b** - Jacqueline Delgado, 6 hours ago : added prompts to PROMPTS file and updated TESTING.md file with additional plan for new features
-* **f597cdd** - Jacqueline Delgado, 6 hours ago : feat: show spinner beside login button while submitting
-* **c20e48b** - Jacqueline Delgado, 6 hours ago : feat: show MapHint between AI explanation and map on both pages
-* **8393434** - Jacqueline Delgado, 6 hours ago : feat: MapHint renders zoom guidance text
-* **71c1a83** - Jacqueline Delgado, 6 hours ago : test: add RED for MapHint zoom guidance component
-* **b9f3fd5** - Jacqueline Delgado, 6 hours ago : feat: wire waterType into SightingRateSearch on both pages, fix fetchReports return type
-* **a6c22a8** - Jacqueline Delgado, 6 hours ago : feat: Species field is a common-name dropdown that submits the scientific name
-* **fdf8059** - Jacqueline Delgado, 6 hours ago : test: add RED for Species field as common-name dropdown
-* **e47914d** - Jacqueline Delgado, 7 hours ago : fix: CatchPost exits edit mode after a successful save
-* **a9c1c95** - Jacqueline Delgado, 7 hours ago : test: add RED for CatchPost closing editor after successful save
-* **08072e4** - Jacqueline Delgado, 7 hours ago : feat: bump refreshKey after post/delete/update so feed updates instantly
-* **677acc1** - Jacqueline Delgado, 7 hours ago : feat: CatchFeed re-fetches immediately when refreshKey changes
-* **bd449dd** - Jacqueline Delgado, 7 hours ago : test: add RED for CatchFeed immediate refresh on refreshKey change
-* **67b2329** - Jacqueline Delgado, 7 hours ago : feat: minimum visible duration so action spinners are perceptible on fast actions
-* **100edb0** - Jacqueline Delgado, 7 hours ago : added prompt md and made changed to testing-report md file
-* **05e0fcd** - Jacqueline Delgado, 7 hours ago : feat: add animated spinner to post, delete, and save buttons during async actions
-* **671be81** - Jacqueline Delgado, 7 hours ago : feat: wire catch reports feed onto freshwater page
-* **1fb3dd4** - Jacqueline Delgado, 8 hours ago : feat: clear composer textarea after successful post, keep text on failure
-* **839e640** - Jacqueline Delgado, 8 hours ago : test: add RED for CatchComposer clearing textarea after successful post
-* **dd33144** - Jacqueline Delgado, 8 hours ago : polish: add gap between avatar and author name in catch posts
-* **2bf56d1** - Jacqueline Delgado, 8 hours ago : polish: space out post timestamp and show Posting state on post button
-* **2bbf0d9** - Jacqueline Delgado, 8 hours ago : feat: display relative timestamp on catch posts, add createdAt to test fixture
-* **849db7b** - Jacqueline Delgado, 8 hours ago : test: add RED for CatchPost timestamp display
-* **4c5a4f6** - Jacqueline Delgado, 8 hours ago : feat: implement formatRelativeTime helper
-* **d05557a** - Jacqueline Delgado, 8 hours ago : test: add RED for formatRelativeTime helper
-* **017f607** - Jacqueline Delgado, 8 hours ago : fix: add id and name to composer and edit textareas for accessibility
-* **eab0e2c** - Jacqueline Delgado, 8 hours ago : feat: disable delete/save buttons while in progress to prevent double-action
-* **eee79de** - Jacqueline Delgado, 8 hours ago : test: add RED for CatchPost double-delete and double-save prevention
-* **558db64** - Jacqueline Delgado, 8 hours ago : fix: full-width composer textarea and spacing between catch posts
-* **0c00993** - Jacqueline Delgado, 8 hours ago : feat: wire CatchFeed edit/delete to PATCH/DELETE routes on saltwater page
-* **ca931f9** - Jacqueline Delgado, 8 hours ago : feat: CatchFeed renders posts as CatchPost with edit/delete for 2c, fix test flush
-* **ae822d3** - Jacqueline Delgado, 8 hours ago : test: add RED for CatchFeed rendering posts as CatchPost with edit/delete
-* **73cc181** - Jacqueline Delgado, 9 hours ago : feat: PATCH catch-reports route updates post body for owner
-* **71e233b** - Jacqueline Delgado, 9 hours ago : test: add RED for PATCH catch-reports route
-* **da11013** - Jacqueline Delgado, 9 hours ago : feat: DELETE catch-reports route deletes post for owner
-* **10ec2c6** - Jacqueline Delgado, 9 hours ago : test: add RED for DELETE catch-reports route
-* **7f455c0** - Jacqueline Delgado, 9 hours ago : feat: CatchComposer disables post button while submitting to prevent double-post
-* **274bbe0** - Jacqueline Delgado, 9 hours ago : test: add RED for CatchComposer double-submit prevention
-* **f591a43** - Jacqueline Delgado, 9 hours ago : feat: add catch reports feed beside saved spots on saltwater page
-* **41e3147** - Jacqueline Delgado, 9 hours ago : feat: CatchComposer post box with profile gate
-* **acd28ab** - Jacqueline Delgado, 9 hours ago : test: add RED for CatchComposer post box with profile gate
-* **781cd50** - Jacqueline Delgado, 9 hours ago : feat: POST catch-reports route creates post for logged-in user
-* **53b2398** - Jacqueline Delgado, 9 hours ago : test: add RED for POST catch-reports route
-* **7d384b0** - Jacqueline Delgado, 9 hours ago : feat: GET catch-reports route lists posts for water type
-* **9a175a5** - Jacqueline Delgado, 9 hours ago : test: add RED for GET catch-reports route
-* **a99bdcd** - Jacqueline Delgado, 9 hours ago : fix: constrain profile image preview to thumbnail so Save button stays visible
-* **4e1a055** - Jacqueline Delgado, 10 hours ago : feat: NavBar pencil edit link to profile next to avatar
-* **3c3d994** - Jacqueline Delgado, 10 hours ago : test: add RED for NavBar pencil edit link to profile
-* **5934f2c** - Jacqueline Delgado, 10 hours ago : feat: SiteNav fetches profile and passes to NavBar for avatar display
-* **134a379** - Jacqueline Delgado, 10 hours ago : feat: GET profile route returns current user profile
-* **bfc3f2c** - Jacqueline Delgado, 10 hours ago : test: add RED for GET profile route
-* **6833d15** - Jacqueline Delgado, 10 hours ago : feat: ProfileForm shows uploaded image preview
-* **d4ff519** - Jacqueline Delgado, 10 hours ago : test: add RED for ProfileForm image preview
-* **39a9b31** - Jacqueline Delgado, 19 hours ago : chore: add public/uploads folder, ignore uploaded files
-* **f7c49d3** - Jacqueline Delgado, 19 hours ago : feat: wire ProfileForm uploadImage to image upload route on profile page
-* **c5cb9b3** - Jacqueline Delgado, 19 hours ago : feat: ProfileForm file upload with pencil for RED 33.2, fix test act flush
-* **9ec3fbf** - Jacqueline Delgado, 19 hours ago : test: rewrite RED 33.2 for ProfileForm file upload, remove URL field
-* **8062659** - Jacqueline Delgado, 19 hours ago : feat: profile image upload route writes file and returns path for RED 33.1, adapt test for jsdom
-* **cf29996** - Jacqueline Delgado, 20 hours ago : test: add RED 33.1 for profile image upload route
-* **a5597c9** - Jacqueline Delgado, 20 hours ago : feat: POST profile route saves profile for logged-in user for RED 32.4
-* **b5a8e60** - Jacqueline Delgado, 20 hours ago : test: add RED 32.4 for POST profile route
-* **0fa2e3b** - Jacqueline Delgado, 20 hours ago : feat: ProfileForm empty name validation for RED 32.3
-* **2ff1c15** - Jacqueline Delgado, 20 hours ago : test: add RED 32.3 for ProfileForm empty name validation
-* **4997b08** - Jacqueline Delgado, 20 hours ago : feat: ProfileForm submit calls onSave with values for RED 32.2
-* **874b6ab** - Jacqueline Delgado, 20 hours ago : test: add RED 32.2 for ProfileForm submit calls onSave
-* **d588e3a** - Jacqueline Delgado, 20 hours ago : feat: ProfileForm renders fields and Save button for RED 32.1
-* **c8e9587** - Jacqueline Delgado, 20 hours ago : test: add RED 32.1 for ProfileForm rendering
-* **24f2c3c** - Jacqueline Delgado, 20 hours ago : test: add RED 31.3 guarding CatchFeed stops polling on unmount (passes on arrival)
-* **66f54a8** - Jacqueline Delgado, 20 hours ago : feat: CatchFeed renders new posts on poll for RED 31.2, fix test promise flushing
-* **f41fcdd** - Jacqueline Delgado, 20 hours ago : test: add RED 31.2 for CatchFeed renders new posts
-* **beacf11** - Jacqueline Delgado, 20 hours ago : feat: CatchFeed polling interval for RED 31.1
-* **e72745c** - Jacqueline Delgado, 20 hours ago : test: add RED 31.1 for CatchFeed polling interval
-* **17fffd0** - Jacqueline Delgado, 20 hours ago : feat: CatchPost delete cancel closes dialog for RED 30.5
-* **2ea518b** - Jacqueline Delgado, 20 hours ago : test: add RED 30.5 for CatchPost delete cancel
-* **256b875** - Jacqueline Delgado, 20 hours ago : feat: CatchPost delete confirmation dialog for RED 30.4
-* **67f4520** - Jacqueline Delgado, 20 hours ago : test: add RED 30.4 for CatchPost delete confirmation
-* **a5f84e8** - Jacqueline Delgado, 20 hours ago : feat: CatchPost Save calls onUpdate with edited body for RED 30.3
-* **bacd474** - Jacqueline Delgado, 20 hours ago : test: add RED 30.3 for CatchPost Save calls onUpdate
-* **80b2e1f** - Jacqueline Delgado, 20 hours ago : feat: CatchPost edit mode textarea and Save button for RED 30.2
-* **7f1fe6c** - Jacqueline Delgado, 20 hours ago : test: add RED 30.2 for CatchPost edit mode textarea and Save
-* **c1345aa** - Jacqueline Delgado, 21 hours ago : feat: CatchPost edit button visibility for RED 30.1
-* **870bd09** - Jacqueline Delgado, 21 hours ago : test: add RED 30.1 for CatchPost edit button visibility
-* **5225ea6** - Jacqueline Delgado, 21 hours ago : feat: reject non-owner in deleteCatchReport for RED 29.8
-* **01940cc** - Jacqueline Delgado, 21 hours ago : test: add RED 29.8 for deleteCatchReport rejects non-owner
-* **9cccdb0** - Jacqueline Delgado, 21 hours ago : feat: implement deleteCatchReport owner-can-delete for RED 29.7
-* **6a7d740** - Jacqueline Delgado, 21 hours ago : test: add RED 29.7 for deleteCatchReport owner can delete
-* **486c473** - Jacqueline Delgado, 21 hours ago : feat: reject non-owner in updateCatchReport for RED 29.6
-* **a63410e** - Jacqueline Delgado, 21 hours ago : test: add RED 29.6 for updateCatchReport rejects non-owner
-* **bb0e5a4** - Jacqueline Delgado, 21 hours ago : feat: implement updateCatchReport owner-can-edit for RED 29.5
-* **eef2919** - Jacqueline Delgado, 21 hours ago : test: add RED 29.5 for updateCatchReport owner can edit
-* **b393ad5** - Jacqueline Delgado, 21 hours ago : feat: add author info to getCatchReports for RED 29.4, update 29.2 mocks for join
-* **e0b1713** - Jacqueline Delgado, 21 hours ago : test: add RED 29.4 for getCatchReports author info join
-* **4b21709** - Jacqueline Delgado, 21 hours ago : feat: order getCatchReports newest first for RED 29.3
-* **27aafef** - Jacqueline Delgado, 21 hours ago : updated nav bar with profile link and updated css
-* **14ca257** - Jacqueline Delgado, 21 hours ago : test: add RED 29.3 for getCatchReports newest-first ordering
-* **fb4a25b** - Jacqueline Delgado, 21 hours ago : feat: implement getCatchReports water type filtering for RED 29.2
-* **cb9fb3a** - Jacqueline Delgado, 21 hours ago : test: add RED 29.2 for getCatchReports water type filtering
-* **468153a** - Jacqueline Delgado, 21 hours ago : feat: implement createCatchReport for RED 29.1
-* **3aa16ac** - Jacqueline Delgado, 21 hours ago : test: add RED 29.1 for createCatchReport, add CatchReport model
-* **8770f4c** - Jacqueline Delgado, 21 hours ago : feat: implement PostButton with set up profile gate for RED 28.10
-* **a6a1ba1** - Jacqueline Delgado, 21 hours ago : test: add RED 28.10 for PostButton set up profile dialog
-* **99d8e91** - Jacqueline Delgado, 21 hours ago : feat: implement canPostCatch profile name gate for RED 28.9
-* **d44bec0** - Jacqueline Delgado, 21 hours ago : test: add RED 28.9 for canPostCatch profile name gate
-* **8b243f2** - Jacqueline Delgado, 21 hours ago : feat: render set up profile prompt in NavBar for RED 28.8
-* **6fbf020** - Jacqueline Delgado, 22 hours ago : test: add RED 28.8 for NavBar set up profile prompt
-* **5d1164c** - Jacqueline Delgado, 22 hours ago : feat: render letter avatar fallback in NavBar for RED 28.7
-* **d4c75ae** - Jacqueline Delgado, 22 hours ago : test: add RED 28.7 for NavBar letter avatar fallback
-* **96b0e30** - Jacqueline Delgado, 22 hours ago : docs: add TESTING.md plan for sections 28-31 profile and catch feed
-* **e4e4875** - Jacqueline Delgado, 22 hours ago : chore: add playwright setup for auth-gate e2e regression test
-* **f387423** - Jacqueline Delgado, 22 hours ago : feat: render profile avatar and display name in NavBar for RED 28.6
-* **19e86ea** - Jacqueline Delgado, 22 hours ago : test: add RED 28.6 for NavBar profile avatar and display name
-* **3819887** - Jacqueline Delgado, 22 hours ago : test: add RED 28.5 regression guard for NavBar brand name
-* **6c3237e** - Jacqueline Delgado, 22 hours ago : feat: implement getDisplayAvatar letter fallback for RED 28.4
-* **c9e3d2a** - Jacqueline Delgado, 22 hours ago : test: add RED 28.4 for getDisplayAvatar letter fallback
-* **1c2bc35** - Jacqueline Delgado, 22 hours ago : feat: implement getDisplayAvatar image case for RED 28.3
-* **da181e8** - Jacqueline Delgado, 22 hours ago : test: add RED 28.3 for getDisplayAvatar image case
-* **1d52768** - Jacqueline Delgado, 22 hours ago : feat: implement saveProfileImage for RED 28.2
-* **821aea6** - Jacqueline Delgado, 22 hours ago : test: add RED 28.2 for saveProfileImage, add profileImageUrl to User
-* **688e21a** - Jacqueline Delgado, 23 hours ago : feat: implement saveProfileName for RED 28.1
-* **cf9ad92** - Jacqueline Delgado, 23 hours ago : test: add RED 28.1 for saveProfileName, exclude e2e from vitest
+* **c83c688** - Jacqueline Delgado, 48 seconds ago : test(blog): 36.2 — getLatestBlogPost returns null on fetch failure (verification)
+* **307189b** - Jacqueline Delgado, 3 minutes ago : feat(blog): GREEN 36.1 — getLatestBlogPost fetches from BLOG_JSON_URL
+* **1d58f52** - Jacqueline Delgado, 12 minutes ago : test(blog): RED 36.1 — getLatestBlogPost fetches BLOG_JSON_URL
+* **d44a15f** - Jacqueline Delgado, 66 minutes ago : test(blog): 35.5 — LatestBlogPost renders nothing when no posts (verification)
+* **762026c** - Jacqueline Delgado, 71 minutes ago : feat(blog): GREEN 35.4 — LatestBlogPost renders title and body
+* **37fdebd** - Jacqueline Delgado, 74 minutes ago : test(blog): RED 35.4 — LatestBlogPost renders title and body
+* **a27f776** - Jacqueline Delgado, 77 minutes ago : feat(blog): GREEN 35.3 — getLatestBlogPost returns newest or null
+* **d5ddbb8** - Jacqueline Delgado, 78 minutes ago : test(blog): RED 35.3 — getLatestBlogPost returns newest or null
+* **10bc7d8** - Jacqueline Delgado, 83 minutes ago : feat(blog): GREEN 35.2 — loadBlogPosts returns [] when blog dir missing
+* **c8af22e** - Jacqueline Delgado, 85 minutes ago : test(blog): RED 35.2 — loadBlogPosts returns [] when blog dir missing
+* **2a7bddb** - Jacqueline Delgado, 86 minutes ago : feat(blog): GREEN 35.1 — loadBlogPosts reads markdown sorted newest-first
+* **2dd1bf2** - Jacqueline Delgado, 2 hours ago : test(blog): RED 35.1 — loadBlogPosts sorts newest-first
+* **ebc9d11** - Jacqueline Delgado, 5 hours ago : updated my readme file added user profile, RAG
+* **c8d2132** - Jacqueline Delgado, 5 hours ago : updated test-report mark down file
+* **dd12eff** - Jacqueline Delgado, 5 hours ago : feat(rag): GREEN 34.11 — chunkMarkdownContent prepends heading context
+* **7763620** - Jacqueline Delgado, 5 hours ago : added 34.11 in testing md and updated test-report md files
+* **05c1205** - Jacqueline Delgado, 5 hours ago : test(rag): RED 34.11 — chunkMarkdownContent prepends heading context
+* **fd3bf03** - Jacqueline Delgado, 5 hours ago : feat(explore): wire FAQ chat onto Explore page + add FAQ corpus
+* **bab7c4c** - Jacqueline Delgado, 6 hours ago : feat(faq-chat): GREEN 34.10 — shows error message when API call fails
+* **7573afe** - Jacqueline Delgado, 6 hours ago : test(faq-chat): RED 34.10 — shows error message when API call fails
+* **fd3da48** - Jacqueline Delgado, 6 hours ago : feat(faq-chat): GREEN 34.9 — displays source titles under the answer
+* **547b1b9** - Jacqueline Delgado, 6 hours ago : test(faq-chat): RED 34.9 — displays source titles under the answer
+* **963ecb0** - Jacqueline Delgado, 6 hours ago : feat(faq-chat): GREEN 34.8 — displays answer after submission
+* **dc02496** - Jacqueline Delgado, 6 hours ago : test(faq-chat): RED 34.8 — displays answer after submission
+* **fdc93fb** - Jacqueline Delgado, 6 hours ago : feat(faq-chat): GREEN 34.7 — renders input and submit button
+* **d65296f** - Jacqueline Delgado, 6 hours ago : test(faq-chat): RED 34.7 — renders input and submit button
+* **c404fc2** - Jacqueline Delgado, 6 hours ago : feat(explore-chat): GREEN 34.6 — returns 'I don't know...' when top score below threshold
+* **a20078d** - Jacqueline Delgado, 6 hours ago : test(explore-chat): RED 34.6 — returns 'I don't know...' when top score below threshold
+* **3a34534** - Jacqueline Delgado, 6 hours ago : feat(explore-chat): GREEN 34.5 — POST returns 400 for missing or empty question
+* **57b26ec** - Jacqueline Delgado, 6 hours ago : test(explore-chat): RED 34.5 — POST returns 400 for missing or empty question
+* **7d0c45c** - Jacqueline Delgado, 6 hours ago : feat(explore-chat): GREEN 34.4 — POST returns answer + sources, grounds model
+* **d93bc00** - Jacqueline Delgado, 7 hours ago : updated package json
+* **4fc1d12** - Jacqueline Delgado, 7 hours ago : test(explore-chat): RED 34.4 — POST returns answer + sources, grounds model
+* **eff9fa5** - Jacqueline Delgado, 7 hours ago : feat(rag): GREEN 34.3 — retrieveTopChunks
+* **8d20358** - Jacqueline Delgado, 7 hours ago : test(rag): RED 34.3 — retrieveTopChunks
+* **7ee3a84** - Jacqueline Delgado, 7 hours ago : feat(rag): GREEN 34.2 — chunkMarkdownContent
+* **5edfb1c** - Jacqueline Delgado, 7 hours ago : test(rag): RED 34.2 — chunkMarkdownContent
+* **8c8eced** - Jacqueline Delgado, 7 hours ago : feat(rag): GREEN 34.1 — cosineSimilarity
+* **b6cf9f2** - Jacqueline Delgado, 7 hours ago : test(rag): RED 34.1 — cosineSimilarity returns 1 / 0 / -1
+* **ce9d386** - Jacqueline Delgado, 8 hours ago : updated test-report md file
+* **d01c681** - Jacqueline Delgado, 10 hours ago : feat: upload profile images to Vercel Blob instead of local disk
+* **71765d4** - Jacqueline Delgado, 10 hours ago : test: add RED for profile image upload via Vercel Blob
+* **0b59697** - Jacqueline Delgado, 10 hours ago : updated test-report.md file
+* **db4ca12** - Jacqueline Delgado, 10 hours ago : fix: add createdAt to CatchFeedPost type so production build type-checks
+* **7d5d87b** - Jacqueline Delgado, 10 hours ago : added prompts to PROMPTS file and updated TESTING.md file with additional plan for new features
+* **f597cdd** - Jacqueline Delgado, 10 hours ago : feat: show spinner beside login button while submitting
+* **c20e48b** - Jacqueline Delgado, 11 hours ago : feat: show MapHint between AI explanation and map on both pages
+* **8393434** - Jacqueline Delgado, 11 hours ago : feat: MapHint renders zoom guidance text
+* **71c1a83** - Jacqueline Delgado, 11 hours ago : test: add RED for MapHint zoom guidance component
+* **b9f3fd5** - Jacqueline Delgado, 11 hours ago : feat: wire waterType into SightingRateSearch on both pages, fix fetchReports return type
+* **a6c22a8** - Jacqueline Delgado, 11 hours ago : feat: Species field is a common-name dropdown that submits the scientific name
+* **fdf8059** - Jacqueline Delgado, 11 hours ago : test: add RED for Species field as common-name dropdown
+* **e47914d** - Jacqueline Delgado, 12 hours ago : fix: CatchPost exits edit mode after a successful save
+* **a9c1c95** - Jacqueline Delgado, 12 hours ago : test: add RED for CatchPost closing editor after successful save
+* **08072e4** - Jacqueline Delgado, 12 hours ago : feat: bump refreshKey after post/delete/update so feed updates instantly
+* **677acc1** - Jacqueline Delgado, 12 hours ago : feat: CatchFeed re-fetches immediately when refreshKey changes
+* **bd449dd** - Jacqueline Delgado, 12 hours ago : test: add RED for CatchFeed immediate refresh on refreshKey change
+* **67b2329** - Jacqueline Delgado, 12 hours ago : feat: minimum visible duration so action spinners are perceptible on fast actions
+* **100edb0** - Jacqueline Delgado, 12 hours ago : added prompt md and made changed to testing-report md file
+* **05e0fcd** - Jacqueline Delgado, 12 hours ago : feat: add animated spinner to post, delete, and save buttons during async actions
+* **671be81** - Jacqueline Delgado, 12 hours ago : feat: wire catch reports feed onto freshwater page
+* **1fb3dd4** - Jacqueline Delgado, 12 hours ago : feat: clear composer textarea after successful post, keep text on failure
+* **839e640** - Jacqueline Delgado, 12 hours ago : test: add RED for CatchComposer clearing textarea after successful post
+* **dd33144** - Jacqueline Delgado, 12 hours ago : polish: add gap between avatar and author name in catch posts
+* **2bf56d1** - Jacqueline Delgado, 12 hours ago : polish: space out post timestamp and show Posting state on post button
+* **2bbf0d9** - Jacqueline Delgado, 12 hours ago : feat: display relative timestamp on catch posts, add createdAt to test fixture
+* **849db7b** - Jacqueline Delgado, 13 hours ago : test: add RED for CatchPost timestamp display
+* **4c5a4f6** - Jacqueline Delgado, 13 hours ago : feat: implement formatRelativeTime helper
+* **d05557a** - Jacqueline Delgado, 13 hours ago : test: add RED for formatRelativeTime helper
+* **017f607** - Jacqueline Delgado, 13 hours ago : fix: add id and name to composer and edit textareas for accessibility
+* **eab0e2c** - Jacqueline Delgado, 13 hours ago : feat: disable delete/save buttons while in progress to prevent double-action
+* **eee79de** - Jacqueline Delgado, 13 hours ago : test: add RED for CatchPost double-delete and double-save prevention
+* **558db64** - Jacqueline Delgado, 13 hours ago : fix: full-width composer textarea and spacing between catch posts
+* **0c00993** - Jacqueline Delgado, 13 hours ago : feat: wire CatchFeed edit/delete to PATCH/DELETE routes on saltwater page
+* **ca931f9** - Jacqueline Delgado, 13 hours ago : feat: CatchFeed renders posts as CatchPost with edit/delete for 2c, fix test flush
+* **ae822d3** - Jacqueline Delgado, 13 hours ago : test: add RED for CatchFeed rendering posts as CatchPost with edit/delete
+* **73cc181** - Jacqueline Delgado, 13 hours ago : feat: PATCH catch-reports route updates post body for owner
+* **71e233b** - Jacqueline Delgado, 13 hours ago : test: add RED for PATCH catch-reports route
+* **da11013** - Jacqueline Delgado, 13 hours ago : feat: DELETE catch-reports route deletes post for owner
+* **10ec2c6** - Jacqueline Delgado, 13 hours ago : test: add RED for DELETE catch-reports route
+* **7f455c0** - Jacqueline Delgado, 13 hours ago : feat: CatchComposer disables post button while submitting to prevent double-post
+* **274bbe0** - Jacqueline Delgado, 13 hours ago : test: add RED for CatchComposer double-submit prevention
+* **f591a43** - Jacqueline Delgado, 14 hours ago : feat: add catch reports feed beside saved spots on saltwater page
+* **41e3147** - Jacqueline Delgado, 14 hours ago : feat: CatchComposer post box with profile gate
+* **acd28ab** - Jacqueline Delgado, 14 hours ago : test: add RED for CatchComposer post box with profile gate
+* **781cd50** - Jacqueline Delgado, 14 hours ago : feat: POST catch-reports route creates post for logged-in user
+* **53b2398** - Jacqueline Delgado, 14 hours ago : test: add RED for POST catch-reports route
+* **7d384b0** - Jacqueline Delgado, 14 hours ago : feat: GET catch-reports route lists posts for water type
+* **9a175a5** - Jacqueline Delgado, 14 hours ago : test: add RED for GET catch-reports route
+* **a99bdcd** - Jacqueline Delgado, 14 hours ago : fix: constrain profile image preview to thumbnail so Save button stays visible
+* **4e1a055** - Jacqueline Delgado, 15 hours ago : feat: NavBar pencil edit link to profile next to avatar
+* **3c3d994** - Jacqueline Delgado, 15 hours ago : test: add RED for NavBar pencil edit link to profile
+* **5934f2c** - Jacqueline Delgado, 15 hours ago : feat: SiteNav fetches profile and passes to NavBar for avatar display
+* **134a379** - Jacqueline Delgado, 15 hours ago : feat: GET profile route returns current user profile
+* **bfc3f2c** - Jacqueline Delgado, 15 hours ago : test: add RED for GET profile route
+* **6833d15** - Jacqueline Delgado, 15 hours ago : feat: ProfileForm shows uploaded image preview
+* **d4ff519** - Jacqueline Delgado, 15 hours ago : test: add RED for ProfileForm image preview
+* **39a9b31** - Jacqueline Delgado, 24 hours ago : chore: add public/uploads folder, ignore uploaded files
+* **f7c49d3** - Jacqueline Delgado, 24 hours ago : feat: wire ProfileForm uploadImage to image upload route on profile page
+* **c5cb9b3** - Jacqueline Delgado, 24 hours ago : feat: ProfileForm file upload with pencil for RED 33.2, fix test act flush
+* **9ec3fbf** - Jacqueline Delgado, 24 hours ago : test: rewrite RED 33.2 for ProfileForm file upload, remove URL field
+* **8062659** - Jacqueline Delgado, 24 hours ago : feat: profile image upload route writes file and returns path for RED 33.1, adapt test for jsdom
+* **cf29996** - Jacqueline Delgado, 24 hours ago : test: add RED 33.1 for profile image upload route
+* **a5597c9** - Jacqueline Delgado, 25 hours ago : feat: POST profile route saves profile for logged-in user for RED 32.4
+* **b5a8e60** - Jacqueline Delgado, 25 hours ago : test: add RED 32.4 for POST profile route
+* **0fa2e3b** - Jacqueline Delgado, 25 hours ago : feat: ProfileForm empty name validation for RED 32.3
+* **2ff1c15** - Jacqueline Delgado, 25 hours ago : test: add RED 32.3 for ProfileForm empty name validation
+* **4997b08** - Jacqueline Delgado, 25 hours ago : feat: ProfileForm submit calls onSave with values for RED 32.2
+* **874b6ab** - Jacqueline Delgado, 25 hours ago : test: add RED 32.2 for ProfileForm submit calls onSave
+* **d588e3a** - Jacqueline Delgado, 25 hours ago : feat: ProfileForm renders fields and Save button for RED 32.1
+* **c8e9587** - Jacqueline Delgado, 25 hours ago : test: add RED 32.1 for ProfileForm rendering
+* **24f2c3c** - Jacqueline Delgado, 25 hours ago : test: add RED 31.3 guarding CatchFeed stops polling on unmount (passes on arrival)
+* **66f54a8** - Jacqueline Delgado, 25 hours ago : feat: CatchFeed renders new posts on poll for RED 31.2, fix test promise flushing
+* **f41fcdd** - Jacqueline Delgado, 25 hours ago : test: add RED 31.2 for CatchFeed renders new posts
+* **beacf11** - Jacqueline Delgado, 25 hours ago : feat: CatchFeed polling interval for RED 31.1
+* **e72745c** - Jacqueline Delgado, 25 hours ago : test: add RED 31.1 for CatchFeed polling interval
+* **17fffd0** - Jacqueline Delgado, 25 hours ago : feat: CatchPost delete cancel closes dialog for RED 30.5
+* **2ea518b** - Jacqueline Delgado, 25 hours ago : test: add RED 30.5 for CatchPost delete cancel
+* **256b875** - Jacqueline Delgado, 25 hours ago : feat: CatchPost delete confirmation dialog for RED 30.4
+* **67f4520** - Jacqueline Delgado, 25 hours ago : test: add RED 30.4 for CatchPost delete confirmation
+* **a5f84e8** - Jacqueline Delgado, 25 hours ago : feat: CatchPost Save calls onUpdate with edited body for RED 30.3
+* **bacd474** - Jacqueline Delgado, 25 hours ago : test: add RED 30.3 for CatchPost Save calls onUpdate
+* **80b2e1f** - Jacqueline Delgado, 25 hours ago : feat: CatchPost edit mode textarea and Save button for RED 30.2
+* **7f1fe6c** - Jacqueline Delgado, 25 hours ago : test: add RED 30.2 for CatchPost edit mode textarea and Save
+* **c1345aa** - Jacqueline Delgado, 25 hours ago : feat: CatchPost edit button visibility for RED 30.1
+* **870bd09** - Jacqueline Delgado, 25 hours ago : test: add RED 30.1 for CatchPost edit button visibility
+* **5225ea6** - Jacqueline Delgado, 25 hours ago : feat: reject non-owner in deleteCatchReport for RED 29.8
+* **01940cc** - Jacqueline Delgado, 25 hours ago : test: add RED 29.8 for deleteCatchReport rejects non-owner
+* **9cccdb0** - Jacqueline Delgado, 25 hours ago : feat: implement deleteCatchReport owner-can-delete for RED 29.7
+* **6a7d740** - Jacqueline Delgado, 25 hours ago : test: add RED 29.7 for deleteCatchReport owner can delete
+* **486c473** - Jacqueline Delgado, 25 hours ago : feat: reject non-owner in updateCatchReport for RED 29.6
+* **a63410e** - Jacqueline Delgado, 25 hours ago : test: add RED 29.6 for updateCatchReport rejects non-owner
+* **bb0e5a4** - Jacqueline Delgado, 25 hours ago : feat: implement updateCatchReport owner-can-edit for RED 29.5
+* **eef2919** - Jacqueline Delgado, 25 hours ago : test: add RED 29.5 for updateCatchReport owner can edit
+* **b393ad5** - Jacqueline Delgado, 25 hours ago : feat: add author info to getCatchReports for RED 29.4, update 29.2 mocks for join
+* **e0b1713** - Jacqueline Delgado, 26 hours ago : test: add RED 29.4 for getCatchReports author info join
+* **4b21709** - Jacqueline Delgado, 26 hours ago : feat: order getCatchReports newest first for RED 29.3
+* **27aafef** - Jacqueline Delgado, 26 hours ago : updated nav bar with profile link and updated css
+* **14ca257** - Jacqueline Delgado, 26 hours ago : test: add RED 29.3 for getCatchReports newest-first ordering
+* **fb4a25b** - Jacqueline Delgado, 26 hours ago : feat: implement getCatchReports water type filtering for RED 29.2
+* **cb9fb3a** - Jacqueline Delgado, 26 hours ago : test: add RED 29.2 for getCatchReports water type filtering
+* **468153a** - Jacqueline Delgado, 26 hours ago : feat: implement createCatchReport for RED 29.1
+* **3aa16ac** - Jacqueline Delgado, 26 hours ago : test: add RED 29.1 for createCatchReport, add CatchReport model
+* **8770f4c** - Jacqueline Delgado, 26 hours ago : feat: implement PostButton with set up profile gate for RED 28.10
+* **a6a1ba1** - Jacqueline Delgado, 26 hours ago : test: add RED 28.10 for PostButton set up profile dialog
+* **99d8e91** - Jacqueline Delgado, 26 hours ago : feat: implement canPostCatch profile name gate for RED 28.9
+* **d44bec0** - Jacqueline Delgado, 26 hours ago : test: add RED 28.9 for canPostCatch profile name gate
+* **8b243f2** - Jacqueline Delgado, 26 hours ago : feat: render set up profile prompt in NavBar for RED 28.8
+* **6fbf020** - Jacqueline Delgado, 27 hours ago : test: add RED 28.8 for NavBar set up profile prompt
+* **5d1164c** - Jacqueline Delgado, 27 hours ago : feat: render letter avatar fallback in NavBar for RED 28.7
+* **d4c75ae** - Jacqueline Delgado, 27 hours ago : test: add RED 28.7 for NavBar letter avatar fallback
+* **96b0e30** - Jacqueline Delgado, 27 hours ago : docs: add TESTING.md plan for sections 28-31 profile and catch feed
+* **e4e4875** - Jacqueline Delgado, 27 hours ago : chore: add playwright setup for auth-gate e2e regression test
+* **f387423** - Jacqueline Delgado, 27 hours ago : feat: render profile avatar and display name in NavBar for RED 28.6
+* **19e86ea** - Jacqueline Delgado, 27 hours ago : test: add RED 28.6 for NavBar profile avatar and display name
+* **3819887** - Jacqueline Delgado, 27 hours ago : test: add RED 28.5 regression guard for NavBar brand name
+* **6c3237e** - Jacqueline Delgado, 27 hours ago : feat: implement getDisplayAvatar letter fallback for RED 28.4
+* **c9e3d2a** - Jacqueline Delgado, 27 hours ago : test: add RED 28.4 for getDisplayAvatar letter fallback
+* **1c2bc35** - Jacqueline Delgado, 27 hours ago : feat: implement getDisplayAvatar image case for RED 28.3
+* **da181e8** - Jacqueline Delgado, 27 hours ago : test: add RED 28.3 for getDisplayAvatar image case
+* **1d52768** - Jacqueline Delgado, 27 hours ago : feat: implement saveProfileImage for RED 28.2
+* **821aea6** - Jacqueline Delgado, 27 hours ago : test: add RED 28.2 for saveProfileImage, add profileImageUrl to User
+* **688e21a** - Jacqueline Delgado, 27 hours ago : feat: implement saveProfileName for RED 28.1
+* **cf9ad92** - Jacqueline Delgado, 27 hours ago : test: add RED 28.1 for saveProfileName, exclude e2e from vitest
 * **11e24a6** - Jacqueline Delgado, 3 days ago : updated readme file and added test-report.md file created by vitest reporter
 * **3f50b4c** - Jacqueline Delgado, 3 days ago : updated package json file added vitest reporter
 * **bb27118** - Jacqueline Delgado, 3 days ago : feat: add EmptyRecordsNotice no-records message
@@ -178,23 +193,23 @@
 * **0ce7543** - Jacqueline Delgado, 6 days ago : test: expect OBIS fetch to request 2000 records
 * **03a1939** - Jacqueline Delgado, 6 days ago : updated TESTING, RESULTS, README mark down files to reflect the new test
 * **15ea65a** - Jacqueline Delgado, 6 days ago : feat: frame percentage as share of records not a chance
-* **8df3177** - Jacqueline Delgado, 6 days ago : test: expect sighting-rate prompt to frame percentage as share of records
-* **6cb2927** - Jacqueline Delgado, 6 days ago : updated RESULTS.md, testing and readme mark down files
-* **a5803be** - Jacqueline Delgado, 6 days ago : feat: restore upbeat angler voice in AI explanation
-* **a07137d** - Jacqueline Delgado, 6 days ago : test: expect sighting-rate prompt to use upbeat angler tone
-* **035c2db** - Jacqueline Delgado, 6 days ago : updated readme test count
-* **4d461cd** - Jacqueline Delgado, 6 days ago : updated testing and results md files
-* **e227c9d** - Jacqueline Delgado, 6 days ago : feat: angler voice without self-reference in AI explanation
-* **27a046e** - Jacqueline Delgado, 6 days ago : test: expect sighting-rate prompt to forbid self-reference
-* **def070f** - Jacqueline Delgado, 6 days ago : updated readme, testing, and results file
-* **c0da6a9** - Jacqueline Delgado, 6 days ago : feat: instruct AI to call counts records not fish
-* **3a94d2a** - Jacqueline Delgado, 6 days ago : test: expect sighting-rate prompt to say records not fish count
-* **f8cf379** - Jacqueline Delgado, 6 days ago : updated the color for the dead email text chose not to make it an email link
-* **c394599** - Jacqueline Delgado, 6 days ago : updated readme from 42 files tested to 48 files tested
-* **1efcb68** - Jacqueline Delgado, 6 days ago : updated readme file from 94 test passing to 118 testpassing
-* **20c81df** - Jacqueline Delgado, 6 days ago : updated RESULTS.md file
-* **3f1c47a** - Jacqueline Delgado, 6 days ago : feat: add login link to reset-confirm success
-* **7f60c11** - Jacqueline Delgado, 6 days ago : test: expect reset-confirm page to link to login after reset
+* **8df3177** - Jacqueline Delgado, 7 days ago : test: expect sighting-rate prompt to frame percentage as share of records
+* **6cb2927** - Jacqueline Delgado, 7 days ago : updated RESULTS.md, testing and readme mark down files
+* **a5803be** - Jacqueline Delgado, 7 days ago : feat: restore upbeat angler voice in AI explanation
+* **a07137d** - Jacqueline Delgado, 7 days ago : test: expect sighting-rate prompt to use upbeat angler tone
+* **035c2db** - Jacqueline Delgado, 7 days ago : updated readme test count
+* **4d461cd** - Jacqueline Delgado, 7 days ago : updated testing and results md files
+* **e227c9d** - Jacqueline Delgado, 7 days ago : feat: angler voice without self-reference in AI explanation
+* **27a046e** - Jacqueline Delgado, 7 days ago : test: expect sighting-rate prompt to forbid self-reference
+* **def070f** - Jacqueline Delgado, 7 days ago : updated readme, testing, and results file
+* **c0da6a9** - Jacqueline Delgado, 7 days ago : feat: instruct AI to call counts records not fish
+* **3a94d2a** - Jacqueline Delgado, 7 days ago : test: expect sighting-rate prompt to say records not fish count
+* **f8cf379** - Jacqueline Delgado, 7 days ago : updated the color for the dead email text chose not to make it an email link
+* **c394599** - Jacqueline Delgado, 7 days ago : updated readme from 42 files tested to 48 files tested
+* **1efcb68** - Jacqueline Delgado, 7 days ago : updated readme file from 94 test passing to 118 testpassing
+* **20c81df** - Jacqueline Delgado, 7 days ago : updated RESULTS.md file
+* **3f1c47a** - Jacqueline Delgado, 7 days ago : feat: add login link to reset-confirm success
+* **7f60c11** - Jacqueline Delgado, 7 days ago : test: expect reset-confirm page to link to login after reset
 * **c734acb** - Jacqueline Delgado, 7 days ago : feat: link reset-request success to confirm page
 * **b73fd99** - Jacqueline Delgado, 7 days ago : test: expect reset-request page to link to confirm page
 * **65bf6c7** - Jacqueline Delgado, 7 days ago : feat: add forgot password link to login page
@@ -227,10 +242,10 @@
 * **3842eac** - Jacqueline Delgado, 7 days ago : updated read me and editted
 * **1b5d11e** - Jacqueline Delgado, 7 days ago : updated README and added the Test-first provable paragraph
 * **c464220** - Jacqueline Delgado, 7 days ago : updated Readme test files and test count on badge and on rules that kept it honest
-* **755e703** - Jacqueline Delgado, 7 days ago : updated saltwater page, edited a typo
-* **2667b86** - Jacqueline Delgado, 7 days ago : updated images on the pages
-* **128d291** - Jacqueline Delgado, 7 days ago : updated the home page paragraph to state both GBIF and OBIS verified all apis using curl commands
-* **fde3c73** - Jacqueline Delgado, 7 days ago : updated Travel-time tool paragraph on explore page
+* **755e703** - Jacqueline Delgado, 8 days ago : updated saltwater page, edited a typo
+* **2667b86** - Jacqueline Delgado, 8 days ago : updated images on the pages
+* **128d291** - Jacqueline Delgado, 8 days ago : updated the home page paragraph to state both GBIF and OBIS verified all apis using curl commands
+* **fde3c73** - Jacqueline Delgado, 8 days ago : updated Travel-time tool paragraph on explore page
 * **410c3a6** - Jacqueline Delgado, 8 days ago : feat: request today's tides in station local time from NOAA
 * **d594d3d** - Jacqueline Delgado, 8 days ago : test: expect fetchTidePredictions to request tides for today
 * **cba3b43** - Jacqueline Delgado, 8 days ago : feat: add Montauk, NYC, Boston, and Miami NOAA tide stations
@@ -282,17 +297,17 @@
 * **1cc4578** - Jacqueline Delgado, 8 days ago : test: add RED for fetchUsgsWaterConditions USGS nearest-gauge seam
 * **355a3d1** - Jacqueline Delgado, 8 days ago : feat: add fetchForecastConditions Open-Meteo Forecast seam
 * **32a154a** - Jacqueline Delgado, 8 days ago : test: add RED for fetchForecastConditions Open-Meteo Forecast seam
-* **e082198** - Jacqueline Delgado, 8 days ago : feat: add fetchMarineConditions Open-Meteo Marine seam
-* **efe72f5** - Jacqueline Delgado, 8 days ago : test: add RED for fetchMarineConditions Open-Meteo Marine seam
-* **c0f5d7a** - Jacqueline Delgado, 8 days ago : feat: expand freshwater species list with CT game and panfish species
-* **abd83fa** - Jacqueline Delgado, 8 days ago : feat: expand freshwater species list with CT game and panfish species
-* **19f9d4c** - Jacqueline Delgado, 8 days ago : feat: expand saltwater species list to 40 with OBIS-backed game and food fish
-* **e33d427** - Jacqueline Delgado, 8 days ago : feat: expand saltwater species list to 40 with OBIS-backed game and food fish
-* **9383567** - Jacqueline Delgado, 8 days ago : feat: merge and dedupe GBIF + OBIS occurrence records in fetchOccurrenceRecords
-* **3969f0a** - Jacqueline Delgado, 8 days ago : test: add red test for deduplicating overlapping GBIF and OBIS records
-* **ae0547e** - Jacqueline Delgado, 8 days ago : test: add red test for merging GBIF and OBIS in fetchOccurrenceRecords
-* **fe38f9e** - Jacqueline Delgado, 8 days ago : feat: implement fetchObisOccurrences (OBIS occurrence fetch)
-* **604735b** - Jacqueline Delgado, 8 days ago : test: add red test for fetchObisOccurrences (OBIS occurrence fetch)
+* **e082198** - Jacqueline Delgado, 9 days ago : feat: add fetchMarineConditions Open-Meteo Marine seam
+* **efe72f5** - Jacqueline Delgado, 9 days ago : test: add RED for fetchMarineConditions Open-Meteo Marine seam
+* **c0f5d7a** - Jacqueline Delgado, 9 days ago : feat: expand freshwater species list with CT game and panfish species
+* **abd83fa** - Jacqueline Delgado, 9 days ago : feat: expand freshwater species list with CT game and panfish species
+* **19f9d4c** - Jacqueline Delgado, 9 days ago : feat: expand saltwater species list to 40 with OBIS-backed game and food fish
+* **e33d427** - Jacqueline Delgado, 9 days ago : feat: expand saltwater species list to 40 with OBIS-backed game and food fish
+* **9383567** - Jacqueline Delgado, 9 days ago : feat: merge and dedupe GBIF + OBIS occurrence records in fetchOccurrenceRecords
+* **3969f0a** - Jacqueline Delgado, 9 days ago : test: add red test for deduplicating overlapping GBIF and OBIS records
+* **ae0547e** - Jacqueline Delgado, 9 days ago : test: add red test for merging GBIF and OBIS in fetchOccurrenceRecords
+* **fe38f9e** - Jacqueline Delgado, 9 days ago : feat: implement fetchObisOccurrences (OBIS occurrence fetch)
+* **604735b** - Jacqueline Delgado, 9 days ago : test: add red test for fetchObisOccurrences (OBIS occurrence fetch)
 * **6c38180** - Jacqueline Delgado, 9 days ago : updated readme, favicon, and fixed logout issue
 * **80aff98** - Jacqueline Delgado, 9 days ago : feat: show logout on all pages via SiteNav wrapper; mock fetch in home page test
 * **33f6df5** - Jacqueline Delgado, 9 days ago : updated and added a test for log out, TDD, failed and passed, log out button
@@ -307,12 +322,12 @@
 * **c5213ee** - Jacqueline Delgado, 9 days ago : Add sighting-rate search form with coordinate validation (Feature 15 UI), test-first
 * **273cda7** - Jacqueline Delgado, 9 days ago : Align recommendation confidence to three tiers (low/moderate/high) matching sighting-rate search, test-first
 * **dbfbed8** - Jacqueline Delgado, 9 days ago : Wire occurrence fetch and sighting-rate search routes (Feature 16.1, 16.6), test-first
-* **982e31e** - Jacqueline Delgado, 9 days ago : Wire auth and saved-spot API routes to logic (Feature 16.2-16.5), test-first
-* **fa85296** - Jacqueline Delgado, 9 days ago : Add live Neon migration: User and SavedSpot tables (Feature 5 live database)
-* **bdf35e6** - Jacqueline Delgado, 9 days ago : Stop tracking build output and generated files (apply .gitignore)
-* **92fcd0c** - Jacqueline Delgado, 9 days ago : Add empirical sighting-rate search logic (Feature 15): rate, confidence tiers, Null Island filter, test-first
-* **5040651** - Jacqueline Delgado, 9 days ago : Add Knots/ETA travel time (Feature 14) with distance calc and ETA sanity-check guard, test-first
-* **cbfa375** - Jacqueline Delgado, 9 days ago : Add species marker-style lookup (Feature 13), test-first
+* **982e31e** - Jacqueline Delgado, 10 days ago : Wire auth and saved-spot API routes to logic (Feature 16.2-16.5), test-first
+* **fa85296** - Jacqueline Delgado, 10 days ago : Add live Neon migration: User and SavedSpot tables (Feature 5 live database)
+* **bdf35e6** - Jacqueline Delgado, 10 days ago : Stop tracking build output and generated files (apply .gitignore)
+* **92fcd0c** - Jacqueline Delgado, 10 days ago : Add empirical sighting-rate search logic (Feature 15): rate, confidence tiers, Null Island filter, test-first
+* **5040651** - Jacqueline Delgado, 10 days ago : Add Knots/ETA travel time (Feature 14) with distance calc and ETA sanity-check guard, test-first
+* **cbfa375** - Jacqueline Delgado, 10 days ago : Add species marker-style lookup (Feature 13), test-first
 * **608cd4b** - Jacqueline Delgado, 10 days ago : Add rugged nautical redesign to landing page (Feature 11)
 * **deb0148** - Jacqueline Delgado, 10 days ago : Add recommendation feature (Feature 10) with consistent sample size and confidence, test-first
 * **db48799** - Jacqueline Delgado, 10 days ago : Add post-login home buttons (Feature 8), test-first
@@ -324,15 +339,13 @@
 * **c35aeb8** - Jacqueline Delgado, 10 days ago : Initial commit: TDD on emailVerification.test.ts
 
 ## 📊 Test Metrics Summary
-* **Total Tests:** 4
-* **Passed:** 😄 4
+* **Total Tests:** 2
+* **Passed:** 😄 2
 * **Failed:** 😡 0
 
 ## 📝 Detailed Test Breakdown
 
 | File | Test Case | Status | Duration |
 | :--- | :--- | :--- | :--- |
-| src/lib/rag.test.ts | cosineSimilarity | ✅ Pass | 0.9096660000000156ms |
-| src/lib/rag.test.ts | chunkMarkdownContent | ✅ Pass | 0.866375000000005ms |
-| src/lib/rag.test.ts | retrieveTopChunks | ✅ Pass | 0.40116699999998673ms |
-| src/lib/rag.test.ts | chunkMarkdownContent — heading context | ✅ Pass | 0.28737499999999727ms |
+| src/lib/blogLoader.test.ts | loadBlogPosts | ✅ Pass | 6.145375000000001ms |
+| src/lib/blogLoader.test.ts | getLatestBlogPost — Apps Script JSON endpoint (Section 36) | ✅ Pass | 0.6467499999999973ms |
