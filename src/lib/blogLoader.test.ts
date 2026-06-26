@@ -141,4 +141,14 @@ describe('getLatestBlogPost — Apps Script JSON endpoint (Section 36)', () => {
 
     expect(post).toBeNull();
   });
+
+  it('returns null and does not call fetch when BLOG_JSON_URL is not set', async () => {
+    delete process.env.BLOG_JSON_URL;
+    const mockFetch = global.fetch as ReturnType<typeof vi.fn>;
+
+    const post = await getLatestBlogPost();
+
+    expect(post).toBeNull();
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
 });
