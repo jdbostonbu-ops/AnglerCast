@@ -815,9 +815,9 @@ RED 35.3 — getLatestBlogPost returns the most recent post or null
   loadBlogPosts() internally and returns the first element of the
   sorted-newest-first array as a single { slug, title, date, body }
   object, or null when loadBlogPosts() returns an empty array.
-  loadBlogPosts is mocked in the test to return seeded fixtures so the
-  test asserts only the "pick the first one" behavior, not the
-  underlying file reading.
+  fs/promises is mocked in the test (same setup as RED 35.1 and 35.2)
+  to seed fixture markdown content, and the test asserts
+  getLatestBlogPost returns the newest post or null when none exist.
 - Why it fails first; expected behavior: the getLatestBlogPost
   function doesn't exist yet in src/lib/blogLoader.ts, so the import
   fails.
