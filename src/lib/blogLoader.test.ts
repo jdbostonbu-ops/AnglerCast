@@ -67,4 +67,15 @@ describe('loadBlogPosts', () => {
     expect(posts[1].date).toBe('2026-06-20');
     expect(posts[1].body).toContain('This is the older post body.');
   });
+
+  it('returns an empty array when the blog directory does not exist', async () => {
+    const enoent = Object.assign(new Error('ENOENT: no such file or directory'), {
+      code: 'ENOENT',
+    });
+    mockReaddir.mockRejectedValue(enoent);
+
+    const posts = await loadBlogPosts();
+
+    expect(posts).toEqual([]);
+  });
 });
