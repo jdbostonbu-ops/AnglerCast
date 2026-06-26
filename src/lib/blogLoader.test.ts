@@ -119,4 +119,26 @@ describe('getLatestBlogPost — Apps Script JSON endpoint (Section 36)', () => {
     expect(post?.slug).toBe('2026-06-25');
     expect(post?.body).toContain('Real records, real talk.');
   });
+
+  it('returns null when fetch rejects with a network error', async () => {
+    const mockFetch = global.fetch as ReturnType<typeof vi.fn>;
+    mockFetch.mockRejectedValue(new Error('network down'));
+
+    const post = await getLatestBlogPost();
+
+    expect(post).toBeNull();
+  });
+
+  it('returns null when fetch resolves with a non-ok response', async () => {
+    const mockFetch = global.fetch as ReturnType<typeof vi.fn>;
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 500,
+      json: async () => ({}),
+    });
+
+    const post = await getLatestBlogPost();
+
+    expect(post).toBeNull();
+  });
 });
