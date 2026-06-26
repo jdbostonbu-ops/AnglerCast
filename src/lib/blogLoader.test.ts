@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 const { mockReaddir, mockReadFile } = vi.hoisted(() => ({
   mockReaddir: vi.fn(),
@@ -77,62 +77,6 @@ describe('loadBlogPosts', () => {
     const posts = await loadBlogPosts();
 
     expect(posts).toEqual([]);
-  });
-});
-
-describe('getLatestBlogPost', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('returns the most recent post when posts exist', async () => {
-    mockReaddir.mockResolvedValue([
-      '2026-06-20-older.md',
-      '2026-06-25-newer.md',
-    ] as never);
-
-    mockReadFile.mockImplementation(async (filePath: string) => {
-      if (filePath.includes('2026-06-20-older.md')) {
-        return [
-          '---',
-          'title: Older Post',
-          'date: 2026-06-20',
-          '---',
-          '',
-          'Older body.',
-        ].join('\n');
-      }
-      if (filePath.includes('2026-06-25-newer.md')) {
-        return [
-          '---',
-          'title: Newer Post',
-          'date: 2026-06-25',
-          '---',
-          '',
-          'Newer body.',
-        ].join('\n');
-      }
-      throw new Error(`unexpected path: ${filePath}`);
-    });
-
-    const latest = await getLatestBlogPost();
-
-    expect(latest).not.toBeNull();
-    expect(latest?.slug).toBe('2026-06-25-newer');
-    expect(latest?.title).toBe('Newer Post');
-    expect(latest?.date).toBe('2026-06-25');
-    expect(latest?.body).toContain('Newer body.');
-  });
-
-  it('returns null when no posts exist', async () => {
-    const enoent = Object.assign(new Error('ENOENT: no such file or directory'), {
-      code: 'ENOENT',
-    });
-    mockReaddir.mockRejectedValue(enoent);
-
-    const latest = await getLatestBlogPost();
-
-    expect(latest).toBeNull();
   });
 });
 

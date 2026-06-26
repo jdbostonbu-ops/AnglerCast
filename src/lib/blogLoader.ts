@@ -8,6 +8,12 @@ export type BlogPost = {
   body: string;
 };
 
+type BlogPostResponse = {
+  title: string;
+  date: string;
+  body: string;
+};
+
 const blogDirectory = path.join(process.cwd(), 'src', 'lib', 'blog');
 
 const parseFrontmatter = (
@@ -100,7 +106,28 @@ export const loadBlogPosts = async (): Promise<BlogPost[]> => {
 };
 
 export const getLatestBlogPost = async (): Promise<BlogPost | null> => {
-  const posts = await loadBlogPosts();
+  const blogJsonUrl = process.env.BLOG_JSON_URL;
 
-  return posts[0] ?? null;
+  if (blogJsonUrl === undefined || blogJsonUrl === '') {
+    return null;
+  }
+
+  try {
+    const response = await fetch(blogJsonUrl);
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const post = (await response.json()) as BlogPostResponse;
+
+    return {
+      slug: post.date.slice(0, 10),
+      title: post.title,
+      date: post.date,
+      body: post.body,
+    };
+  } catch {
+    return null;
+  }
 };

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import HomePage from '@/app/page';
 
-vi.mock('@/lib/homeHighlights', () => ({
+vi.mock('@/lib/homeHighlights',() => ({
   getHomeHighlights: vi.fn().mockResolvedValue([
     {
       commonName: 'Spiny Dogfish',
@@ -16,6 +16,10 @@ vi.mock('@/lib/homeHighlights', () => ({
       confidence: 'high',
     },
   ]),
+}));
+
+vi.mock('@/components/LatestBlogPost', () => ({
+  LatestBlogPost: () => null,
 }));
 
 describe('HomePage', () => {
