@@ -774,6 +774,85 @@ RED 34.11 — chunkMarkdownContent prepends the most recent heading to each chun
 
 ---
 
+## 35 — Weekly blog post on the Home page
+
+A weekly blog post that lives below the % cards on the Home page. Blog
+posts are markdown files in src/lib/blog/*.md with frontmatter (title,
+date) and a markdown body. Only the most recent post is rendered on the
+Home page — when a new post is added, it replaces the previous one in
+view. Each post file is named YYYY-MM-DD-slug.md so the date sorts
+naturally. The post is meant to be filled in weekly by a Zapier AI
+workflow that writes a new markdown file into the repo via GitHub,
+triggers a Vercel deploy, and the new post appears live the next time
+someone visits Home.
+
+RED 35.1 — loadBlogPosts reads markdown from src/lib/blog and returns posts sorted newest-first
+- What it checks: loadBlogPosts() in src/lib/blogLoader.ts reads every
+  .md file in src/lib/blog/, parses each file's frontmatter (title,
+  date) and the markdown body that follows, and returns an array of
+  { slug, title, date, body } objects sorted by date in descending
+  order (newest first). The slug is derived from the filename without
+  the .md extension (e.g. "2026-06-25-where-the-fish-are" stays as the
+  slug). The frontmatter is parsed using gray-matter or an equivalent.
+  The function uses fs/promises and is async. Two fixture files placed
+  in src/lib/blog/ for the test confirm the ordering: an older-dated
+  post and a newer-dated post must come back newest-first.
+- Why it fails first; expected behavior: the loadBlogPosts function
+  doesn't exist yet in src/lib/blogLoader.ts, so the import fails.
+
+RED 35.2 — loadBlogPosts returns an empty array when the blog directory does not exist
+- What it checks: When src/lib/blog/ does not exist on disk (ENOENT
+  error from fs/promises.readdir), loadBlogPosts() returns an empty
+  array [] rather than throwing. The fs/promises module is mocked so
+  the readdir call rejects with an ENOENT error during the test. This
+  matches the same defensive pattern as loadFaqDocuments() in
+  src/lib/faqLoader.ts.
+- Why it fails first; expected behavior: the loadBlogPosts function
+  doesn't exist yet, so there is no ENOENT handling.
+
+RED 35.3 — getLatestBlogPost returns the most recent post or null
+- What it checks: getLatestBlogPost() in src/lib/blogLoader.ts calls
+  loadBlogPosts() internally and returns the first element of the
+  sorted-newest-first array as a single { slug, title, date, body }
+  object, or null when loadBlogPosts() returns an empty array.
+  loadBlogPosts is mocked in the test to return seeded fixtures so the
+  test asserts only the "pick the first one" behavior, not the
+  underlying file reading.
+- Why it fails first; expected behavior: the getLatestBlogPost
+  function doesn't exist yet in src/lib/blogLoader.ts, so the import
+  fails.
+
+RED 35.4 — LatestBlogPost component renders the post title and body when a post exists
+- What it checks: The LatestBlogPost component (a new component in
+  src/components/LatestBlogPost.tsx, named export, server component)
+  calls getLatestBlogPost() and renders the post's title as a heading
+  and the post's markdown body rendered as HTML below it. The markdown
+  body is rendered using react-markdown or an equivalent so headings,
+  paragraphs, and lists in the markdown source render as real HTML.
+  getLatestBlogPost is mocked in the test to return a fixture post
+  with a known title and body, and the test asserts both appear in
+  the rendered output.
+- Why it fails first; expected behavior: the LatestBlogPost component
+  doesn't exist yet in src/components/LatestBlogPost.tsx, so the
+  import fails.
+
+RED 35.5 — LatestBlogPost renders nothing when no posts exist
+- What it checks: When getLatestBlogPost() returns null (no posts in
+  src/lib/blog/), the LatestBlogPost component renders nothing
+  visible — no empty heading, no placeholder text, no error. The
+  component returns null or an empty fragment so the Home page is
+  unaffected when there are no posts yet. getLatestBlogPost is mocked
+  in the test to return null.
+- Why it fails first; expected behavior: the LatestBlogPost component
+  doesn't exist yet, so there is no graceful empty state.
+
+Visual/wiring part (eyeball-verified):
+The LatestBlogPost component is rendered on the Home page below the
+% cards (the species occurrence summary section), so users see the
+latest weekly post when they scroll past the data. Verified by eye.
+
+---
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.
