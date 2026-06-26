@@ -61,7 +61,21 @@ const parseFrontmatter = (
 };
 
 export const loadBlogPosts = async (): Promise<BlogPost[]> => {
-  const filenames = await readdir(blogDirectory);
+  let filenames: string[];
+
+  try {
+    filenames = await readdir(blogDirectory);
+  } catch (error: unknown) {
+    if (
+      error instanceof Error &&
+      (error as NodeJS.ErrnoException).code === 'ENOENT'
+    ) {
+      return [];
+    }
+
+    throw error;
+  }
+
   const markdownFilenames = filenames
     .filter((filename) => filename.endsWith('.md'))
     .sort();
