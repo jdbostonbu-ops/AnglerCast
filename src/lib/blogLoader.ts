@@ -1,0 +1,86 @@
+import { readdir, readFile } from 'node:fs/promises';
+import path from 'node:path';
+
+export type BlogPost = {
+  slug: string;
+  title: string;
+  date: string;
+  body: string;
+};
+
+const blogDirectory = path.join(process.cwd(), 'src', 'lib', 'blog');
+
+const parseFrontmatter = (
+  fileContents: string,
+): { title: string; date: string; body: string } => {
+  const lines = fileContents.split(/\r?\n/);
+
+  if (lines[0] !== '---') {
+    return {
+      title: '',
+      date: '',
+      body: fileContents.trim(),
+    };
+  }
+
+  const closingIndex = lines.findIndex(
+    (line, index) => index > 0 && line === '---',
+  );
+
+  if (closingIndex === -1) {
+    return {
+      title: '',
+      date: '',
+      body: fileContents.trim(),
+    };
+  }
+
+  const frontmatter = lines.slice(1, closingIndex);
+  const body = lines.slice(closingIndex + 1).join('\n').trim();
+  const values = frontmatter.reduce<Record<string, string>>((fields, line) => {
+    const separatorIndex = line.indexOf(':');
+
+    if (separatorIndex === -1) {
+      return fields;
+    }
+
+    const key = line.slice(0, separatorIndex).trim();
+    const value = line.slice(separatorIndex + 1).trim();
+
+    return {
+      ...fields,
+      [key]: value,
+    };
+  }, {});
+
+  return {
+    title: values.title ?? '',
+    date: values.date ?? '',
+    body,
+  };
+};
+
+export const loadBlogPosts = async (): Promise<BlogPost[]> => {
+  const filenames = await readdir(blogDirectory);
+  const markdownFilenames = filenames
+    .filter((filename) => filename.endsWith('.md'))
+    .sort();
+  const posts = await Promise.all(
+    markdownFilenames.map(async (filename) => {
+      const fileContents = await readFile(
+        path.join(blogDirectory, filename),
+        'utf8',
+      );
+      const { title, date, body } = parseFrontmatter(fileContents);
+
+      return {
+        slug: filename.replace(/\.md$/, ''),
+        title,
+        date,
+        body,
+      };
+    }),
+  );
+
+  return posts.sort((a, b) => b.date.localeCompare(a.date));
+};

@@ -1,33 +1,36 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { loadBlogPosts } from './blogLoader';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-vi.mock('fs/promises', () => ({
-  readdir: vi.fn(),
-  readFile: vi.fn(),
+const { mockReaddir, mockReadFile } = vi.hoisted(() => ({
+  mockReaddir: vi.fn(),
+  mockReadFile: vi.fn(),
 }));
 
-import { readdir, readFile } from 'fs/promises';
+vi.mock('node:fs/promises', () => {
+  const mockedModule = {
+    readdir: mockReaddir,
+    readFile: mockReadFile,
+  };
+  return {
+    ...mockedModule,
+    default: mockedModule,
+  };
+});
 
-const mockedReaddir = readdir as ReturnType<typeof vi.fn>;
-const mockedReadFile = readFile as ReturnType<typeof vi.fn>;
+import { loadBlogPosts } from './blogLoader';
 
 describe('loadBlogPosts', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it('returns posts sorted newest-first by date from frontmatter', async () => {
-    mockedReaddir.mockResolvedValue([
+    mockReaddir.mockResolvedValue([
       '2026-06-20-older-post.md',
       '2026-06-25-newer-post.md',
     ] as never);
 
-    mockedReadFile.mockImplementation(async (path: string) => {
-      if (path.includes('2026-06-20-older-post.md')) {
+    mockReadFile.mockImplementation(async (filePath: string) => {
+      if (filePath.includes('2026-06-20-older-post.md')) {
         return [
           '---',
           'title: Older Post',
@@ -37,7 +40,7 @@ describe('loadBlogPosts', () => {
           'This is the older post body.',
         ].join('\n');
       }
-      if (path.includes('2026-06-25-newer-post.md')) {
+      if (filePath.includes('2026-06-25-newer-post.md')) {
         return [
           '---',
           'title: Newer Post',
@@ -47,14 +50,13 @@ describe('loadBlogPosts', () => {
           'This is the newer post body.',
         ].join('\n');
       }
-      throw new Error(`unexpected path: ${path}`);
+      throw new Error(`unexpected path: ${filePath}`);
     });
 
     const posts = await loadBlogPosts();
 
     expect(posts).toHaveLength(2);
 
-    // newest first
     expect(posts[0].slug).toBe('2026-06-25-newer-post');
     expect(posts[0].title).toBe('Newer Post');
     expect(posts[0].date).toBe('2026-06-25');
