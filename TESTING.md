@@ -847,10 +847,14 @@ RED 35.5 — LatestBlogPost renders nothing when no posts exist
   doesn't exist yet, so there is no graceful empty state.
 
 Visual/wiring part (eyeball-verified):
+Visual/wiring part (eyeball-verified):
 The LatestBlogPost component is rendered on the Home page below the
 % cards (the species occurrence summary section), so users see the
-latest weekly post when they scroll past the data. Verified by eye.
-
+latest weekly post when they scroll past the data. The post title and
+body must be at a comfortable reading size — large enough that
+anglers reading on phones or laptops don't have to squint. Body text
+should be at least the same size as the disclaimer paragraph beneath
+the data cards. Verified by eye after wiring.
 ---
 
 # 2. Run the tests (expect RED)
