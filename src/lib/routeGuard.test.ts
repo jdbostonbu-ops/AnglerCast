@@ -20,6 +20,7 @@ describe('shouldRedirectToLogin', () => {
     expect(shouldRedirectToLogin('/login', false)).toBe(false);
     expect(shouldRedirectToLogin('/signup', false)).toBe(false);
     expect(shouldRedirectToLogin('/verify', false)).toBe(false);
+    expect(shouldRedirectToLogin('/reset-request', false)).toBe(false);
     expect(shouldRedirectToLogin('/reset-confirm', false)).toBe(false);
   });
 });

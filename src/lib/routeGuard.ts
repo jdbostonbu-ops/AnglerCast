@@ -2,6 +2,7 @@ const exemptPathPrefixes = [
   '/login',
   '/signup',
   '/verify',
+  '/reset-request',
   '/reset-confirm',
   '/api/auth',
 ];
