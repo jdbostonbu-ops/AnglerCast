@@ -111,3 +111,42 @@ export const fetchSaltwaterForecast = async ({
 
   return forecast;
 };
+
+type FetchSaltwaterMarineInput = {
+  latitude: number;
+  longitude: number;
+  targetDate: string;
+};
+
+type SaltwaterMarineResponse = {
+  latitude: number;
+  longitude: number;
+  hourly?: {
+    time?: string[];
+    wave_height?: number[];
+    wave_direction?: number[];
+    wave_period?: number[];
+    sea_surface_temperature?: number[];
+  };
+};
+
+export const fetchSaltwaterMarine = async ({
+  latitude,
+  longitude,
+  targetDate,
+}: FetchSaltwaterMarineInput): Promise<SaltwaterMarineResponse> => {
+  const url = new URL('https://marine-api.open-meteo.com/v1/marine');
+  url.searchParams.set('latitude', String(latitude));
+  url.searchParams.set('longitude', String(longitude));
+  url.searchParams.set('start_date', targetDate);
+  url.searchParams.set('end_date', targetDate);
+  url.searchParams.set(
+    'hourly',
+    'wave_height,wave_direction,wave_period,sea_surface_temperature',
+  );
+
+  const response = await fetch(url.toString());
+  const marine = (await response.json()) as SaltwaterMarineResponse;
+
+  return marine;
+};
