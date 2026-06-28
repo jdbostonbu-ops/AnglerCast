@@ -1,32 +1,35 @@
 # Test Run & Git Summary Report
-**Generated on:** 6/28/2026, 7:39:56 PM
+**Generated on:** 6/28/2026, 7:54:32 PM
 
 ## 🕒 Recent Git Commit Log
-* **f9e9eed** - Jacqueline Delgado, 51 seconds ago : RED 37.41 — does not crash when OpenAI response has no choices field
-* **3574a3a** - Jacqueline Delgado, 3 minutes ago : added 37.41 test in testing md for agentics rag
-* **c016fd5** - Jacqueline Delgado, 13 minutes ago : GREEN 37.40 — Forecast and Marine tools request imperial units from Open-Meteo
-* **b56a920** - Jacqueline Delgado, 15 minutes ago : RED 37.40 — Forecast and Marine tools request imperial units from Open-Meteo
-* **75f7324** - Jacqueline Delgado, 18 minutes ago : updated testing md and added red test 37.2 forecast and marine tools to change celcius to farenheit
-* **25c135b** - Jacqueline Delgado, 24 minutes ago : GREEN 37.39 — null tool result test uses runSaltwaterTool seam
-* **c498a5c** - Jacqueline Delgado, 26 minutes ago : GREEN 37.38 — max iterations test uses runSaltwaterTool seam
-* **49997e3** - Jacqueline Delgado, 29 minutes ago : GREEN 37.37 — multi-tool chain test uses runSaltwaterTool seam
-* **0e77a6d** - Jacqueline Delgado, 33 minutes ago : GREEN 37.36 — single tool_call test uses runSaltwaterTool seam
-* **0daa65a** - Jacqueline Delgado, 38 minutes ago : GREEN 37.35 — recovers when tool returns error uses runSaltwaterTool seam
-* **df17d89** - Jacqueline Delgado, 43 minutes ago : updated testing report md and saltwater agent ts file
-* **bfeb512** - Jacqueline Delgado, 44 minutes ago : RED 37.35–37.39 — orchestration tests fail after GREEN 37.34; documented in Section 37.5
-* **da45611** - Jacqueline Delgado, 59 minutes ago : RED 37.34 — runSaltwaterAgent dispatches tool_calls through shared runSaltwaterTool
-* **eadfdd8** - Jacqueline Delgado, 61 minutes ago : updated testing md and added more tests for agentic rag
-* **b63021f** - Jacqueline Delgado, 67 minutes ago : GREEN 37.33 — system prompt forbids inventing data when a tool fails
-* **848be49** - Jacqueline Delgado, 74 minutes ago : RED 37.33 — system prompt instructs the agent never to invent data when a tool fails
-* **9232145** - Jacqueline Delgado, 76 minutes ago : GREEN 37.32 — tool schemas declare required parameters with descriptions
-* **e9791a1** - Jacqueline Delgado, 79 minutes ago : RED 37.32 — every tool schema declares the parameters its function actually needs
-* **0f32f7c** - Jacqueline Delgado, 83 minutes ago : GREEN 37.31 — registry names match dispatcher (test fixture: fresh Response per fetch call)
+* **f6cee5f** - Jacqueline Delgado, 66 seconds ago : RED 37.42 — runSaltwaterAgent injects the saltwater common-fished species list into the OpenAI request context
+* **30854d3** - Jacqueline Delgado, 5 minutes ago : added 37.42 red test for agentics RAG to select from the common species list of 40
+* **d9c2475** - Jacqueline Delgado, 14 minutes ago : GREEN 37.41 — defensive access to completion.choices prevents crash
+* **f9e9eed** - Jacqueline Delgado, 15 minutes ago : RED 37.41 — does not crash when OpenAI response has no choices field
+* **3574a3a** - Jacqueline Delgado, 18 minutes ago : added 37.41 test in testing md for agentics rag
+* **c016fd5** - Jacqueline Delgado, 28 minutes ago : GREEN 37.40 — Forecast and Marine tools request imperial units from Open-Meteo
+* **b56a920** - Jacqueline Delgado, 29 minutes ago : RED 37.40 — Forecast and Marine tools request imperial units from Open-Meteo
+* **75f7324** - Jacqueline Delgado, 33 minutes ago : updated testing md and added red test 37.2 forecast and marine tools to change celcius to farenheit
+* **25c135b** - Jacqueline Delgado, 39 minutes ago : GREEN 37.39 — null tool result test uses runSaltwaterTool seam
+* **c498a5c** - Jacqueline Delgado, 41 minutes ago : GREEN 37.38 — max iterations test uses runSaltwaterTool seam
+* **49997e3** - Jacqueline Delgado, 43 minutes ago : GREEN 37.37 — multi-tool chain test uses runSaltwaterTool seam
+* **0e77a6d** - Jacqueline Delgado, 48 minutes ago : GREEN 37.36 — single tool_call test uses runSaltwaterTool seam
+* **0daa65a** - Jacqueline Delgado, 52 minutes ago : GREEN 37.35 — recovers when tool returns error uses runSaltwaterTool seam
+* **df17d89** - Jacqueline Delgado, 58 minutes ago : updated testing report md and saltwater agent ts file
+* **bfeb512** - Jacqueline Delgado, 58 minutes ago : RED 37.35–37.39 — orchestration tests fail after GREEN 37.34; documented in Section 37.5
+* **da45611** - Jacqueline Delgado, 74 minutes ago : RED 37.34 — runSaltwaterAgent dispatches tool_calls through shared runSaltwaterTool
+* **eadfdd8** - Jacqueline Delgado, 75 minutes ago : updated testing md and added more tests for agentic rag
+* **b63021f** - Jacqueline Delgado, 82 minutes ago : GREEN 37.33 — system prompt forbids inventing data when a tool fails
+* **848be49** - Jacqueline Delgado, 88 minutes ago : RED 37.33 — system prompt instructs the agent never to invent data when a tool fails
+* **9232145** - Jacqueline Delgado, 2 hours ago : GREEN 37.32 — tool schemas declare required parameters with descriptions
+* **e9791a1** - Jacqueline Delgado, 2 hours ago : RED 37.32 — every tool schema declares the parameters its function actually needs
+* **0f32f7c** - Jacqueline Delgado, 2 hours ago : GREEN 37.31 — registry names match dispatcher (test fixture: fresh Response per fetch call)
 * **03f21f1** - Jacqueline Delgado, 2 hours ago : RED 37.31 — every tool in SALTWATER_AGENT_TOOLS dispatches to a real tool function by its registered name
 * **ab44304** - Jacqueline Delgado, 2 hours ago : GREEN 37.30 — runSaltwaterAgent passes prior history into OpenAI messages array
 * **107fe2f** - Jacqueline Delgado, 2 hours ago : RED 37.30 — runSaltwaterAgent passes prior history into OpenAI messages array
 * **f02429d** - Jacqueline Delgado, 2 hours ago : GREEN 37.29 — route forwards body.history to runSaltwaterAgent
 * **102ccf1** - Jacqueline Delgado, 2 hours ago : RED 37.29 — POST /api/saltwater-chat forwards body.history to runSaltwaterAgent
-* **e75f438** - Jacqueline Delgado, 3 hours ago : Wire SaltwaterChat into the saltwater page above the sighting-rate search
+* **e75f438** - Jacqueline Delgado, 4 hours ago : Wire SaltwaterChat into the saltwater page above the sighting-rate search
 * **4d4d2d6** - Jacqueline Delgado, 4 hours ago : GREEN 37.28: SaltwaterChat shows an error message when the API call fails
 * **44d6250** - Jacqueline Delgado, 4 hours ago : RED 37.28: SaltwaterChat shows an error message when the API call fails
 * **77b2563** - Jacqueline Delgado, 4 hours ago : GREEN 37.27: SaltwaterChat sends prior conversation history with each follow-up request
@@ -48,7 +51,7 @@
 * **f2a2c84** - Jacqueline Delgado, 5 hours ago : GUARD 37.5: saltwater agent returns the honest decline and invokes no tools
 * **ccadef9** - Jacqueline Delgado, 5 hours ago : updated TESTING.md for a new agentics RAG for saltwater and freshwater pages
 * **a6bf0d6** - Jacqueline Delgado, 5 hours ago : GUARD 37.2: saltwater agent returns clarifying text and invokes no tools
-* **bd92121** - Jacqueline Delgado, 5 hours ago : GREEN 37.19: saltwater agent stops after max iterations to prevent infinite loops
+* **bd92121** - Jacqueline Delgado, 6 hours ago : GREEN 37.19: saltwater agent stops after max iterations to prevent infinite loops
 * **84d9a68** - Jacqueline Delgado, 6 hours ago : RED 37.19: saltwater agent stops after max iterations to prevent infinite loops
 * **038a8b8** - Jacqueline Delgado, 6 hours ago : GREEN 37.18: saltwater agent chains multiple tool_calls and returns the final synthesis
 * **b968154** - Jacqueline Delgado, 6 hours ago : RED 37.18: saltwater agent chains multiple tool_calls and returns the final synthesis
@@ -76,10 +79,10 @@
 * **670d51b** - Jacqueline Delgado, 6 hours ago : RED 37.7: saltwater agent system prompt distinguishes specific-species queries from open-ended
 * **2f075a3** - Jacqueline Delgado, 6 hours ago : GREEN 37.6: saltwater agent system prompt instructs species narrowing on open-ended queries
 * **be6909c** - Jacqueline Delgado, 6 hours ago : RED 37.6: saltwater agent system prompt instructs species narrowing on open-ended queries
-* **020864e** - Jacqueline Delgado, 6 hours ago : GREEN 37.4: saltwater agent system prompt instructs decline of out-of-scope requests
-* **134282b** - Jacqueline Delgado, 6 hours ago : RED 37.4: saltwater agent system prompt instructs decline of out-of-scope requests
-* **36bfc14** - Jacqueline Delgado, 6 hours ago : GREEN 37.3: saltwater agent system prompt declares the six APIs
-* **fa96a9f** - Jacqueline Delgado, 6 hours ago : RED 37.3: saltwater agent system prompt declares the six APIs
+* **020864e** - Jacqueline Delgado, 7 hours ago : GREEN 37.4: saltwater agent system prompt instructs decline of out-of-scope requests
+* **134282b** - Jacqueline Delgado, 7 hours ago : RED 37.4: saltwater agent system prompt instructs decline of out-of-scope requests
+* **36bfc14** - Jacqueline Delgado, 7 hours ago : GREEN 37.3: saltwater agent system prompt declares the six APIs
+* **fa96a9f** - Jacqueline Delgado, 7 hours ago : RED 37.3: saltwater agent system prompt declares the six APIs
 * **bcebfb6** - Jacqueline Delgado, 7 hours ago : GREEN 37.1: saltwater agent system prompt instructs date confirmation
 * **ece7f06** - Jacqueline Delgado, 7 hours ago : RED 37.1: saltwater agent system prompt instructs date confirmation
 * **8e9109a** - Jacqueline Delgado, 26 hours ago : updated test-report md file
@@ -178,9 +181,9 @@
 * **7d384b0** - Jacqueline Delgado, 3 days ago : feat: GET catch-reports route lists posts for water type
 * **9a175a5** - Jacqueline Delgado, 3 days ago : test: add RED for GET catch-reports route
 * **a99bdcd** - Jacqueline Delgado, 3 days ago : fix: constrain profile image preview to thumbnail so Save button stays visible
-* **4e1a055** - Jacqueline Delgado, 3 days ago : feat: NavBar pencil edit link to profile next to avatar
-* **3c3d994** - Jacqueline Delgado, 3 days ago : test: add RED for NavBar pencil edit link to profile
-* **5934f2c** - Jacqueline Delgado, 3 days ago : feat: SiteNav fetches profile and passes to NavBar for avatar display
+* **4e1a055** - Jacqueline Delgado, 4 days ago : feat: NavBar pencil edit link to profile next to avatar
+* **3c3d994** - Jacqueline Delgado, 4 days ago : test: add RED for NavBar pencil edit link to profile
+* **5934f2c** - Jacqueline Delgado, 4 days ago : feat: SiteNav fetches profile and passes to NavBar for avatar display
 * **134a379** - Jacqueline Delgado, 4 days ago : feat: GET profile route returns current user profile
 * **bfc3f2c** - Jacqueline Delgado, 4 days ago : test: add RED for GET profile route
 * **6833d15** - Jacqueline Delgado, 4 days ago : feat: ProfileForm shows uploaded image preview
@@ -291,9 +294,9 @@
 * **c0da6a9** - Jacqueline Delgado, 9 days ago : feat: instruct AI to call counts records not fish
 * **3a94d2a** - Jacqueline Delgado, 9 days ago : test: expect sighting-rate prompt to say records not fish count
 * **f8cf379** - Jacqueline Delgado, 9 days ago : updated the color for the dead email text chose not to make it an email link
-* **c394599** - Jacqueline Delgado, 9 days ago : updated readme from 42 files tested to 48 files tested
-* **1efcb68** - Jacqueline Delgado, 9 days ago : updated readme file from 94 test passing to 118 testpassing
-* **20c81df** - Jacqueline Delgado, 9 days ago : updated RESULTS.md file
+* **c394599** - Jacqueline Delgado, 10 days ago : updated readme from 42 files tested to 48 files tested
+* **1efcb68** - Jacqueline Delgado, 10 days ago : updated readme file from 94 test passing to 118 testpassing
+* **20c81df** - Jacqueline Delgado, 10 days ago : updated RESULTS.md file
 * **3f1c47a** - Jacqueline Delgado, 10 days ago : feat: add login link to reset-confirm success
 * **7f60c11** - Jacqueline Delgado, 10 days ago : test: expect reset-confirm page to link to login after reset
 * **c734acb** - Jacqueline Delgado, 10 days ago : feat: link reset-request success to confirm page
@@ -331,7 +334,7 @@
 * **755e703** - Jacqueline Delgado, 10 days ago : updated saltwater page, edited a typo
 * **2667b86** - Jacqueline Delgado, 10 days ago : updated images on the pages
 * **128d291** - Jacqueline Delgado, 10 days ago : updated the home page paragraph to state both GBIF and OBIS verified all apis using curl commands
-* **fde3c73** - Jacqueline Delgado, 10 days ago : updated Travel-time tool paragraph on explore page
+* **fde3c73** - Jacqueline Delgado, 11 days ago : updated Travel-time tool paragraph on explore page
 * **410c3a6** - Jacqueline Delgado, 11 days ago : feat: request today's tides in station local time from NOAA
 * **d594d3d** - Jacqueline Delgado, 11 days ago : test: expect fetchTidePredictions to request tides for today
 * **cba3b43** - Jacqueline Delgado, 11 days ago : feat: add Montauk, NYC, Boston, and Miami NOAA tide stations
@@ -390,7 +393,7 @@
 * **19f9d4c** - Jacqueline Delgado, 11 days ago : feat: expand saltwater species list to 40 with OBIS-backed game and food fish
 * **e33d427** - Jacqueline Delgado, 11 days ago : feat: expand saltwater species list to 40 with OBIS-backed game and food fish
 * **9383567** - Jacqueline Delgado, 11 days ago : feat: merge and dedupe GBIF + OBIS occurrence records in fetchOccurrenceRecords
-* **3969f0a** - Jacqueline Delgado, 11 days ago : test: add red test for deduplicating overlapping GBIF and OBIS records
+* **3969f0a** - Jacqueline Delgado, 12 days ago : test: add red test for deduplicating overlapping GBIF and OBIS records
 * **ae0547e** - Jacqueline Delgado, 12 days ago : test: add red test for merging GBIF and OBIS in fetchOccurrenceRecords
 * **fe38f9e** - Jacqueline Delgado, 12 days ago : feat: implement fetchObisOccurrences (OBIS occurrence fetch)
 * **604735b** - Jacqueline Delgado, 12 days ago : test: add red test for fetchObisOccurrences (OBIS occurrence fetch)
@@ -433,4 +436,4 @@
 
 | File | Test Case | Status | Duration |
 | :--- | :--- | :--- | :--- |
-| src/lib/saltwaterAgent.test.ts | runSaltwaterAgent | ✅ Pass | 4.988999999999976ms |
+| src/lib/saltwaterAgent.test.ts | runSaltwaterAgent | ✅ Pass | 5.686125000000004ms |

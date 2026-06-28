@@ -1195,9 +1195,18 @@ Why it fails first; expected behavior: the current implementation accesses compl
 
 ---
 
-RED 37.42 — runSaltwaterAgent includes the saltwater common-fished species list in the system context
-- What it checks: When runSaltwaterAgent is called, the OpenAI request body contains the common-fished species list either inside the system prompt content or as an additional system message. The list is a non-empty array of species names exported from somewhere in src/lib. The test asserts at least N (e.g. 10) recognizable common saltwater species names (e.g. "Striped Bass", "Bluefish", "Atlantic Cod", etc.) appear somewhere in the messages array sent to OpenAI.
-- Why it fails first; expected behavior: the current system prompt mentions "the saltwater common-fished species list provided in context" but no such list is actually included anywhere in the context. OpenAI has nothing concrete to narrow against, so it defaults to calling OBIS/GBIF with no scientificName filter, fetching hundreds of records and blowing the token limit.
+RED 37.42 — runSaltwaterAgent injects the saltwater common-fished species list into the OpenAI request context
+
+- What it checks: When runSaltwaterAgent is called, the OpenAI request body contains the saltwater common-fished species list (sourced from getSpeciesForWaterType('saltwater') in src/lib/species.ts) somewhere in the messages array — either inside the system prompt content or as an additional system message. The test asserts that at least three recognizable common saltwater species names from that list (e.g. "Striped Bass", "Bluefish", "Atlantic Cod") appear in the serialized messages sent to OpenAI.
+
+- Why it fails first; expected behavior: the current system prompt mentions "the saltwater common-fished species list provided in context" but no such list is actually included in the messages array sent to OpenAI. The agent has nothing concrete to narrow against, so it defaults to calling OBIS/GBIF with no scientificName filter, fetching hundreds of records and blowing the OpenAI token-per-minute rate limit.
+
+---
+
+RED 37.43 — runSaltwaterAgent processes all tool_calls in a single assistant message before requesting the next OpenAI completion
+- What it checks: When OpenAI returns an assistant message that contains multiple tool_calls (e.g. one OBIS call and one GBIF call in the same message), the agent dispatches runSaltwaterTool once per tool_call in that message, then sends the assistant message back to OpenAI exactly once with one tool message per tool_call_id. The next OpenAI request contains the assistant message followed by N tool messages — one for each tool_call_id in the assistant message — before any new user content. The test mocks OpenAI to return an assistant message with two tool_calls, mocks runSaltwaterTool to return distinct results for each tool name, mocks a final OpenAI completion that returns a text answer, and asserts: (a) runSaltwaterTool was called twice, once per tool name; (b) the messages array sent in the second OpenAI request includes both tool messages with matching tool_call_ids; (c) the final response is returned correctly.
+
+- Why it fails first; expected behavior: the current loop reads only message.tool_calls?.[0] and dispatches that single tool. The assistant message it pushes back to OpenAI still contains both tool_calls, but the loop only attaches one tool response. OpenAI rejects the request with An assistant message with 'tool_calls' must be followed by tool messages responding to each 'tool_call_id'.
 
 ---
 
