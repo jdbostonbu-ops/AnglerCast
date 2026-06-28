@@ -334,5 +334,47 @@ describe('fetchSaltwaterNoaa', () => {
       expect(result).not.toEqual({ error: 'unknown_tool' });
     }
   });
+
+  it('RED 37.32 — every tool schema declares the parameters its function actually needs', async () => {
+    const requiredParametersByToolName: Record<string, string[]> = {
+      forecast: ['latitude', 'longitude', 'targetDate'],
+      marine: ['latitude', 'longitude', 'targetDate'],
+      obis: ['latitude', 'longitude'],
+      gbif: ['latitude', 'longitude'],
+      usgs: ['siteId'],
+      noaa: ['stationId', 'targetDate'],
+    };
+
+    for (const tool of SALTWATER_AGENT_TOOLS) {
+      const toolName = tool.function.name;
+      const expectedRequired = requiredParametersByToolName[toolName];
+      expect(expectedRequired, `no expected schema for tool ${toolName}`).toBeDefined();
+
+      const properties = tool.function.parameters.properties as Record
+        string,
+        { type?: string; description?: string }
+      >;
+      const required = tool.function.parameters.required;
+
+      for (const parameterName of expectedRequired) {
+        expect(
+          properties[parameterName],
+          `tool ${toolName} missing property ${parameterName}`,
+        ).toBeDefined();
+        expect(
+          properties[parameterName]?.type,
+          `tool ${toolName} property ${parameterName} missing type`,
+        ).toBeDefined();
+        expect(
+          properties[parameterName]?.description ?? '',
+          `tool ${toolName} property ${parameterName} missing or empty description`,
+        ).not.toBe('');
+        expect(
+          required,
+          `tool ${toolName} required list missing ${parameterName}`,
+        ).toContain(parameterName);
+      }
+    }
+  });
 });
 
