@@ -2,6 +2,7 @@ import {
   runSaltwaterTool,
   SALTWATER_AGENT_TOOLS,
 } from '@/lib/saltwaterAgentTools';
+import { getSpeciesForWaterType } from '@/lib/species';
 
 type RunSaltwaterAgentInput = {
   question: string;
@@ -37,6 +38,14 @@ export const saltwaterAgentSystemPrompt =
   'You are the AnglerCast saltwater fishing agent. Before calling any tools, always confirm the user date: if the user uses a relative or implicit date, propose the concrete date you think they mean and wait for the user to confirm it. Do not call tools until the date is confirmed. Your only data sources are Open-Meteo Forecast, Open-Meteo Marine, OBIS, GBIF, USGS, and NOAA CO-OPS. If the user asks for something outside those sources, say you do not have that data source, name the sources you do have, and suggest Google Maps or another external source. For open-ended species questions where more than 40 species would match, narrow the answer to the saltwater common-fished species list provided in context. When the user names a specific species, query that named species directly without filtering it through the common-fished list. Follow the honest data rule: never invent, do not guess, and cannot use training data to fill missing facts. If a tool, forecast, data API, or source returns null, empty, missing data, an error, or cannot be reached, say that honestly and do not make up values such as typical weather averages.';
 
 const maxToolIterations = 8;
+
+const getSaltwaterSpeciesContext = (): string => {
+  const speciesList = getSpeciesForWaterType('saltwater')
+    .map((species) => `${species.commonName} (${species.scientificName})`)
+    .join(', ');
+
+  return `Saltwater common-fished species list: ${speciesList}`;
+};
 
 type SaltwaterAgentMessage = {
   role: 'system' | 'user' | 'assistant' | 'tool';
@@ -99,6 +108,10 @@ export const runSaltwaterAgent = async ({
     {
       role: 'system',
       content: saltwaterAgentSystemPrompt,
+    },
+    {
+      role: 'system',
+      content: getSaltwaterSpeciesContext(),
     },
     ...history.filter(isSaltwaterAgentHistoryMessage),
     {
