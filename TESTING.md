@@ -1189,6 +1189,12 @@ After all five GREENs commit, the diagnostic console.log lines added during the 
 
 ---
 
+RED 37.41 — runSaltwaterAgent handles OpenAI responses that have no choices field without crashing
+What it checks: When the OpenAI API returns a response body that omits the choices field (e.g. an error payload like { error: { message: 'rate limit exceeded' } }), runSaltwaterAgent does not throw Cannot read properties of undefined (reading '0'). Instead it returns a SaltwaterAgentResult with a recognizable shape — either an empty response or an error indicator — so the route can surface a graceful failure rather than a 500 stack trace.
+Why it fails first; expected behavior: the current implementation accesses completion.choices[0]?.message directly. The optional chaining protects against choices[0] being undefined, but not against choices itself being undefined. When OpenAI returns an error payload, the agent crashes.
+
+---
+
 ### Reference system prompt (GREEN-time starting point)
 
 This is reference wording for Codex to use as a starting point. The tests above assert the SHAPE of the prompt via regex, not these exact sentences. Codex may tune the wording at GREEN as long as the regex shape continues to match.
