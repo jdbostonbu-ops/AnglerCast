@@ -150,3 +150,57 @@ export const fetchSaltwaterMarine = async ({
 
   return marine;
 };
+
+type FetchSaltwaterObisInput = {
+  latitude: number;
+  longitude: number;
+  radiusDegrees?: number;
+  scientificName?: string;
+};
+
+type SaltwaterObisRecord = {
+  scientificName?: string;
+  decimalLatitude?: number;
+  decimalLongitude?: number;
+  eventDate?: string;
+  marine?: boolean;
+  vernacularName?: string;
+};
+
+type SaltwaterObisResponse = {
+  total?: number;
+  results?: SaltwaterObisRecord[];
+};
+
+const buildObisGeometry = (
+  latitude: number,
+  longitude: number,
+  radiusDegrees: number,
+): string => {
+  const north = latitude + radiusDegrees;
+  const south = latitude - radiusDegrees;
+  const east = longitude + radiusDegrees;
+  const west = longitude - radiusDegrees;
+
+  return `POLYGON((${west} ${south},${east} ${south},${east} ${north},${west} ${north},${west} ${south}))`;
+};
+
+export const fetchSaltwaterObis = async ({
+  latitude,
+  longitude,
+  radiusDegrees = 0.5,
+  scientificName,
+}: FetchSaltwaterObisInput): Promise<SaltwaterObisResponse> => {
+  const url = new URL('https://api.obis.org/v3/occurrence');
+  url.searchParams.set('geometry', buildObisGeometry(latitude, longitude, radiusDegrees));
+  url.searchParams.set('size', '300');
+
+  if (scientificName !== undefined) {
+    url.searchParams.set('scientificname', scientificName);
+  }
+
+  const response = await fetch(url.toString());
+  const obis = (await response.json()) as SaltwaterObisResponse;
+
+  return obis;
+};
