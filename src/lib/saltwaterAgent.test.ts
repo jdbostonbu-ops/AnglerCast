@@ -357,6 +357,11 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
   });
 
 it('stops after max iterations when OpenAI never returns a final answer', async () => {
+    const toolsModule = await import('@/lib/saltwaterAgentTools');
+    const runSaltwaterToolSpy = vi
+      .spyOn(toolsModule, 'runSaltwaterTool')
+      .mockResolvedValue({ predictions: [{ t: '2026-06-28 07:48', v: '3.924' }] });
+
     const toolCallJson = {
       choices: [{ message: {
         content: null,
@@ -364,28 +369,25 @@ it('stops after max iterations when OpenAI never returns a final answer', async 
           id: 'call_x',
           type: 'function',
           function: {
-            name: 'fetchSaltwaterNoaa',
+            name: 'noaa',
             arguments: JSON.stringify({ stationId: '8443970', targetDate: '2026-06-28' }),
           },
         }],
       }}],
     };
-    const toolResultJson = { predictions: [{ t: '2026-06-28 07:48', v: '3.924' }] };
-    const fallbackFinalJson = { choices: [{ message: { content: 'fallback final answer' } }] };
 
-    const fetchMock = vi.fn<typeof fetch>();
-    for (let i = 0; i < 15; i++) {
-      fetchMock
-        .mockResolvedValueOnce({ ok: true, json: async () => toolCallJson } as Response)
-        .mockResolvedValueOnce({ ok: true, json: async () => toolResultJson } as Response);
-    }
-    fetchMock.mockResolvedValue({ ok: true, json: async () => fallbackFinalJson } as Response);
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      json: async () => toolCallJson,
+    } as Response);
     vi.stubGlobal('fetch', fetchMock);
 
     const result = await runSaltwaterAgent({ question: 'When is high tide?' }) as { ok?: boolean; reason?: string; response?: string };
 
     expect(result.ok).toBe(false);
     expect(result.reason).toBe('max_iterations_exceeded');
+
+    runSaltwaterToolSpy.mockRestore();
   });
 
   it('returns the honest decline and invokes no tools when the question is fully out of scope', async () => {
