@@ -257,3 +257,84 @@ export const fetchSaltwaterGbif = async ({
 
   return gbif;
 };
+
+type FetchSaltwaterUsgsInput = {
+  siteId: string;
+  parameterCodes?: string[];
+};
+
+type UsgsTimeSeries = {
+  sourceInfo?: {
+    siteName?: string;
+    geoLocation?: {
+      geogLocation?: {
+        latitude?: number;
+        longitude?: number;
+      };
+    };
+  };
+  variable?: {
+    variableName?: string;
+    unit?: {
+      unitCode?: string;
+    };
+  };
+  values?: {
+    value?: {
+      value?: string;
+      dateTime?: string;
+    }[];
+  }[];
+};
+
+type UsgsResponse = {
+  value?: {
+    timeSeries?: UsgsTimeSeries[];
+  };
+};
+
+type SaltwaterUsgsResponse = {
+  siteName: string;
+  latitude: number | null;
+  longitude: number | null;
+  parameters: {
+    variableName: string;
+    unit: string;
+    latestValue: string;
+    latestTime: string;
+  }[];
+};
+
+export const fetchSaltwaterUsgs = async ({
+  siteId,
+  parameterCodes = [],
+}: FetchSaltwaterUsgsInput): Promise<SaltwaterUsgsResponse> => {
+  const url = new URL('https://waterservices.usgs.gov/nwis/iv/');
+  url.searchParams.set('format', 'json');
+  url.searchParams.set('sites', siteId);
+
+  if (parameterCodes.length > 0) {
+    url.searchParams.set('parameterCd', parameterCodes.join(','));
+  }
+
+  const response = await fetch(url.toString());
+  const usgs = (await response.json()) as UsgsResponse;
+  const timeSeries = usgs.value?.timeSeries ?? [];
+  const firstSeries = timeSeries[0];
+
+  return {
+    siteName: firstSeries?.sourceInfo?.siteName ?? '',
+    latitude: firstSeries?.sourceInfo?.geoLocation?.geogLocation?.latitude ?? null,
+    longitude: firstSeries?.sourceInfo?.geoLocation?.geogLocation?.longitude ?? null,
+    parameters: timeSeries.map((series) => {
+      const latest = series.values?.[0]?.value?.[0];
+
+      return {
+        variableName: series.variable?.variableName ?? '',
+        unit: series.variable?.unit?.unitCode ?? '',
+        latestValue: latest?.value ?? '',
+        latestTime: latest?.dateTime ?? '',
+      };
+    }),
+  };
+};
