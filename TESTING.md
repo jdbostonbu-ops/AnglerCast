@@ -1195,6 +1195,12 @@ Why it fails first; expected behavior: the current implementation accesses compl
 
 ---
 
+RED 37.42 — runSaltwaterAgent includes the saltwater common-fished species list in the system context
+- What it checks: When runSaltwaterAgent is called, the OpenAI request body contains the common-fished species list either inside the system prompt content or as an additional system message. The list is a non-empty array of species names exported from somewhere in src/lib. The test asserts at least N (e.g. 10) recognizable common saltwater species names (e.g. "Striped Bass", "Bluefish", "Atlantic Cod", etc.) appear somewhere in the messages array sent to OpenAI.
+- Why it fails first; expected behavior: the current system prompt mentions "the saltwater common-fished species list provided in context" but no such list is actually included anywhere in the context. OpenAI has nothing concrete to narrow against, so it defaults to calling OBIS/GBIF with no scientificName filter, fetching hundreds of records and blowing the token limit.
+
+---
+
 ### Reference system prompt (GREEN-time starting point)
 
 This is reference wording for Codex to use as a starting point. The tests above assert the SHAPE of the prompt via regex, not these exact sentences. Codex may tune the wording at GREEN as long as the regex shape continues to match.
