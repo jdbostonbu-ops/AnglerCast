@@ -1180,7 +1180,13 @@ REFACTOR 37.39 — Test "handles a tool returning null and continues the loop to
 
 ---
 
+RED 37.40 — Forecast and Marine tools request imperial units from Open-Meteo
+- What it checks: When fetchSaltwaterForecast is called, the URL it builds for api.open-meteo.com includes temperature_unit=fahrenheit and wind_speed_unit=mph query parameters, and precipitation_unit=inch. When fetchSaltwaterMarine is called, the URL it builds for marine-api.open-meteo.com includes length_unit=imperial (so wave heights come back in feet rather than meters). The existing tool tests are extended to assert these query parameters appear in the fetched URL.
+
+- Why it fails first; expected behavior: the current tool implementations call Open-Meteo with no unit parameters, so the API returns metric defaults (Celsius, km/h, mm, meters). Reports to users mix units and don't match the US-centric audience. This change keeps the honest-data thesis intact — the API returns imperial values, no LLM-side conversion required.
+
 After all five GREENs commit, the diagnostic console.log lines added during the GREEN 37.34 debugging pass will be cleaned up in a final commit. Those were not test-driven and exist only to confirm the bug fix; once the orchestration tests run cleanly against the new seam, they can come out.
+
 ---
 
 ### Reference system prompt (GREEN-time starting point)

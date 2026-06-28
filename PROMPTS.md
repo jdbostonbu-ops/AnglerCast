@@ -767,3 +767,24 @@ Two changes are required:
 Do not modify the agent orchestration loop, the tool registry, the tools themselves, or any test files.
 
 Tell Jacqueline what command to run.
+
+## 104. RED 37.34 - Saltwater Agent Uses Shared Tool Dispatcher
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.34 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Update src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts the agent calls the shared `runSaltwaterTool` exported from '@/lib/saltwaterAgentTools' with the tool name (e.g. 'forecast') and the parsed arguments object. The agent currently has a private `runSupportedTool` function that only handles three long names (fetchSaltwaterForecast, fetchSaltwaterMarine, fetchSaltwaterNoaa) and returns { error: 'unknown_tool' } for everything else.
+
+Required changes:
+1. Import `runSaltwaterTool` from '@/lib/saltwaterAgentTools'.
+2. Replace the call site `runSupportedTool(toolCall.function.name, toolCall.function.arguments)` with a call to `runSaltwaterTool(toolCall.function.name, parsedArguments)`, where `parsedArguments` is the parsed JSON object from `toolCall.function.arguments`.
+3. Delete the private `runSupportedTool` function and its helper parsers (`parseLocationDateToolArguments`, `parseStationDateToolArguments`) since `runSaltwaterTool` already handles argument coercion per RED 37.31.
+
+Do not modify any other behavior, the system prompt, or test files. The diagnostic console.log lines currently in the file can stay; we will remove them in a separate cleanup pass.
+
+Tell Jacqueline what command to run.
+
+## 105. Add Remaining Prompts
+
+Add remaining prompts in PROMPTS.md file.
