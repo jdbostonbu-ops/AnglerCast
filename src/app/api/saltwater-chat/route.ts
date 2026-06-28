@@ -2,6 +2,7 @@ import { runSaltwaterAgent } from '@/lib/saltwaterAgent';
 
 type SaltwaterChatRequestBody = {
   question?: unknown;
+  history?: unknown;
 };
 
 export async function POST(request: Request): Promise<Response> {
@@ -12,8 +13,10 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ error: 'Question is required.' }, { status: 400 });
   }
 
+  const history = Array.isArray(body.history) ? body.history : undefined;
+
   try {
-    const result = await runSaltwaterAgent({ question });
+    const result = await runSaltwaterAgent({ question, history });
 
     return Response.json(result, { status: 200 });
   } catch {
