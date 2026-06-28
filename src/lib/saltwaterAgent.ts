@@ -7,6 +7,7 @@ import {
 
 type RunSaltwaterAgentInput = {
   question: string;
+  history?: unknown[];
 };
 
 type OpenAIChatCompletionResponse = {
@@ -51,6 +52,26 @@ type SaltwaterAgentMessage = {
       arguments: string;
     };
   }[];
+};
+
+type SaltwaterAgentHistoryMessage = {
+  role: 'user' | 'assistant';
+  content: string;
+};
+
+const isSaltwaterAgentHistoryMessage = (
+  message: unknown,
+): message is SaltwaterAgentHistoryMessage => {
+  if (typeof message !== 'object' || message === null) {
+    return false;
+  }
+
+  const candidate = message as { role?: unknown; content?: unknown };
+
+  return (
+    (candidate.role === 'user' || candidate.role === 'assistant') &&
+    typeof candidate.content === 'string'
+  );
 };
 
 const requestOpenAI = async (
@@ -123,12 +144,14 @@ const runSupportedTool = async (
 
 export const runSaltwaterAgent = async ({
   question,
+  history = [],
 }: RunSaltwaterAgentInput): Promise<SaltwaterAgentResult> => {
   const messages: SaltwaterAgentMessage[] = [
     {
       role: 'system',
       content: saltwaterAgentSystemPrompt,
     },
+    ...history.filter(isSaltwaterAgentHistoryMessage),
     {
       role: 'user',
       content: question,
