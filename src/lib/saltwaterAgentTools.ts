@@ -1,3 +1,8 @@
+type SaltwaterAgentToolProperty = {
+  type: 'number' | 'string';
+  description: string;
+};
+
 type SaltwaterAgentTool = {
   type: 'function';
   function: {
@@ -5,16 +10,67 @@ type SaltwaterAgentTool = {
     description: string;
     parameters: {
       type: 'object';
-      properties: Record<string, never>;
+      properties: Record<string, SaltwaterAgentToolProperty>;
       required: string[];
     };
   };
 };
 
-const emptyParameters = {
+const latitudeProperty = {
+  type: 'number',
+  description: 'Latitude for the fishing location.',
+} satisfies SaltwaterAgentToolProperty;
+
+const longitudeProperty = {
+  type: 'number',
+  description: 'Longitude for the fishing location.',
+} satisfies SaltwaterAgentToolProperty;
+
+const targetDateProperty = {
+  type: 'string',
+  description: 'Target date for the requested conditions in YYYY-MM-DD format.',
+} satisfies SaltwaterAgentToolProperty;
+
+const locationDateParameters = {
   type: 'object',
-  properties: {},
-  required: [],
+  properties: {
+    latitude: latitudeProperty,
+    longitude: longitudeProperty,
+    targetDate: targetDateProperty,
+  },
+  required: ['latitude', 'longitude', 'targetDate'],
+} satisfies SaltwaterAgentTool['function']['parameters'];
+
+const locationParameters = {
+  type: 'object',
+  properties: {
+    latitude: latitudeProperty,
+    longitude: longitudeProperty,
+  },
+  required: ['latitude', 'longitude'],
+} satisfies SaltwaterAgentTool['function']['parameters'];
+
+const usgsParameters = {
+  type: 'object',
+  properties: {
+    siteId: {
+      type: 'string',
+      description: 'USGS site identifier for the water station.',
+    },
+  },
+  required: ['siteId'],
+} satisfies SaltwaterAgentTool['function']['parameters'];
+
+const noaaParameters = {
+  type: 'object',
+  properties: {
+    stationId: {
+      type: 'string',
+      description: 'NOAA CO-OPS station identifier for tide predictions.',
+    },
+    targetDate: targetDateProperty,
+  },
+  required: ['stationId', 'targetDate'],
 } satisfies SaltwaterAgentTool['function']['parameters'];
 
 export const SALTWATER_AGENT_TOOLS: SaltwaterAgentTool[] = [
@@ -23,7 +79,7 @@ export const SALTWATER_AGENT_TOOLS: SaltwaterAgentTool[] = [
     function: {
       name: 'forecast',
       description: 'Fetch Open-Meteo Forecast conditions for a saltwater fishing question.',
-      parameters: emptyParameters,
+      parameters: locationDateParameters,
     },
   },
   {
@@ -31,7 +87,7 @@ export const SALTWATER_AGENT_TOOLS: SaltwaterAgentTool[] = [
     function: {
       name: 'marine',
       description: 'Fetch Open-Meteo Marine conditions for a saltwater fishing question.',
-      parameters: emptyParameters,
+      parameters: locationDateParameters,
     },
   },
   {
@@ -39,7 +95,7 @@ export const SALTWATER_AGENT_TOOLS: SaltwaterAgentTool[] = [
     function: {
       name: 'obis',
       description: 'Fetch OBIS saltwater occurrence records.',
-      parameters: emptyParameters,
+      parameters: locationParameters,
     },
   },
   {
@@ -47,7 +103,7 @@ export const SALTWATER_AGENT_TOOLS: SaltwaterAgentTool[] = [
     function: {
       name: 'gbif',
       description: 'Fetch GBIF saltwater occurrence records.',
-      parameters: emptyParameters,
+      parameters: locationParameters,
     },
   },
   {
@@ -55,7 +111,7 @@ export const SALTWATER_AGENT_TOOLS: SaltwaterAgentTool[] = [
     function: {
       name: 'usgs',
       description: 'Fetch USGS water data for saltwater context.',
-      parameters: emptyParameters,
+      parameters: usgsParameters,
     },
   },
   {
@@ -63,7 +119,7 @@ export const SALTWATER_AGENT_TOOLS: SaltwaterAgentTool[] = [
     function: {
       name: 'noaa',
       description: 'Fetch NOAA CO-OPS tide predictions.',
-      parameters: emptyParameters,
+      parameters: noaaParameters,
     },
   },
 ];
