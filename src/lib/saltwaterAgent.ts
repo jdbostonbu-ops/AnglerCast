@@ -108,7 +108,7 @@ export const runSaltwaterAgent = async ({
   ];
 
   let completion = await requestOpenAI(messages);
-  let message = completion.choices[0]?.message;
+  let message = completion.choices?.[0]?.message;
   let toolCall = message?.tool_calls?.[0];
   let toolIterations = 0;
 
@@ -138,7 +138,7 @@ export const runSaltwaterAgent = async ({
     );
 
     completion = await requestOpenAI(messages);
-    message = completion.choices[0]?.message;
+    message = completion.choices?.[0]?.message;
     toolCall = message?.tool_calls?.[0];
   }
 
