@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { SALTWATER_AGENT_TOOLS, runSaltwaterTool, fetchSaltwaterForecast, fetchSaltwaterMarine } from '@/lib/saltwaterAgentTools';
+import { SALTWATER_AGENT_TOOLS, runSaltwaterTool, fetchSaltwaterForecast, fetchSaltwaterMarine, fetchSaltwaterObis } from '@/lib/saltwaterAgentTools';
 
 type ToolEntry = {
   type: string;
@@ -116,6 +116,49 @@ describe('fetchSaltwaterMarine', () => {
     expect(url.hostname).toBe('marine-api.open-meteo.com');
     expect(url.searchParams.get('latitude')).toBe('41.4901');
     expect(url.searchParams.get('longitude')).toBe('-71.3128');
+
+    expect(result).not.toBeNull();
+  });
+});
+
+describe('fetchSaltwaterObis', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('queries OBIS with a lat/lng geometry, species, and size, and parses the response', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        total: 149,
+        results: [
+          {
+            scientificName: 'Morone saxatilis',
+            decimalLatitude: 41.73875,
+            decimalLongitude: -70.6194,
+            eventDate: '2022-09-16',
+            marine: true,
+            vernacularName: 'striped bass',
+          },
+        ],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await fetchSaltwaterObis({
+      latitude: 41.4901,
+      longitude: -71.3128,
+      scientificName: 'Morone saxatilis',
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const urlCalled = fetchMock.mock.calls[0]?.[0];
+    expect(typeof urlCalled).toBe('string');
+    const url = new URL(urlCalled as string);
+    expect(url.hostname).toBe('api.obis.org');
+    expect(url.searchParams.get('scientificname')).toBe('Morone saxatilis');
+    expect(url.searchParams.get('geometry')).toBeDefined();
+    expect(url.searchParams.get('size')).toBeDefined();
 
     expect(result).not.toBeNull();
   });
