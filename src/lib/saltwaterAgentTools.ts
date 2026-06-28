@@ -338,3 +338,45 @@ export const fetchSaltwaterUsgs = async ({
     }),
   };
 };
+
+type FetchSaltwaterNoaaInput = {
+  stationId: string;
+  targetDate: string;
+};
+
+type NoaaPrediction = {
+  t: string;
+  v: string;
+};
+
+type NoaaResponse = {
+  predictions?: NoaaPrediction[];
+};
+
+type SaltwaterNoaaResponse = {
+  predictions: NoaaPrediction[];
+};
+
+const formatNoaaDate = (date: string): string => date.replaceAll('-', '');
+
+export const fetchSaltwaterNoaa = async ({
+  stationId,
+  targetDate,
+}: FetchSaltwaterNoaaInput): Promise<SaltwaterNoaaResponse> => {
+  const url = new URL('https://api.tidesandcurrents.noaa.gov/api/prod/datagetter');
+  url.searchParams.set('station', stationId);
+  url.searchParams.set('product', 'predictions');
+  url.searchParams.set('format', 'json');
+  url.searchParams.set('begin_date', formatNoaaDate(targetDate));
+  url.searchParams.set('end_date', formatNoaaDate(targetDate));
+  url.searchParams.set('datum', 'MLLW');
+  url.searchParams.set('time_zone', 'lst_ldt');
+  url.searchParams.set('units', 'english');
+
+  const response = await fetch(url.toString());
+  const noaa = (await response.json()) as NoaaResponse;
+
+  return {
+    predictions: noaa.predictions ?? [],
+  };
+};
