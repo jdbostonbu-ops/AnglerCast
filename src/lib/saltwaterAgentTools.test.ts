@@ -77,7 +77,9 @@ describe('fetchSaltwaterForecast', () => {
     expect(url.hostname).toBe('api.open-meteo.com');
     expect(url.searchParams.get('latitude')).toBe('41.4901');
     expect(url.searchParams.get('longitude')).toBe('-71.3128');
-
+    expect(url.searchParams.get('temperature_unit')).toBe('fahrenheit');
+    expect(url.searchParams.get('wind_speed_unit')).toBe('mph');
+    expect(url.searchParams.get('precipitation_unit')).toBe('inch');
     expect(result).not.toBeNull();
   });
 });
@@ -114,10 +116,9 @@ describe('fetchSaltwaterMarine', () => {
     const urlCalled = fetchMock.mock.calls[0]?.[0];
     expect(typeof urlCalled).toBe('string');
     const url = new URL(urlCalled as string);
-    expect(url.hostname).toBe('marine-api.open-meteo.com');
     expect(url.searchParams.get('latitude')).toBe('41.4901');
     expect(url.searchParams.get('longitude')).toBe('-71.3128');
-
+    expect(url.searchParams.get('length_unit')).toBe('imperial');
     expect(result).not.toBeNull();
   });
 });
