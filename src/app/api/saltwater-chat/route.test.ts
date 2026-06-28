@@ -57,4 +57,28 @@ describe('POST /api/saltwater-chat', () => {
 
     expect(response.status).toBe(500);
   });
+
+    it('RED 37.29 — forwards body.history to runSaltwaterAgent so the agent can use prior turns', async () => {
+  mockRunSaltwaterAgent.mockResolvedValue({ response: 'mocked answer' });
+
+  const priorHistory = [
+    { role: 'user' as const, content: 'where can I fish in Boston?' },
+    { role: 'assistant' as const, content: 'What date are you fishing?' },
+  ];
+
+  const request = new Request('http://test/api/saltwater-chat', {
+    method: 'POST',
+    body: JSON.stringify({
+      question: 'July 4 2026',
+      history: priorHistory,
+    }),
+  });
+
+  await POST(request);
+
+expect(mockRunSaltwaterAgent).toHaveBeenCalledWith({
+    question: 'July 4 2026',
+    history: priorHistory,
+  });
+});
 });
