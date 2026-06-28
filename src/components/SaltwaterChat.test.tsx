@@ -120,6 +120,23 @@ describe('SaltwaterChat', () => {
       expect(historyText).toContain('Where should I fish this Saturday?');
       expect(historyText).toContain('Did you mean Saturday, June 28?');
     });
+
+    it('displays an error message and clears the spinner when the API call fails', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Network down')));
+
+      const user = userEvent.setup();
+      render(<SaltwaterChat />);
+
+      const input = screen.getByLabelText(/question/i);
+      const submitButton = screen.getByRole('button');
+
+      await user.type(input, 'Where should I fish?');
+      await user.click(submitButton);
+
+      const errorMessage = await screen.findByText(/something went wrong/i);
+      expect(errorMessage).toBeInTheDocument();
+      expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    });
   });
 });
 
