@@ -926,6 +926,229 @@ can be deleted along with the now-unused loadBlogPosts helper.
 
 ---
 
+## 37 — Agentic RAG: Saltwater Agent — Expected Behavior
+
+The Saltwater Agentic RAG is a new feature on the saltwater page, separate from the FAQ RAG on the explore page (Section 34). Where the explore-chat RAG retrieves from markdown documents using vector similarity, the saltwater agentic RAG calls live external APIs in response to a user's saltwater fishing question and synthesizes a plain-English plan. A parallel freshwater agent will be built in Section 38, mirroring this structure.
+
+The agent has access to exactly six external APIs:
+
+1. Open-Meteo Forecast
+2. Open-Meteo Marine
+3. OBIS
+4. GBIF
+5. USGS
+6. NOAA CO-OPS
+
+These behaviors are non-negotiable and align with the AnglerCast honest-data principle: "Real data computes the facts. The AI explains and assembles — it does not invent."
+
+A. The agent ALWAYS confirms the user's intended date BEFORE calling any tools. The agent never silently infers "this Saturday" or any relative date. The agent's first response is a clarifying question that proposes the date it thinks the user means and asks the user to confirm, so the user can see exactly which date the agent will pull data for.
+
+B. The agent NEVER invents data outside its six APIs. When the user asks for something outside the agent's six APIs (restaurants, gear shops, lodging, news, etc.), the agent says it does not have that data source, lists the six APIs it does have, and suggests an external source (e.g. Google Maps) the user can check instead.
+
+C. When the user asks an open-ended species question (e.g. "what fish are biting in Boston in July?") and the underlying API returns more than 40 species, the agent narrows the answer to the saltwater common-fished species list (provided to the agent in context) — so the answer surfaces species fishermen actually target, not noise. When the user asks about a specific species by name, the agent uses that species directly with no filtering.
+
+D. The agent calls multiple tools in sequence to answer comprehensive questions (e.g. trip planning) and a single tool for simple targeted questions (e.g. "when is high tide today?"). The agent never asks the user mid-loop for more info — once the date is confirmed and the question is in scope, the agent runs its tools and assembles the final answer.
+
+### Files this section produces
+
+- Route: `src/app/api/saltwater-chat/route.ts` (POST handler)
+- Agent lib: `src/lib/saltwaterAgent.ts` exporting `runSaltwaterAgent`
+- Agent lib test: `src/lib/saltwaterAgent.test.ts`
+- Tool registry + tools: `src/lib/saltwaterAgentTools.ts` exporting the tool registry and the six tool functions
+- Tool registry + tools test: `src/lib/saltwaterAgentTools.test.ts`
+- Component: `src/components/SaltwaterChat.tsx`
+- Component test: `src/components/SaltwaterChat.test.tsx`
+- Wired into: `src/app/saltwater/page.tsx`
+
+---
+
+### Behavior A — Date confirmation
+
+RED 37.1 — System prompt instructs the agent to confirm the user's date before calling any tools
+- What it checks: the system prompt sent to OpenAI by `runSaltwaterAgent` explicitly tells the model that it must propose a date back to the user and wait for confirmation before calling any of its tools. The test inspects the request body's system message and asserts it matches phrasing requiring date confirmation (e.g. matches /confirm.*date|propose.*date|wait.*confirm/i). OpenAI is mocked.
+- Why it fails first; expected behavior: `runSaltwaterAgent` does not exist yet, so there is no system prompt to inspect.
+
+RED 37.2 — `runSaltwaterAgent` returns a clarifying question and invokes no tools when the user's question contains an implicit date reference
+- What it checks: when the user submits a question containing a relative date (e.g. "this Saturday"), `runSaltwaterAgent` returns a result whose response field contains a clarifying question with a proposed concrete date. No tool dispatches occur. The test mocks OpenAI to return a clarification message (no tool_calls) and asserts (a) the function returns the clarifying text and (b) no tool functions were invoked.
+- Why it fails first; expected behavior: `runSaltwaterAgent` does not exist yet, so no clarification-then-tool flow is in place.
+
+---
+
+### Behavior B — Honest 6-API scope
+
+RED 37.3 — System prompt declares exactly the six APIs the agent has access to
+- What it checks: the system prompt lists exactly the six API names — Open-Meteo Forecast, Open-Meteo Marine, OBIS, GBIF, USGS, and NOAA CO-OPS — and instructs the model that these are the only data sources it may use. The test asserts each of the six API names appears in the system message. OpenAI is mocked.
+- Why it fails first; expected behavior: `runSaltwaterAgent` does not exist yet.
+
+RED 37.4 — System prompt instructs the agent to decline out-of-scope requests and suggest an external source
+- What it checks: the system prompt tells the model that when the user asks for something outside the six APIs (restaurants, gear shops, lodging, news, etc.), the model must (a) say it does not have a data source for that, (b) name what it does have, and (c) suggest an external source like Google Maps. The test asserts phrasing matches /do not have.*data source|don't have.*data source/i and /Google Maps|external source/i. OpenAI is mocked.
+- Why it fails first; expected behavior: `runSaltwaterAgent` does not exist yet.
+
+RED 37.5 — `runSaltwaterAgent` returns the honest decline and invokes no tools when the user's question is fully out of scope
+- What it checks: when the user submits a fully out-of-scope question (e.g. "What's a good vegetarian restaurant near Boston Harbor?"), `runSaltwaterAgent` returns the honest decline text and no tool dispatches occur. OpenAI is mocked to return the decline (no tool_calls); the test asserts the function returns the decline text and no tool functions were invoked.
+- Why it fails first; expected behavior: `runSaltwaterAgent` does not exist yet.
+
+---
+
+### Behavior C — Common-fished species filter on open-ended queries
+
+RED 37.6 — System prompt instructs the agent to narrow to the saltwater common-fished species list when the user's species question is open-ended
+- What it checks: the system prompt tells the model that when the user asks about fish without naming a specific species AND a species query would return more than 40 results, the agent must narrow to the saltwater common-fished species list (provided in context). The test asserts the system prompt mentions the 40-species threshold and the saltwater common-fished list. OpenAI is mocked.
+- Why it fails first; expected behavior: `runSaltwaterAgent` does not exist yet, and the system prompt has no species-narrowing instruction.
+
+RED 37.7 — System prompt does NOT instruct narrowing when the user names a specific species
+- What it checks: the system prompt distinguishes between open-ended species questions and specific-species questions, and only triggers the narrowing rule for open-ended ones. The test asserts the system prompt contains language clarifying that specific named species are queried directly (e.g. matches /specific species|named species|named by the user/i).
+- Why it fails first; expected behavior: `runSaltwaterAgent` does not exist yet.
+
+---
+
+### Tool registry — six tools
+
+RED 37.8 — `saltwaterAgentTools.ts` exports a tool registry with exactly six tools, each with name, description, and JSON Schema parameters
+- What it checks: `SALTWATER_AGENT_TOOLS` (or equivalent named export) is an array of exactly six entries, each shaped as `{ type: "function", function: { name, description, parameters } }` per OpenAI's tool-calling contract. Each tool's name is unique and matches one of: forecast, marine, OBIS, GBIF, USGS, NOAA. Each `parameters` is a valid JSON Schema object with `type: "object"`, `properties`, and `required` fields. Each tool has a non-empty description.
+- Why it fails first; expected behavior: `saltwaterAgentTools.ts` does not exist yet, so the import fails.
+
+RED 37.9 — Tool registry exposes a dispatcher that runs the right tool function for a given tool_call name
+- What it checks: `saltwaterAgentTools.ts` exports a `runSaltwaterTool(name, args)` function. Given a tool_call name and a parsed args object, `runSaltwaterTool` dispatches to the matching tool function and returns its result. Unknown tool names return a clear error shape (e.g. `{ error: "unknown_tool" }`) rather than throwing. Individual tool functions are mocked in this test.
+- Why it fails first; expected behavior: the `runSaltwaterTool` dispatcher does not exist yet.
+
+---
+
+### Individual tool functions — six APIs
+
+RED 37.10 — `fetchSaltwaterForecast` tool builds the Open-Meteo Forecast URL with the agent-provided lat/lng and target date, and parses the response into a stable shape
+- What it checks: the tool function takes structured input from the agent (latitude, longitude, target date or date range) and calls fetch with a URL whose search params include full-precision lat/lng and the appropriate hourly variables for saltwater conditions context (wind, temperature, precipitation). Given a captured real response as a mocked fetch result, the function returns a parsed shape suitable for the agent to read. The test asserts the URL parameters and the parsed shape; fetch is mocked.
+- Why it fails first; expected behavior: the tool function does not exist yet.
+
+RED 37.11 — `fetchSaltwaterMarine` tool builds the Open-Meteo Marine URL with the agent-provided lat/lng and target date, and parses the response
+- What it checks: the tool function takes lat/lng and target date and calls fetch with a URL whose search params include full-precision lat/lng and marine variables (wave height, wave direction, wave period, sea surface temperature, etc.). Given a captured real Open-Meteo Marine response as a mocked fetch result, returns a parsed shape. The test asserts URL parameters and parsed shape; fetch is mocked.
+- Why it fails first; expected behavior: the tool function does not exist yet.
+
+RED 37.12 — `fetchSaltwaterObis` tool queries OBIS by lat/lng bounding box and parses the response
+- What it checks: the tool function takes lat/lng, radius, and optionally a species name and calls fetch with an OBIS occurrence URL whose search params include a geometry built from the lat/lng and radius, the species (when provided), and a size parameter for a confident sample (matching Section 23.1's contract). Given a captured real OBIS response, returns parsed records shaped `{ scientificName, decimalLatitude, decimalLongitude, eventDate, marine, vernacularName }`. The test asserts URL params and parsed shape; fetch is mocked.
+- Why it fails first; expected behavior: the tool function does not exist yet.
+
+RED 37.13 — `fetchSaltwaterGbif` tool queries GBIF by lat/lng bounding box and parses the response
+- What it checks: the tool function takes lat/lng, radius, and optionally a species name and calls fetch with a GBIF occurrence search URL whose search params include decimal lat/lng range bounds, the species (when provided), and a limit parameter for a confident sample (matching Section 23.2's contract). Given a captured real GBIF response, returns parsed records shaped `{ scientificName, decimalLatitude, decimalLongitude, eventDate, year, month, stateProvince }`. The test asserts URL params and parsed shape; fetch is mocked.
+- Why it fails first; expected behavior: the tool function does not exist yet.
+
+RED 37.14 — `fetchSaltwaterUsgs` tool queries USGS NWIS for a site near the user's location and parses the response
+- What it checks: the tool function takes a USGS site ID and parameter codes and calls fetch with the USGS NWIS instantaneous-values URL. Given a captured real USGS response (with deeply nested `value.timeSeries[]`), returns a flattened shape `{ siteName, latitude, longitude, parameters: [{ variableName, unit, latestValue, latestTime }] }`. The test asserts URL params and parsed shape; fetch is mocked.
+- Why it fails first; expected behavior: the tool function does not exist yet.
+
+RED 37.15 — `fetchSaltwaterNoaa` tool queries NOAA CO-OPS for tide predictions and parses the response
+- What it checks: the tool function takes a NOAA station ID and target date and calls fetch with the NOAA CO-OPS predictions URL. Given a captured real NOAA response (`{ predictions: [{ t, v }] }`), returns a parsed shape that surfaces the high and low tide times for the date (walking the 6-minute series for local maxima/minima OR using a high_low product variant). The test asserts URL params and parsed shape; fetch is mocked.
+- Why it fails first; expected behavior: the tool function does not exist yet.
+
+---
+
+### Tool dispatch and orchestration loop
+
+RED 37.16 — `runSaltwaterAgent` sends the tool registry and system prompt to OpenAI along with the user's question
+- What it checks: when `runSaltwaterAgent` is called with a user question, it invokes the OpenAI chat completion with (a) the user's question in the messages array, (b) the `SALTWATER_AGENT_TOOLS` registry in the `tools` parameter, and (c) the system prompt described in Behaviors A–D. OpenAI is mocked; the test asserts the request body contains all three pieces.
+- Why it fails first; expected behavior: `runSaltwaterAgent` does not exist yet.
+
+RED 37.17 — When OpenAI returns a single tool_call, `runSaltwaterAgent` runs that tool and feeds the result back to OpenAI
+- What it checks: OpenAI is mocked to return a chat completion with one tool_call entry (e.g. `{ name: "fetchSaltwaterNoaa", arguments: '{"stationId":"8443970","date":"2026-06-28"}' }`) on the first call and a final answer on the second call. The test asserts (a) the matching tool function was invoked with the parsed arguments, (b) the tool's return value was sent back to OpenAI as a tool message in the second call's messages array, and (c) the final answer from the second call is what `runSaltwaterAgent` returns.
+- Why it fails first; expected behavior: the tool-dispatch + result-feedback loop does not exist yet.
+
+RED 37.18 — When OpenAI returns multiple tool_calls in sequence across turns, `runSaltwaterAgent` chains them and returns the final synthesis
+- What it checks: OpenAI is mocked to return three responses in sequence — a tool_call for `fetchSaltwaterForecast`, then a tool_call for `fetchSaltwaterMarine`, then a tool_call for `fetchSaltwaterNoaa`, then a final answer. The test asserts each tool was invoked in order, each result was appended to the messages array between OpenAI calls, and the final answer is returned. This is the multi-turn loop described in Behavior D for comprehensive questions.
+- Why it fails first; expected behavior: multi-turn iteration does not exist yet.
+
+RED 37.19 — `runSaltwaterAgent` stops after a max iteration cap to prevent infinite loops
+- What it checks: OpenAI is mocked to ALWAYS return a tool_call (never a final answer). `runSaltwaterAgent` stops looping after the configured cap (e.g. 8 iterations) and returns a clear safety result (e.g. `{ ok: false, reason: "max_iterations_exceeded" }`) instead of looping forever. The test asserts OpenAI was called exactly cap times and `runSaltwaterAgent` resolved (did not hang).
+- Why it fails first; expected behavior: no iteration cap exists yet.
+
+RED 37.20 — `runSaltwaterAgent` recovers when a tool function returns null or an error shape
+- What it checks: OpenAI returns a tool_call; the mocked tool returns null (e.g. inland coordinates for marine, or no recent data from USGS). `runSaltwaterAgent` passes that null back to OpenAI as the tool result (so the model can adjust) rather than throwing. The test asserts the agent does not throw and the loop continues normally.
+- Why it fails first; expected behavior: no graceful tool-null handling exists yet.
+
+---
+
+### Route — POST /api/saltwater-chat
+
+RED 37.21 — POST /api/saltwater-chat — surfaces `runSaltwaterAgent`'s response back to the client
+- What it checks: POSTing a JSON body `{ question: "...", history?: [...] }` to `src/app/api/saltwater-chat/route.ts` calls `runSaltwaterAgent` once with the question (and the optional prior conversation history sent by the component), and the route returns a 200 JSON response whose body contains the agent's response text. `runSaltwaterAgent` is mocked to return a known response; the test asserts the route surfaces it.
+- Why it fails first; expected behavior: the route file does not exist yet.
+
+RED 37.22 — POST /api/saltwater-chat — returns 400 for missing or empty question
+- What it checks: POSTing with `question` missing, empty string, or whitespace-only returns a 400 status with a JSON error message. `runSaltwaterAgent` is NOT called.
+- Why it fails first; expected behavior: the route does not exist yet.
+
+RED 37.23 — POST /api/saltwater-chat — returns 500 when `runSaltwaterAgent` throws
+- What it checks: when `runSaltwaterAgent` is mocked to throw an unexpected error, the route returns a 500 with a JSON error message instead of letting the error propagate.
+- Why it fails first; expected behavior: the route does not exist yet.
+
+---
+
+### Component — SaltwaterChat
+
+RED 37.24 — `SaltwaterChat` renders a labeled question input and a submit button
+- What it checks: `SaltwaterChat` renders a labeled text input (with `id` and `htmlFor` pair) and a submit button. Both present on initial render with no response yet.
+- Why it fails first; expected behavior: the component does not exist yet.
+
+RED 37.25 — `SaltwaterChat` displays the agent's response after a successful submission
+- What it checks: when the user submits a question and the mocked fetch to `/api/saltwater-chat` resolves with `{ response: "Did you mean Saturday, June 28?" }`, the component displays the response text. Fetch is mocked.
+- Why it fails first; expected behavior: the component does not exist yet, or doesn't yet wire the API call to a rendered response.
+
+RED 37.26 — `SaltwaterChat` shows a red spinner while the request is in flight
+- What it checks: after the user clicks submit and while the fetch to `/api/saltwater-chat` is pending, a loading spinner (using the existing `Spinner.tsx` with a red variant or prop) is visible and the submit button is disabled. Once the fetch resolves, the spinner disappears and the response renders.
+- Why it fails first; expected behavior: the component does not exist yet, and no spinner integration is in place.
+
+RED 37.27 — `SaltwaterChat` sends prior conversation history with each follow-up request
+- What it checks: when the user submits a follow-up question after a prior agent response (the typical date-confirmation flow), the component sends `{ question, history }` to the route, where `history` is the running conversation. The test mocks the first fetch to return a clarification, then asserts the second fetch's request body includes the prior assistant + user turns in `history`. This is how the multi-turn flow stays cost-effective without DB storage.
+- Why it fails first; expected behavior: the component does not exist yet, and no history-passing wiring is in place.
+
+RED 37.28 — `SaltwaterChat` shows an error message when the API call fails
+- What it checks: when the mocked fetch to `/api/saltwater-chat` rejects or returns a non-200 response, the component displays a clear error message (e.g. "Something went wrong. Please try again.") and clears the spinner.
+- Why it fails first; expected behavior: the component does not exist yet.
+
+---
+
+### Reference system prompt (GREEN-time starting point)
+
+This is reference wording for Codex to use as a starting point. The tests above assert the SHAPE of the prompt via regex, not these exact sentences. Codex may tune the wording at GREEN as long as the regex shape continues to match.
+
+> You are AnglerCast's saltwater trip-planning agent. You help anglers plan a saltwater fishing trip by checking live data from real public APIs.
+>
+> You have access to exactly six external data sources, and these are the ONLY data sources you may use:
+>
+> 1. Open-Meteo Forecast — wind, temperature, precipitation
+> 2. Open-Meteo Marine — wave height, period, direction, sea surface conditions
+> 3. OBIS — marine species occurrence records
+> 4. GBIF — global species occurrence records
+> 5. USGS — water gauge readings
+> 6. NOAA CO-OPS — tide predictions
+>
+> CRITICAL RULE — date confirmation: Before calling ANY tools, you MUST confirm the user's intended date with the user. The user may say things like "this Saturday," "next weekend," or "tomorrow" — never silently infer the date yourself. Always propose a concrete date back to the user (e.g. "Did you mean Saturday, June 28?") and wait for them to confirm before calling any tools. This is non-negotiable.
+>
+> CRITICAL RULE — honest scope: When the user asks for something you cannot answer with your six APIs (restaurants, food, lodging, gear shops, fishing licenses, news, regulations, etc.), respond plainly: say you do not have a data source for that, list the six APIs you do have access to, and suggest the user check an external source like Google Maps. Never invent data outside your six APIs. This is non-negotiable.
+>
+> CRITICAL RULE — common-fished species filter: When the user asks an open-ended species question (e.g. "what fish are biting?") and a species query would return more than 40 species, narrow your answer to the saltwater common-fished species list provided to you in this context. The list contains exactly 40 species (each with a common name and scientific name) and is read at request time from `getSpeciesForWaterType('saltwater')` in `src/lib/species.ts`, then injected into this prompt before the OpenAI call. When the user names a specific species, query that species directly without filtering.
+>
+> CRITICAL RULE — tool sequencing: For comprehensive questions (trip planning, "where should I fish," etc.), call multiple tools in sequence to gather all the data you need (weather, marine, tide, species records, etc.). For simple targeted questions (e.g. "when is high tide today?"), call only the one tool that answers it. Do not ask the user mid-loop for more information — once the date is confirmed and the question is in scope, run your tools and assemble the final answer.
+
+---
+
+### Notes:
+
+(1) The exact wording of the system prompt is a GREEN-time choice. Tests assert SHAPE via regex (Sections 19–22 pattern), not specific sentences.
+
+(2) The saltwater common-fished species list is already in the project at `src/lib/species.ts`, exported as a 40-species list accessible via `getSpeciesForWaterType('saltwater')`. Each species is shaped `{ commonName, scientificName }`. The route should read the list with this helper and inject it into the system prompt before each OpenAI call so the agent can use it for the species-narrowing behavior described in Behavior C. No new species list needs to be created — Codex imports from the existing file.
+
+(3) Conversation history is stored in the component's React state and sent with every fetch request in the `history` field of the JSON body. No DB schema is added in this section. If implementation reveals a need for persistence (rate limit handling, audit, cross-tab), a schema can be added in a follow-up section.
+
+(4) Section 38 will mirror this structure for the freshwater page: `/api/freshwater-chat`, `freshwaterAgent.ts`, `freshwaterAgentTools.ts`, `FreshwaterChat.tsx`. The tool functions in Section 38 will mirror the six saltwater tools with a freshwater-appropriate variable set (e.g. forecast emphasis on freshwater conditions, USGS emphasis on streamflow/temperature, no NOAA tides). The freshwater common-fished species list will be a separate list provided by Jacqueline.
+
+---
+
+### Visual/wiring part (eyeball-verified):
+
+After GREEN, an angler on the saltwater page can submit a question like "Where should I fish this Saturday?" in the `SaltwaterChat` component and see the agent's clarifying question proposing the date. After replying with the date, the angler sees the red spinner while the agent calls multiple tools (forecast, marine, tide, OBIS, GBIF) in sequence, then sees the synthesized fishing plan with which data sources were consulted. A question like "What's a good vegetarian restaurant near Boston Harbor?" produces the honest decline with the six-API list and a Google Maps suggestion. A question like "when is high tide today?" produces a single-tool response from NOAA CO-OPS. Verified by eye on the dev server, then again against the deployed Vercel build.
+
+---
+
 # 2. Run the tests (expect RED)
 
 I run all the tests. They must all fail, because no implementation exists yet. I confirm each fails for the REASON I expect (missing behavior) — not a typo or bad import. Then I commit the RED.
