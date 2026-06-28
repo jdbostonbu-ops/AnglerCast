@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { SALTWATER_AGENT_TOOLS, runSaltwaterTool, fetchSaltwaterForecast, fetchSaltwaterMarine, fetchSaltwaterObis, fetchSaltwaterGbif } from '@/lib/saltwaterAgentTools';
+import { SALTWATER_AGENT_TOOLS, runSaltwaterTool, fetchSaltwaterForecast, fetchSaltwaterMarine, fetchSaltwaterObis, fetchSaltwaterGbif, fetchSaltwaterUsgs } from '@/lib/saltwaterAgentTools';
 
 type ToolEntry = {
   type: string;
@@ -208,6 +208,60 @@ describe('fetchSaltwaterGbif', () => {
     expect(url.searchParams.get('decimalLatitude')).toBeDefined();
     expect(url.searchParams.get('decimalLongitude')).toBeDefined();
     expect(url.searchParams.get('limit')).toBeDefined();
+
+    expect(result).not.toBeNull();
+  });
+});
+
+describe('fetchSaltwaterUsgs', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('queries USGS NWIS with the site ID and parses the time series response', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        value: {
+          timeSeries: [
+            {
+              sourceInfo: {
+                siteName: 'CONNECTICUT RIVER AT THOMPSONVILLE, CT',
+                siteCode: [{ value: '01184000' }],
+                geoLocation: {
+                  geogLocation: { latitude: 41.98720462, longitude: -72.60534826 },
+                },
+              },
+              variable: {
+                variableCode: [{ value: '00060' }],
+                variableName: 'Streamflow, ft³/s',
+                unit: { unitCode: 'ft3/s' },
+              },
+              values: [
+                {
+                  value: [
+                    { value: '17000', qualifiers: ['P'], dateTime: '2026-06-28T10:30:00.000-04:00' },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await fetchSaltwaterUsgs({
+      siteId: '01184000',
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const urlCalled = fetchMock.mock.calls[0]?.[0];
+    expect(typeof urlCalled).toBe('string');
+    const url = new URL(urlCalled as string);
+    expect(url.hostname).toBe('waterservices.usgs.gov');
+    expect(url.searchParams.get('sites')).toBe('01184000');
+    expect(url.searchParams.get('format')).toBe('json');
 
     expect(result).not.toBeNull();
   });
