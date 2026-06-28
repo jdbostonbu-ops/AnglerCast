@@ -49,4 +49,12 @@ describe('POST /api/saltwater-chat', () => {
     expect(responseWhitespace.status).toBe(400);
     expect(mockRunSaltwaterAgent).not.toHaveBeenCalled();
   });
+
+  it('returns 500 when runSaltwaterAgent throws an unexpected error', async () => {
+    mockRunSaltwaterAgent.mockRejectedValue(new Error('agent crashed'));
+
+    const response = await POST(buildRequest({ question: 'When is high tide today?' }));
+
+    expect(response.status).toBe(500);
+  });
 });
