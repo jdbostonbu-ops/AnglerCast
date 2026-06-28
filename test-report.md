@@ -1,19 +1,22 @@
 # Test Run & Git Summary Report
-**Generated on:** 6/28/2026, 6:32:29 PM
+**Generated on:** 6/28/2026, 6:44:26 PM
 
 ## 🕒 Recent Git Commit Log
-* **848be49** - Jacqueline Delgado, 6 minutes ago : RED 37.33 — system prompt instructs the agent never to invent data when a tool fails
-* **9232145** - Jacqueline Delgado, 9 minutes ago : GREEN 37.32 — tool schemas declare required parameters with descriptions
-* **e9791a1** - Jacqueline Delgado, 11 minutes ago : RED 37.32 — every tool schema declares the parameters its function actually needs
-* **0f32f7c** - Jacqueline Delgado, 15 minutes ago : GREEN 37.31 — registry names match dispatcher (test fixture: fresh Response per fetch call)
-* **03f21f1** - Jacqueline Delgado, 23 minutes ago : RED 37.31 — every tool in SALTWATER_AGENT_TOOLS dispatches to a real tool function by its registered name
-* **ab44304** - Jacqueline Delgado, 57 minutes ago : GREEN 37.30 — runSaltwaterAgent passes prior history into OpenAI messages array
-* **107fe2f** - Jacqueline Delgado, 58 minutes ago : RED 37.30 — runSaltwaterAgent passes prior history into OpenAI messages array
-* **f02429d** - Jacqueline Delgado, 66 minutes ago : GREEN 37.29 — route forwards body.history to runSaltwaterAgent
-* **102ccf1** - Jacqueline Delgado, 67 minutes ago : RED 37.29 — POST /api/saltwater-chat forwards body.history to runSaltwaterAgent
+* **da45611** - Jacqueline Delgado, 4 minutes ago : RED 37.34 — runSaltwaterAgent dispatches tool_calls through shared runSaltwaterTool
+* **eadfdd8** - Jacqueline Delgado, 5 minutes ago : updated testing md and added more tests for agentic rag
+* **b63021f** - Jacqueline Delgado, 12 minutes ago : GREEN 37.33 — system prompt forbids inventing data when a tool fails
+* **848be49** - Jacqueline Delgado, 18 minutes ago : RED 37.33 — system prompt instructs the agent never to invent data when a tool fails
+* **9232145** - Jacqueline Delgado, 21 minutes ago : GREEN 37.32 — tool schemas declare required parameters with descriptions
+* **e9791a1** - Jacqueline Delgado, 23 minutes ago : RED 37.32 — every tool schema declares the parameters its function actually needs
+* **0f32f7c** - Jacqueline Delgado, 27 minutes ago : GREEN 37.31 — registry names match dispatcher (test fixture: fresh Response per fetch call)
+* **03f21f1** - Jacqueline Delgado, 35 minutes ago : RED 37.31 — every tool in SALTWATER_AGENT_TOOLS dispatches to a real tool function by its registered name
+* **ab44304** - Jacqueline Delgado, 69 minutes ago : GREEN 37.30 — runSaltwaterAgent passes prior history into OpenAI messages array
+* **107fe2f** - Jacqueline Delgado, 70 minutes ago : RED 37.30 — runSaltwaterAgent passes prior history into OpenAI messages array
+* **f02429d** - Jacqueline Delgado, 78 minutes ago : GREEN 37.29 — route forwards body.history to runSaltwaterAgent
+* **102ccf1** - Jacqueline Delgado, 79 minutes ago : RED 37.29 — POST /api/saltwater-chat forwards body.history to runSaltwaterAgent
 * **e75f438** - Jacqueline Delgado, 2 hours ago : Wire SaltwaterChat into the saltwater page above the sighting-rate search
-* **4d4d2d6** - Jacqueline Delgado, 2 hours ago : GREEN 37.28: SaltwaterChat shows an error message when the API call fails
-* **44d6250** - Jacqueline Delgado, 2 hours ago : RED 37.28: SaltwaterChat shows an error message when the API call fails
+* **4d4d2d6** - Jacqueline Delgado, 3 hours ago : GREEN 37.28: SaltwaterChat shows an error message when the API call fails
+* **44d6250** - Jacqueline Delgado, 3 hours ago : RED 37.28: SaltwaterChat shows an error message when the API call fails
 * **77b2563** - Jacqueline Delgado, 3 hours ago : GREEN 37.27: SaltwaterChat sends prior conversation history with each follow-up request
 * **7f4431b** - Jacqueline Delgado, 3 hours ago : RED 37.27: SaltwaterChat sends prior conversation history with each follow-up request
 * **9fa311c** - Jacqueline Delgado, 3 hours ago : GREEN 37.26: SaltwaterChat shows a spinner and disables the button while the request is in flight
@@ -28,13 +31,13 @@
 * **ca51eb3** - Jacqueline Delgado, 3 hours ago : RED 37.22: POST /api/saltwater-chat returns 400 for missing or empty question
 * **3654d7a** - Jacqueline Delgado, 3 hours ago : GREEN 37.21: POST /api/saltwater-chat surfaces runSaltwaterAgent's response
 * **549fb1c** - Jacqueline Delgado, 3 hours ago : RED 37.21: POST /api/saltwater-chat surfaces runSaltwaterAgent's response
-* **0ab45e5** - Jacqueline Delgado, 3 hours ago : Fix: align User test fixtures with current Prisma schema (profileName, profileImageUrl)
+* **0ab45e5** - Jacqueline Delgado, 4 hours ago : Fix: align User test fixtures with current Prisma schema (profileName, profileImageUrl)
 * **04e3009** - Jacqueline Delgado, 4 hours ago : GUARD 37.20: saltwater agent recovers when a tool function returns null or an error shape
 * **f2a2c84** - Jacqueline Delgado, 4 hours ago : GUARD 37.5: saltwater agent returns the honest decline and invokes no tools
 * **ccadef9** - Jacqueline Delgado, 4 hours ago : updated TESTING.md for a new agentics RAG for saltwater and freshwater pages
 * **a6bf0d6** - Jacqueline Delgado, 4 hours ago : GUARD 37.2: saltwater agent returns clarifying text and invokes no tools
 * **bd92121** - Jacqueline Delgado, 4 hours ago : GREEN 37.19: saltwater agent stops after max iterations to prevent infinite loops
-* **84d9a68** - Jacqueline Delgado, 4 hours ago : RED 37.19: saltwater agent stops after max iterations to prevent infinite loops
+* **84d9a68** - Jacqueline Delgado, 5 hours ago : RED 37.19: saltwater agent stops after max iterations to prevent infinite loops
 * **038a8b8** - Jacqueline Delgado, 5 hours ago : GREEN 37.18: saltwater agent chains multiple tool_calls and returns the final synthesis
 * **b968154** - Jacqueline Delgado, 5 hours ago : RED 37.18: saltwater agent chains multiple tool_calls and returns the final synthesis
 * **8412c09** - Jacqueline Delgado, 5 hours ago : GREEN 37.17: saltwater agent dispatches a single tool_call and feeds the result back to OpenAI
@@ -62,9 +65,9 @@
 * **2f075a3** - Jacqueline Delgado, 5 hours ago : GREEN 37.6: saltwater agent system prompt instructs species narrowing on open-ended queries
 * **be6909c** - Jacqueline Delgado, 5 hours ago : RED 37.6: saltwater agent system prompt instructs species narrowing on open-ended queries
 * **020864e** - Jacqueline Delgado, 5 hours ago : GREEN 37.4: saltwater agent system prompt instructs decline of out-of-scope requests
-* **134282b** - Jacqueline Delgado, 5 hours ago : RED 37.4: saltwater agent system prompt instructs decline of out-of-scope requests
-* **36bfc14** - Jacqueline Delgado, 5 hours ago : GREEN 37.3: saltwater agent system prompt declares the six APIs
-* **fa96a9f** - Jacqueline Delgado, 5 hours ago : RED 37.3: saltwater agent system prompt declares the six APIs
+* **134282b** - Jacqueline Delgado, 6 hours ago : RED 37.4: saltwater agent system prompt instructs decline of out-of-scope requests
+* **36bfc14** - Jacqueline Delgado, 6 hours ago : GREEN 37.3: saltwater agent system prompt declares the six APIs
+* **fa96a9f** - Jacqueline Delgado, 6 hours ago : RED 37.3: saltwater agent system prompt declares the six APIs
 * **bcebfb6** - Jacqueline Delgado, 6 hours ago : GREEN 37.1: saltwater agent system prompt instructs date confirmation
 * **ece7f06** - Jacqueline Delgado, 6 hours ago : RED 37.1: saltwater agent system prompt instructs date confirmation
 * **8e9109a** - Jacqueline Delgado, 25 hours ago : updated test-report md file
@@ -411,11 +414,11 @@
 
 ## 📊 Test Metrics Summary
 * **Total Tests:** 1
-* **Passed:** 😄 1
-* **Failed:** 😡 0
+* **Passed:** 😄 0
+* **Failed:** 😡 1
 
 ## 📝 Detailed Test Breakdown
 
 | File | Test Case | Status | Duration |
 | :--- | :--- | :--- | :--- |
-| src/lib/saltwaterAgent.test.ts | runSaltwaterAgent | ✅ Pass | 7.363625000000013ms |
+| src/lib/saltwaterAgent.test.ts | runSaltwaterAgent | ❌ Fail | 6.405457999999953ms |

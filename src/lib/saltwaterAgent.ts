@@ -1,7 +1,5 @@
 import {
-  fetchSaltwaterForecast,
-  fetchSaltwaterMarine,
-  fetchSaltwaterNoaa,
+  runSaltwaterTool,
   SALTWATER_AGENT_TOOLS,
 } from '@/lib/saltwaterAgentTools';
 
@@ -93,55 +91,6 @@ const requestOpenAI = async (
   return (await response.json()) as OpenAIChatCompletionResponse;
 };
 
-const parseLocationDateToolArguments = (
-  rawArguments: string,
-): { latitude: number; longitude: number; targetDate: string } => {
-  const parsedArguments = JSON.parse(rawArguments) as {
-    latitude?: unknown;
-    longitude?: unknown;
-    targetDate?: unknown;
-  };
-
-  return {
-    latitude: typeof parsedArguments.latitude === 'number' ? parsedArguments.latitude : 0,
-    longitude: typeof parsedArguments.longitude === 'number' ? parsedArguments.longitude : 0,
-    targetDate: typeof parsedArguments.targetDate === 'string' ? parsedArguments.targetDate : '',
-  };
-};
-
-const parseStationDateToolArguments = (
-  rawArguments: string,
-): { stationId: string; targetDate: string } => {
-  const parsedArguments = JSON.parse(rawArguments) as {
-    stationId?: unknown;
-    targetDate?: unknown;
-  };
-
-  return {
-    stationId: typeof parsedArguments.stationId === 'string' ? parsedArguments.stationId : '',
-    targetDate: typeof parsedArguments.targetDate === 'string' ? parsedArguments.targetDate : '',
-  };
-};
-
-const runSupportedTool = async (
-  toolName: string,
-  rawArguments: string,
-): Promise<unknown> => {
-  if (toolName === 'fetchSaltwaterForecast') {
-    return fetchSaltwaterForecast(parseLocationDateToolArguments(rawArguments));
-  }
-
-  if (toolName === 'fetchSaltwaterMarine') {
-    return fetchSaltwaterMarine(parseLocationDateToolArguments(rawArguments));
-  }
-
-  if (toolName === 'fetchSaltwaterNoaa') {
-    return fetchSaltwaterNoaa(parseStationDateToolArguments(rawArguments));
-  }
-
-  return { error: 'unknown_tool' };
-};
-
 export const runSaltwaterAgent = async ({
   question,
   history = [],
@@ -159,8 +108,6 @@ export const runSaltwaterAgent = async ({
   ];
 
   let completion = await requestOpenAI(messages);
-    console.log('OpenAI first response:', JSON.stringify(completion.choices[0]?.message, null, 2));
-   
   let message = completion.choices[0]?.message;
   let toolCall = message?.tool_calls?.[0];
   let toolIterations = 0;
@@ -173,11 +120,8 @@ export const runSaltwaterAgent = async ({
       };
     }
 
-    const toolResult = await runSupportedTool(
-      toolCall.function.name,
-      toolCall.function.arguments,
-    );
-    console.log('Tool result for', toolCall.function.name, ':', JSON.stringify(toolResult, null, 2));
+    const parsedArguments = JSON.parse(toolCall.function.arguments) as Record<string, unknown>;
+    const toolResult = await runSaltwaterTool(toolCall.function.name, parsedArguments);
     toolIterations += 1;
 
     messages.push(
@@ -194,7 +138,6 @@ export const runSaltwaterAgent = async ({
     );
 
     completion = await requestOpenAI(messages);
-    console.log('OpenAI follow-up response:', JSON.stringify(completion.choices[0]?.message, null, 2));
     message = completion.choices[0]?.message;
     toolCall = message?.tool_calls?.[0];
   }
