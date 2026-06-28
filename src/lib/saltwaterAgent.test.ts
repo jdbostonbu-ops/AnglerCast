@@ -587,4 +587,30 @@ it('stops after max iterations when OpenAI never returns a final answer', async 
     expect(result).toBeDefined();
     expect(typeof result).toBe('object');
   });
+
+  it('RED 37.42 — injects the saltwater common-fished species list into the OpenAI request context', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { role: 'assistant', content: 'ok' } }],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await runSaltwaterAgent({ question: 'What fish can I find in Boston?' });
+
+    const fetchCall = fetchMock.mock.calls[0];
+    const requestInit = fetchCall?.[1] as RequestInit;
+    const requestBody = JSON.parse(requestInit.body as string) as {
+      messages: Array<{ role: string; content: string | null }>;
+    };
+
+    const allMessageContent = requestBody.messages
+      .map((m) => m.content ?? '')
+      .join(' ');
+
+    expect(allMessageContent).toContain('Striped Bass');
+    expect(allMessageContent).toContain('Bluefish');
+    expect(allMessageContent).toContain('Atlantic Cod');
+  });
 });
