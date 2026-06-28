@@ -350,7 +350,7 @@ describe('fetchSaltwaterNoaa', () => {
       const expectedRequired = requiredParametersByToolName[toolName];
       expect(expectedRequired, `no expected schema for tool ${toolName}`).toBeDefined();
 
-      const properties = tool.function.parameters.properties as Record
+      const properties = tool.function.parameters.properties as Record <
         string,
         { type?: string; description?: string }
       >;

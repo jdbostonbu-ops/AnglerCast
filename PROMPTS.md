@@ -415,3 +415,355 @@ Add waterType, import getSpeciesForWaterType and WaterType, compute speciesOptio
 ## 70. Append Missing Prompts Without Duplicates
 
 Add the prompts in the PROMPTS.md file no duplicates.
+
+## 71. RED 37.1 - Saltwater Agent Date Confirmation Prompt
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.1 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Create the minimal implementation at src/lib/saltwaterAgent.ts so that one test passes — nothing more.
+
+Do not implement tool dispatch, tool registry, individual tool functions, or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 72. RED 37.3 - Saltwater Agent Six API Sources Prompt
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.3 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Update the existing implementation at src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+Do not implement tool dispatch, tool registry, individual tool functions, or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 73. RED 37.4 - Saltwater Agent Out-of-Scope Prompt
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.4 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Update the existing implementation at src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+Do not implement tool dispatch, tool registry, individual tool functions, or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 74. RED 37.6 - Saltwater Agent Common-Fished Species Prompt
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.6 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Update the existing implementation at src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+Do not implement tool dispatch, tool registry, individual tool functions, or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 75. RED 37.7 - Saltwater Agent Specific Species Prompt
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.7 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Update the existing implementation at src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+Do not implement tool dispatch, tool registry, individual tool functions, or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 76. RED 37.8 - Saltwater Agent Tool Registry
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.8 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgentTools.test.ts. Create the minimal implementation at src/lib/saltwaterAgentTools.ts so that one test passes — nothing more.
+
+Do not implement tool dispatch, individual tool functions, or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 77. RED 37.9 - Saltwater Tool Unknown Dispatcher Shape
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.9 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgentTools.test.ts. Update the existing implementation at src/lib/saltwaterAgentTools.ts minimally so that test passes — nothing more.
+
+Do not implement individual tool functions, the orchestration loop, or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 78. RED 37.10 - Saltwater Forecast Tool
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.10 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgentTools.test.ts. Update the existing implementation at src/lib/saltwaterAgentTools.ts minimally so that test passes — nothing more.
+
+Do not implement the other five tool functions, orchestration loop, or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 79. RED 37.11 - Saltwater Marine Tool
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.11 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgentTools.test.ts. Update the existing implementation at src/lib/saltwaterAgentTools.ts minimally so that test passes — nothing more.
+
+Do not implement the remaining tool functions, orchestration loop, or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 80. RED 37.12 - Saltwater OBIS Tool
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.12 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgentTools.test.ts. Update the existing implementation at src/lib/saltwaterAgentTools.ts minimally so that test passes — nothing more.
+
+Do not implement the remaining tool functions, orchestration loop, or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 81. RED 37.13 - Saltwater GBIF Tool
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.13 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgentTools.test.ts. Update the existing implementation at src/lib/saltwaterAgentTools.ts minimally so that test passes — nothing more.
+
+Do not implement the remaining tool functions, orchestration loop, or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 82. RED 37.14 - Saltwater USGS Tool
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.14 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgentTools.test.ts. Update the existing implementation at src/lib/saltwaterAgentTools.ts minimally so that test passes — nothing more.
+
+Do not implement the remaining tool functions, orchestration loop, or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 83. RED 37.15 - Saltwater NOAA Tool
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.15 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgentTools.test.ts. Update the existing implementation at src/lib/saltwaterAgentTools.ts minimally so that test passes — nothing more.
+
+Do not implement the orchestration loop or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 84. RED 37.16 - Saltwater Agent Sends Tool Registry
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.16 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Update the existing implementation at src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+Do not implement tool dispatch, multi-turn loop, max iteration safety, or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 85. RED 37.17 - Saltwater Agent Single Tool Call
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.17 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Update the existing implementation at src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+Do not implement multi-turn chaining, max iteration safety, tool null recovery, or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 86. RED 37.18 - Saltwater Agent Multi-Turn Tool Chain
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.18 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Update the existing implementation at src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+Do not implement max iteration safety, tool null recovery, or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 87. RED 37.19 - Saltwater Agent Max Iteration Safety
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.19 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Update the existing implementation at src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+Do not implement tool null recovery or any other behaviors yet. Those are later REDs in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 88. Add Remaining Prompts
+
+Add all remaining prompts to PROMPTS.md file.
+
+## 89. RED 37.21 - Saltwater Chat Route Success Path
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.21 from TESTING.md Section 37. The failing test is at src/app/api/saltwater-chat/route.test.ts. Create the minimal implementation at src/app/api/saltwater-chat/route.ts so that one test passes — nothing more.
+
+Do not implement input validation, error handling, or any other behaviors yet. Those are later REDs (37.22 and 37.23) in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 90. RED 37.22 - Saltwater Chat Route Question Validation
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.22 from TESTING.md Section 37. The failing test is at src/app/api/saltwater-chat/route.test.ts. Update the existing implementation at src/app/api/saltwater-chat/route.ts minimally so that test passes — nothing more.
+
+Do not implement error handling for runSaltwaterAgent throws or any other behaviors yet. That is a later RED (37.23) in Section 37 that has not been written as a test yet.
+
+Tell Jacqueline what command to run.
+
+## 91. RED 37.23 - Saltwater Chat Route Agent Error
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.23 from TESTING.md Section 37. The failing test is at src/app/api/saltwater-chat/route.test.ts. Update the existing implementation at src/app/api/saltwater-chat/route.ts minimally so that test passes — nothing more.
+
+Do not implement any component-level behaviors or other behaviors yet. Those are later REDs (37.24+) in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 92. RED 37.24 - SaltwaterChat Initial Render
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.24 from TESTING.md Section 37. The failing test is at src/components/SaltwaterChat.test.tsx. Create the minimal implementation at src/components/SaltwaterChat.tsx so that one test passes — nothing more.
+
+Do not implement form submission, fetch wiring, response display, spinner, error handling, or history passing yet. Those are later REDs (37.25–37.28) in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 93. Add Remaining Prompts Again
+
+Add the remaining prompts to PROMPTS.md file.
+
+## 94. RED 37.25 - SaltwaterChat Submit and Response
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.25 from TESTING.md Section 37. The failing test is at src/components/SaltwaterChat.test.tsx. Update the existing implementation at src/components/SaltwaterChat.tsx minimally so that test passes — nothing more.
+
+Do not implement spinner, error handling, or history passing yet. Those are later REDs (37.26, 37.27, 37.28) in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 95. RED 37.26 - SaltwaterChat Spinner
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.26 from TESTING.md Section 37. The failing test is at src/components/SaltwaterChat.test.tsx. Update the existing implementation at src/components/SaltwaterChat.tsx minimally so that test passes — nothing more.
+
+Do not implement history passing or error handling yet. Those are later REDs (37.27, 37.28) in Section 37 that have not been written as tests yet.
+
+Tell Jacqueline what command to run.
+
+## 96. RED 37.27 - SaltwaterChat History
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.27 from TESTING.md Section 37. The failing test is at src/components/SaltwaterChat.test.tsx. Update the existing implementation at src/components/SaltwaterChat.tsx minimally so that test passes — nothing more.
+
+Do not implement error handling yet. That is a later RED (37.28) in Section 37 that has not been written as a test yet.
+
+Tell Jacqueline what command to run.
+
+## 97. RED 37.28 - SaltwaterChat Error Handling
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.28 from TESTING.md Section 37. The failing test is at src/components/SaltwaterChat.test.tsx. Update the existing implementation at src/components/SaltwaterChat.tsx minimally so that test passes — nothing more.
+
+Tell Jacqueline what command to run.
+
+## 98. RED 37.24 Through 37.28 - SaltwaterChat Full Minimal Component
+
+Read AGENTS.md and TESTING.md file.
+
+The 5 failing tests in src/components/SaltwaterChat.test.tsx (RED 37.24 through RED 37.28 in TESTING.md Section 37) need an implementation. Create src/components/SaltwaterChat.tsx with the minimal implementation required to make all 5 tests pass — nothing more.
+
+The tests describe:
+- A labeled text input for the question (an <input>, not a textarea)
+- A submit button
+- A POST to /api/saltwater-chat with { question, history } in the body
+- Rendering the agent's response text
+- A spinner with role="status" while the fetch is in flight, with the submit button disabled
+- Sending the prior conversation history on follow-up requests
+- An error message containing "something went wrong" when the fetch fails
+
+There is an existing src/components/Spinner component you can import.
+
+There is also a 6th failing test in the saltwater page test file that imports SaltwaterChat — it will pass automatically once the component exists.
+
+Do not implement anything beyond what the tests require. No chat-bubble UI, no scroll container, no styling beyond what the tests assert.
+
+Tell Jacqueline what command to run.
+
+## 99. RED 37.29 - Saltwater Chat Route Forwards History
+
+RED 37.29 — POST /api/saltwater-chat forwards body.history to runSaltwaterAgent
+
+The test posts a question plus a non-empty history array to the route and asserts runSaltwaterAgent is called with both fields. It currently fails because the route only extracts body.question and drops history silently. The component already sends history (covered by RED 37.27), but no test until now asserted the route forwards it — which is why the agent loses conversational context in dev.
+
+275 other tests still pass.
+
+## 100. RED 37.30 - Saltwater Agent Sends History to OpenAI
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.30 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Update the agent at src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+The test expects runSaltwaterAgent to accept a history parameter (an array of { role: 'user' | 'assistant'; content: string }) on its input, and to include those prior turns as { role, content } entries in the messages array sent to the OpenAI chat completion, positioned BEFORE the new question.
+
+The system prompt should remain first in the messages array. The new question should remain last.
+
+Do not modify any other tool, route, or component files.
+
+Tell Jacqueline what command to run.
+
+## 101. RED 37.31 - Saltwater Tool Registry Names Dispatch
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.31 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgentTools.test.ts. Update src/lib/saltwaterAgentTools.ts and/or src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts that every tool declared in SALTWATER_AGENT_TOOLS, when its registered `name` is passed to runSaltwaterTool along with valid arguments, returns something other than { error: 'unknown_tool' }. The current registry uses short names (forecast, marine, obis, gbif, usgs, noaa) but the dispatcher only handles three of them and uses different long names internally. The registry names and the dispatcher must agree, and all six tools must be reachable through runSaltwaterTool.
+
+Do not modify the tool function implementations (fetchSaltwaterForecast, etc.). Do not change tool parameter schemas. Do not change the system prompt. Those are later REDs.
+
+Tell Jacqueline what command to run.
+
+## 102. RED 37.32 - Saltwater Tool Parameter Schemas
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.32 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgentTools.test.ts. Update src/lib/saltwaterAgentTools.ts minimally so that test passes — nothing more.
+
+The test asserts each tool in SALTWATER_AGENT_TOOLS declares the parameters its underlying function actually needs in its JSON Schema, with a non-empty `description` on each property and each parameter listed in `required`. Specifically:
+
+- forecast: latitude (number), longitude (number), targetDate (string)
+- marine: latitude (number), longitude (number), targetDate (string)
+- obis: latitude (number), longitude (number)
+- gbif: latitude (number), longitude (number)
+- usgs: siteId (string)
+- noaa: stationId (string), targetDate (string)
+
+The currently-shared `emptyParameters` object needs to be replaced with per-tool parameter schemas. The SaltwaterAgentTool type may need its `properties` field widened from `Record<string, never>` to a real property-schema type to accommodate the new schemas.
+
+Do not modify tool function bodies, the dispatcher, the system prompt, or the agent orchestration. Do not change which six tools exist in the registry.
+
+Tell Jacqueline what command to run.
+
+## 103. RED 37.33 - Saltwater Agent Honest Tool Failure Prompt
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.33 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Update src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+The test imports `saltwaterAgentSystemPrompt` from saltwaterAgent.ts and asserts the system prompt contains:
+1. Honesty enforcement language matching: /never invent|do not fabricate|do not (make up|invent)|cannot use training data|honest data|do not guess/i
+2. Tool-failure handling language matching: /(tool|forecast|data|api).{0,40}(fail|error|null|empty|missing|cannot|unable)/i
+
+Two changes are required:
+1. Export `saltwaterAgentSystemPrompt` so the test can import it (it is currently a private const).
+2. Add language to the prompt that satisfies both regexes. The language should instruct the model that if a tool returns null, empty, or an error, the agent must say so honestly and never fall back on training data or invent values like typical weather averages. This aligns with AnglerCast's honest-data thesis from the README ("Real data computes the facts. The AI explains and assembles — it does not invent").
+
+Do not modify the agent orchestration loop, the tool registry, the tools themselves, or any test files.
+
+Tell Jacqueline what command to run.

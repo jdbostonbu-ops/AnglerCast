@@ -177,6 +177,7 @@ export const runSaltwaterAgent = async ({
       toolCall.function.name,
       toolCall.function.arguments,
     );
+    console.log('Tool result for', toolCall.function.name, ':', JSON.stringify(toolResult, null, 2));
     toolIterations += 1;
 
     messages.push(
