@@ -238,6 +238,9 @@ export const fetchSaltwaterForecast = async ({
   url.searchParams.set('start_date', targetDate);
   url.searchParams.set('end_date', targetDate);
   url.searchParams.set('hourly', 'temperature_2m,wind_speed_10m,precipitation');
+  url.searchParams.set('temperature_unit', 'fahrenheit');
+  url.searchParams.set('wind_speed_unit', 'mph');
+  url.searchParams.set('precipitation_unit', 'inch');
 
   const response = await fetch(url.toString());
   const forecast = (await response.json()) as SaltwaterForecastResponse;
@@ -273,6 +276,7 @@ export const fetchSaltwaterMarine = async ({
   url.searchParams.set('longitude', String(longitude));
   url.searchParams.set('start_date', targetDate);
   url.searchParams.set('end_date', targetDate);
+  url.searchParams.set('length_unit', 'imperial');
   url.searchParams.set(
     'hourly',
     'wave_height,wave_direction,wave_period,sea_surface_temperature',
