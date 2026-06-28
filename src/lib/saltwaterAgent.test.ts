@@ -498,4 +498,65 @@ it('stops after max iterations when OpenAI never returns a final answer', async 
       /(tool|forecast|data|api).{0,40}(fail|error|null|empty|missing|cannot|unable)/i,
     );
   });
+
+  it('RED 37.34 — dispatches tool_calls through the shared runSaltwaterTool, not a private duplicate', async () => {
+    const toolsModule = await import('@/lib/saltwaterAgentTools');
+    const runSaltwaterToolSpy = vi
+      .spyOn(toolsModule, 'runSaltwaterTool')
+      .mockResolvedValue({ ok: true });
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            choices: [
+              {
+                message: {
+                  role: 'assistant',
+                  content: null,
+                  tool_calls: [
+                    {
+                      id: 'call_1',
+                      type: 'function',
+                      function: {
+                        name: 'forecast',
+                        arguments: JSON.stringify({
+                          latitude: 42.3601,
+                          longitude: -71.0589,
+                          targetDate: '2026-07-04',
+                        }),
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          }),
+        ),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            choices: [
+              {
+                message: { role: 'assistant', content: 'final answer' },
+              },
+            ],
+          }),
+        ),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await runSaltwaterAgent({ question: 'weather in Boston July 4 2026?' });
+
+    expect(runSaltwaterToolSpy).toHaveBeenCalledTimes(1);
+    expect(runSaltwaterToolSpy).toHaveBeenCalledWith('forecast', {
+      latitude: 42.3601,
+      longitude: -71.0589,
+      targetDate: '2026-07-04',
+    });
+
+    runSaltwaterToolSpy.mockRestore();
+  });
 });
