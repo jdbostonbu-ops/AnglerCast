@@ -73,6 +73,53 @@ describe('SaltwaterChat', () => {
       expect(responseText).toBeInTheDocument();
       expect(screen.queryByRole('status')).not.toBeInTheDocument();
     });
+
+    it('sends prior conversation history with each follow-up request', async () => {
+      const fetchMock = vi
+        .fn()
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ response: 'Did you mean Saturday, June 28?' }),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ response: 'High tide is at 7:48 AM.' }),
+        });
+      vi.stubGlobal('fetch', fetchMock);
+
+      const user = userEvent.setup();
+      render(<SaltwaterChat />);
+
+      const input = screen.getByLabelText(/question/i);
+      const submitButton = screen.getByRole('button');
+
+      await user.type(input, 'Where should I fish this Saturday?');
+      await user.click(submitButton);
+
+      await screen.findByText(/did you mean saturday/i);
+
+      await user.clear(input);
+      await user.type(input, 'Yes, June 28');
+      await user.click(submitButton);
+
+      await screen.findByText(/high tide is at/i);
+
+      const secondCallArgs = fetchMock.mock.calls[1];
+      const requestInit = secondCallArgs?.[1] as RequestInit;
+      expect(requestInit).toBeDefined();
+      const body = JSON.parse(requestInit.body as string) as {
+        question: string;
+        history?: unknown[];
+      };
+
+      expect(body.question).toBe('Yes, June 28');
+      expect(Array.isArray(body.history)).toBe(true);
+      expect(body.history?.length).toBeGreaterThanOrEqual(2);
+
+      const historyText = JSON.stringify(body.history);
+      expect(historyText).toContain('Where should I fish this Saturday?');
+      expect(historyText).toContain('Did you mean Saturday, June 28?');
+    });
   });
 });
 
