@@ -7,10 +7,16 @@ type SaltwaterChatResponse = {
   response?: string;
 };
 
+type ChatHistoryMessage = {
+  role: 'user' | 'assistant';
+  content: string;
+};
+
 export const SaltwaterChat = () => {
   const [question, setQuestion] = useState('');
   const [responseText, setResponseText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [history, setHistory] = useState<ChatHistoryMessage[]>([]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -19,11 +25,17 @@ export const SaltwaterChat = () => {
     const response = await fetch('/api/saltwater-chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question }),
+      body: JSON.stringify({ question, history }),
     });
     const data = (await response.json()) as SaltwaterChatResponse;
+    const nextResponseText = data.response ?? '';
 
-    setResponseText(data.response ?? '');
+    setResponseText(nextResponseText);
+    setHistory((currentHistory) => [
+      ...currentHistory,
+      { role: 'user', content: question },
+      { role: 'assistant', content: nextResponseText },
+    ]);
     setIsLoading(false);
   };
 
