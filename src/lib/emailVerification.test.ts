@@ -139,6 +139,8 @@ describe('createEmailVerificationCode', () => {
       isVerified: true,
       verificationCodeHash: null,
       verificationCodeExpiresAt: null,
+      profileName: null,
+      profileImageUrl: null,
       passwordResetCodeHash: null,
       passwordResetCodeExpiresAt: null,
       createdAt: now,
