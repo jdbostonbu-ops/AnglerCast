@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { SALTWATER_AGENT_TOOLS } from '@/lib/saltwaterAgentTools';
+import { SALTWATER_AGENT_TOOLS, runSaltwaterTool } from '@/lib/saltwaterAgentTools';
 
 type ToolEntry = {
   type: string;
@@ -34,3 +34,11 @@ describe('SALTWATER_AGENT_TOOLS', () => {
     });
   });
 });
+
+  describe('runSaltwaterTool', () => {
+  it('returns an unknown_tool error shape when called with a tool name that is not in the registry', async () => {
+    const result = await runSaltwaterTool('not_a_real_tool', {});
+    expect(result).toEqual({ error: 'unknown_tool' });
+  });
+});
+
