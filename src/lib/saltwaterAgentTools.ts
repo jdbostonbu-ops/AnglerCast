@@ -67,3 +67,12 @@ export const SALTWATER_AGENT_TOOLS: SaltwaterAgentTool[] = [
     },
   },
 ];
+
+type UnknownSaltwaterToolResult = {
+  error: 'unknown_tool';
+};
+
+export const runSaltwaterTool = async (
+  _name: string,
+  _args: Record<string, unknown>,
+): Promise<UnknownSaltwaterToolResult> => ({ error: 'unknown_tool' });
