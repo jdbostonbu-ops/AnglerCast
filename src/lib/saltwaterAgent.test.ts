@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { runSaltwaterAgent } from '@/lib/saltwaterAgent';
+import { runSaltwaterAgent, saltwaterAgentSystemPrompt  } from '@/lib/saltwaterAgent';
 
 describe('runSaltwaterAgent', () => {
   afterEach(() => {
@@ -488,5 +488,14 @@ it('stops after max iterations when OpenAI never returns a final answer', async 
     expect(firstUserIndex).toBeGreaterThanOrEqual(0);
     expect(firstAssistantIndex).toBeGreaterThan(firstUserIndex);
     expect(newQuestionIndex).toBeGreaterThan(firstAssistantIndex);
+  });
+
+  it('RED 37.33 — system prompt instructs the agent never to invent data when a tool fails', () => {
+    expect(saltwaterAgentSystemPrompt).toMatch(
+      /never invent|do not fabricate|do not (make up|invent)|cannot use training data|honest data|do not guess/i,
+    );
+    expect(saltwaterAgentSystemPrompt).toMatch(
+      /(tool|forecast|data|api).{0,40}(fail|error|null|empty|missing|cannot|unable)/i,
+    );
   });
 });
