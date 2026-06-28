@@ -135,6 +135,11 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
   });
 
   it('recovers when a tool function returns null or an error shape and continues to a final answer', async () => {
+    const toolsModule = await import('@/lib/saltwaterAgentTools');
+    const runSaltwaterToolSpy = vi
+      .spyOn(toolsModule, 'runSaltwaterTool')
+      .mockResolvedValue({ error: 'no data for location' });
+
     const fetchMock = vi.fn<typeof fetch>()
       .mockResolvedValueOnce({
         ok: true,
@@ -145,16 +150,12 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
               id: 'call_m',
               type: 'function',
               function: {
-                name: 'fetchSaltwaterMarine',
+                name: 'marine',
                 arguments: JSON.stringify({ latitude: 39.8283, longitude: -98.5795, targetDate: '2026-06-28' }),
               },
             }],
           }}],
         }),
-      } as Response)
-      .mockResolvedValueOnce({
-        ok: false,
-        json: async () => ({ error: 'no data for location' }),
       } as Response)
       .mockResolvedValueOnce({
         ok: true,
@@ -167,13 +168,15 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
     const result = await runSaltwaterAgent({ question: 'Marine conditions in Kansas?' }) as { response: string };
 
     expect(result.response).toBe('I do not have marine data for that inland location.');
-    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
 
-    const thirdCallBody = JSON.parse(fetchMock.mock.calls[2]?.[1]?.body as string) as {
+    const secondCallBody = JSON.parse(fetchMock.mock.calls[1]?.[1]?.body as string) as {
       messages: { role: string; content?: string }[];
     };
-    const toolMessage = thirdCallBody.messages.find((m) => m.role === 'tool');
+    const toolMessage = secondCallBody.messages.find((m) => m.role === 'tool');
     expect(toolMessage).toBeDefined();
+
+    runSaltwaterToolSpy.mockRestore();
   });
 
   it('sends the user question and the tool registry to OpenAI', async () => {
