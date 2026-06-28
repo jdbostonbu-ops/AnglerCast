@@ -569,4 +569,22 @@ it('stops after max iterations when OpenAI never returns a final answer', async 
 
     runSaltwaterToolSpy.mockRestore();
   });
+
+  it('RED 37.41 — does not crash when the OpenAI response has no choices field', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        error: {
+          message: 'rate limit exceeded',
+          type: 'rate_limit_error',
+        },
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await runSaltwaterAgent({ question: 'What fish can I find in Boston on July 4 2026?' });
+
+    expect(result).toBeDefined();
+    expect(typeof result).toBe('object');
+  });
 });
