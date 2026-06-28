@@ -204,3 +204,56 @@ export const fetchSaltwaterObis = async ({
 
   return obis;
 };
+
+type FetchSaltwaterGbifInput = {
+  latitude: number;
+  longitude: number;
+  radiusDegrees?: number;
+  scientificName?: string;
+};
+
+type SaltwaterGbifRecord = {
+  scientificName?: string;
+  species?: string;
+  decimalLatitude?: number;
+  decimalLongitude?: number;
+  eventDate?: string;
+  year?: number;
+  month?: number;
+  stateProvince?: string;
+};
+
+type SaltwaterGbifResponse = {
+  offset?: number;
+  limit?: number;
+  endOfRecords?: boolean;
+  count?: number;
+  results?: SaltwaterGbifRecord[];
+};
+
+export const fetchSaltwaterGbif = async ({
+  latitude,
+  longitude,
+  radiusDegrees = 0.5,
+  scientificName,
+}: FetchSaltwaterGbifInput): Promise<SaltwaterGbifResponse> => {
+  const url = new URL('https://api.gbif.org/v1/occurrence/search');
+  url.searchParams.set(
+    'decimalLatitude',
+    `${latitude - radiusDegrees},${latitude + radiusDegrees}`,
+  );
+  url.searchParams.set(
+    'decimalLongitude',
+    `${longitude - radiusDegrees},${longitude + radiusDegrees}`,
+  );
+  url.searchParams.set('limit', '300');
+
+  if (scientificName !== undefined) {
+    url.searchParams.set('scientificName', scientificName);
+  }
+
+  const response = await fetch(url.toString());
+  const gbif = (await response.json()) as SaltwaterGbifResponse;
+
+  return gbif;
+};
