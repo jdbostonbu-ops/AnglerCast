@@ -1,6 +1,7 @@
 'use client';
 
 import { type FormEvent, useState } from 'react';
+import { Spinner } from '@/components/Spinner';
 
 type SaltwaterChatResponse = {
   response?: string;
@@ -9,10 +10,12 @@ type SaltwaterChatResponse = {
 export const SaltwaterChat = () => {
   const [question, setQuestion] = useState('');
   const [responseText, setResponseText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    setIsLoading(true);
     const response = await fetch('/api/saltwater-chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -21,6 +24,7 @@ export const SaltwaterChat = () => {
     const data = (await response.json()) as SaltwaterChatResponse;
 
     setResponseText(data.response ?? '');
+    setIsLoading(false);
   };
 
   return (
@@ -33,7 +37,14 @@ export const SaltwaterChat = () => {
         value={question}
         onChange={(event) => setQuestion(event.currentTarget.value)}
       />
-      <button type="submit">Submit</button>
+      <button type="submit" disabled={isLoading}>
+        Submit
+      </button>
+      {isLoading ? (
+        <span role="status">
+          <Spinner />
+        </span>
+      ) : null}
       {responseText !== '' ? <p>{responseText}</p> : null}
     </form>
   );
