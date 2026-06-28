@@ -443,4 +443,50 @@ it('stops after max iterations when OpenAI never returns a final answer', async 
     expect(toolMessage).toBeDefined();
     expect(toolMessage?.content).toBeDefined();
   });
+
+  it('RED 37.30 — passes prior history into the OpenAI messages array before the new question', async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          choices: [
+            {
+              message: { role: 'assistant', content: 'final answer' },
+            },
+          ],
+        }),
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const history = [
+      { role: 'user' as const, content: 'first question' },
+      { role: 'assistant' as const, content: 'first reply' },
+    ];
+
+    await runSaltwaterAgent({
+      question: 'follow-up question',
+      history,
+    });
+
+    const fetchCall = fetchMock.mock.calls[0];
+    const requestInit = fetchCall[1] as RequestInit;
+    const requestBody = JSON.parse(requestInit.body as string) as {
+      messages: Array<{ role: string; content: string }>;
+    };
+    const messages = requestBody.messages;
+
+    const firstUserIndex = messages.findIndex(
+      (m) => m.role === 'user' && m.content === 'first question',
+    );
+    const firstAssistantIndex = messages.findIndex(
+      (m) => m.role === 'assistant' && m.content === 'first reply',
+    );
+    const newQuestionIndex = messages.findIndex(
+      (m) => m.role === 'user' && m.content === 'follow-up question',
+    );
+
+    expect(firstUserIndex).toBeGreaterThanOrEqual(0);
+    expect(firstAssistantIndex).toBeGreaterThan(firstUserIndex);
+    expect(newQuestionIndex).toBeGreaterThan(firstAssistantIndex);
+  });
 });
