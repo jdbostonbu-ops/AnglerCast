@@ -1,3 +1,5 @@
+import { SALTWATER_AGENT_TOOLS } from '@/lib/saltwaterAgentTools';
+
 type RunSaltwaterAgentInput = {
   question: string;
 };
@@ -28,6 +30,7 @@ export const runSaltwaterAgent = async ({
     },
     body: JSON.stringify({
       model: 'gpt-4o-mini',
+      tools: SALTWATER_AGENT_TOOLS,
       messages: [
         {
           role: 'system',
