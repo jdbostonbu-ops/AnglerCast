@@ -206,6 +206,16 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
   });
 
   it('runs a single tool_call, feeds the result back to OpenAI, and returns the final answer', async () => {
+    const toolsModule = await import('@/lib/saltwaterAgentTools');
+    const runSaltwaterToolSpy = vi
+      .spyOn(toolsModule, 'runSaltwaterTool')
+      .mockResolvedValue({
+        predictions: [
+          { t: '2026-06-28 07:48', v: '3.924' },
+          { t: '2026-06-28 13:54', v: '0.704' },
+        ],
+      });
+
     const fetchMock = vi.fn<typeof fetch>()
       .mockResolvedValueOnce({
         ok: true,
@@ -219,22 +229,13 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
                     id: 'call_1',
                     type: 'function',
                     function: {
-                      name: 'fetchSaltwaterNoaa',
+                      name: 'noaa',
                       arguments: JSON.stringify({ stationId: '8443970', targetDate: '2026-06-28' }),
                     },
                   },
                 ],
               },
             },
-          ],
-        }),
-      } as Response)
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          predictions: [
-            { t: '2026-06-28 07:48', v: '3.924' },
-            { t: '2026-06-28 13:54', v: '0.704' },
           ],
         }),
       } as Response)
@@ -248,22 +249,25 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
 
     const result = await runSaltwaterAgent({ question: 'When is high tide today at Providence?' }) as { response: string };
 
-    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
 
-    const secondUrl = fetchMock.mock.calls[1]?.[0];
-    expect(typeof secondUrl).toBe('string');
-    expect(secondUrl as string).toContain('tidesandcurrents.noaa.gov');
+    expect(runSaltwaterToolSpy).toHaveBeenCalledWith('noaa', {
+      stationId: '8443970',
+      targetDate: '2026-06-28',
+    });
 
-    const thirdCallBody = JSON.parse(fetchMock.mock.calls[2]?.[1]?.body as string) as {
+    const secondCallBody = JSON.parse(fetchMock.mock.calls[1]?.[1]?.body as string) as {
       messages: { role: string; content?: string; tool_call_id?: string }[];
     };
-    const toolMessage = thirdCallBody.messages.find((m) => m.role === 'tool');
+    const toolMessage = secondCallBody.messages.find((m) => m.role === 'tool');
     expect(toolMessage).toBeDefined();
     expect(toolMessage?.tool_call_id).toBe('call_1');
 
     expect(result.response).toBe('High tide is at 7:48 AM, low tide at 1:54 PM.');
-  });
 
+    runSaltwaterToolSpy.mockRestore();
+  });
+  
   it('chains multiple tool_calls in sequence and returns the final synthesis', async () => {
     const fetchMock = vi.fn<typeof fetch>()
       .mockResolvedValueOnce({
