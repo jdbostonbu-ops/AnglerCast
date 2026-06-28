@@ -49,6 +49,8 @@ describe('POST /api/auth/signup', () => {
       isVerified: false,
       verificationCodeHash: verificationCode.verificationCodeHash,
       verificationCodeExpiresAt: verificationCode.expiresAt,
+      profileName: null,
+      profileImageUrl: null,
       passwordResetCodeHash: null,
       passwordResetCodeExpiresAt: null,
       createdAt: new Date('2026-01-15T12:00:00.000Z'),

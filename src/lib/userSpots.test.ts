@@ -24,6 +24,8 @@ describe('User SavedSpot relationship', () => {
       id: 'user_1',
       email: 'angler@example.com',
       passwordHash: 'hashed-password',
+      profileName: null,
+      profileImageUrl: null,
       isVerified: true,
       verificationCodeHash: null,
       verificationCodeExpiresAt: null,
