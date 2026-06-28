@@ -200,4 +200,94 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
 
     expect(result.response).toBe('High tide is at 7:48 AM, low tide at 1:54 PM.');
   });
+
+  it('chains multiple tool_calls in sequence and returns the final synthesis', async () => {
+    const fetchMock = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: {
+            content: null,
+            tool_calls: [{
+              id: 'call_1',
+              type: 'function',
+              function: {
+                name: 'fetchSaltwaterForecast',
+                arguments: JSON.stringify({ latitude: 41.4901, longitude: -71.3128, targetDate: '2026-06-28' }),
+              },
+            }],
+          }}],
+        }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          latitude: 41.48979, longitude: -71.294586,
+          hourly: { time: ['2026-06-28T00:00'], temperature_2m: [19.8], wind_speed_10m: [8.9], precipitation: [0] },
+        }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: {
+            content: null,
+            tool_calls: [{
+              id: 'call_2',
+              type: 'function',
+              function: {
+                name: 'fetchSaltwaterMarine',
+                arguments: JSON.stringify({ latitude: 41.4901, longitude: -71.3128, targetDate: '2026-06-28' }),
+              },
+            }],
+          }}],
+        }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          latitude: 41.458336, longitude: -71.20833,
+          hourly: { time: ['2026-06-28T00:00'], wave_height: [0.58], wave_direction: [162], wave_period: [6.75], sea_surface_temperature: [19.9] },
+        }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: {
+            content: null,
+            tool_calls: [{
+              id: 'call_3',
+              type: 'function',
+              function: {
+                name: 'fetchSaltwaterNoaa',
+                arguments: JSON.stringify({ stationId: '8443970', targetDate: '2026-06-28' }),
+              },
+            }],
+          }}],
+        }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          predictions: [{ t: '2026-06-28 07:48', v: '3.924' }, { t: '2026-06-28 13:54', v: '0.704' }],
+        }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: { content: 'Saturday looks great. Calm seas, light wind, high tide at 7:48 AM.' } }],
+        }),
+      } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await runSaltwaterAgent({ question: 'Where should I fish on Saturday, June 28?' });
+
+    expect(fetchMock).toHaveBeenCalledTimes(7);
+
+    const calledUrls = fetchMock.mock.calls.map((c) => (typeof c[0] === 'string' ? c[0] : c[0].toString()));
+    expect(calledUrls.some((u) => u.includes('api.open-meteo.com'))).toBe(true);
+    expect(calledUrls.some((u) => u.includes('marine-api.open-meteo.com'))).toBe(true);
+    expect(calledUrls.some((u) => u.includes('tidesandcurrents.noaa.gov'))).toBe(true);
+
+    expect(result.response).toBe('Saturday looks great. Calm seas, light wind, high tide at 7:48 AM.');
+  });
 });
