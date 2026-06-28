@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { SALTWATER_AGENT_TOOLS, runSaltwaterTool, fetchSaltwaterForecast, fetchSaltwaterMarine, fetchSaltwaterObis, fetchSaltwaterGbif, fetchSaltwaterUsgs } from '@/lib/saltwaterAgentTools';
+import { SALTWATER_AGENT_TOOLS, runSaltwaterTool, fetchSaltwaterForecast, fetchSaltwaterMarine, fetchSaltwaterObis, fetchSaltwaterGbif, fetchSaltwaterUsgs, fetchSaltwaterNoaa } from '@/lib/saltwaterAgentTools';
 
 type ToolEntry = {
   type: string;
@@ -261,6 +261,43 @@ describe('fetchSaltwaterUsgs', () => {
     const url = new URL(urlCalled as string);
     expect(url.hostname).toBe('waterservices.usgs.gov');
     expect(url.searchParams.get('sites')).toBe('01184000');
+    expect(url.searchParams.get('format')).toBe('json');
+
+    expect(result).not.toBeNull();
+  });
+});
+
+describe('fetchSaltwaterNoaa', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('queries NOAA CO-OPS for tide predictions by station and parses the response', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        predictions: [
+          { t: '2026-06-28 00:00', v: '0.946' },
+          { t: '2026-06-28 00:06', v: '0.9' },
+          { t: '2026-06-28 07:48', v: '3.924' },
+          { t: '2026-06-28 13:54', v: '0.704' },
+        ],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await fetchSaltwaterNoaa({
+      stationId: '8454000',
+      targetDate: '2026-06-28',
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const urlCalled = fetchMock.mock.calls[0]?.[0];
+    expect(typeof urlCalled).toBe('string');
+    const url = new URL(urlCalled as string);
+    expect(url.hostname).toBe('api.tidesandcurrents.noaa.gov');
+    expect(url.searchParams.get('station')).toBe('8454000');
+    expect(url.searchParams.get('product')).toBe('predictions');
     expect(url.searchParams.get('format')).toBe('json');
 
     expect(result).not.toBeNull();
