@@ -115,4 +115,30 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
     expect(systemMessage).toBeDefined();
     expect(systemMessage?.content).toMatch(/specific species|named species|named by the user/i);
   });
+
+  it('sends the user question and the tool registry to OpenAI', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { content: 'ok' } }],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await runSaltwaterAgent({ question: 'Where should I fish this Saturday?' });
+
+    const requestInit = fetchMock.mock.calls[0]?.[1];
+    const requestBody = JSON.parse(requestInit?.body as string) as {
+      messages: { role: string; content: string }[];
+      tools?: unknown[];
+    };
+
+    const userMessage = requestBody.messages.find((m) => m.role === 'user');
+    expect(userMessage).toBeDefined();
+    expect(userMessage?.content).toBe('Where should I fish this Saturday?');
+
+    expect(requestBody.tools).toBeDefined();
+    expect(Array.isArray(requestBody.tools)).toBe(true);
+    expect(requestBody.tools).toHaveLength(6);
+  });
 });
