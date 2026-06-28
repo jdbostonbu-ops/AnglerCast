@@ -76,3 +76,38 @@ export const runSaltwaterTool = async (
   _name: string,
   _args: Record<string, unknown>,
 ): Promise<UnknownSaltwaterToolResult> => ({ error: 'unknown_tool' });
+
+type FetchSaltwaterForecastInput = {
+  latitude: number;
+  longitude: number;
+  targetDate: string;
+};
+
+type SaltwaterForecastResponse = {
+  latitude: number;
+  longitude: number;
+  hourly?: {
+    time?: string[];
+    temperature_2m?: number[];
+    wind_speed_10m?: number[];
+    precipitation?: number[];
+  };
+};
+
+export const fetchSaltwaterForecast = async ({
+  latitude,
+  longitude,
+  targetDate,
+}: FetchSaltwaterForecastInput): Promise<SaltwaterForecastResponse> => {
+  const url = new URL('https://api.open-meteo.com/v1/forecast');
+  url.searchParams.set('latitude', String(latitude));
+  url.searchParams.set('longitude', String(longitude));
+  url.searchParams.set('start_date', targetDate);
+  url.searchParams.set('end_date', targetDate);
+  url.searchParams.set('hourly', 'temperature_2m,wind_speed_10m,precipitation');
+
+  const response = await fetch(url.toString());
+  const forecast = (await response.json()) as SaltwaterForecastResponse;
+
+  return forecast;
+};
