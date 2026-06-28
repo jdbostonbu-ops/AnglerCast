@@ -1104,6 +1104,40 @@ RED 37.28 — `SaltwaterChat` shows an error message when the API call fails
 - What it checks: when the mocked fetch to `/api/saltwater-chat` rejects or returns a non-200 response, the component displays a clear error message (e.g. "Something went wrong. Please try again.") and clears the spinner.
 - Why it fails first; expected behavior: the component does not exist yet.
 
+RED 37.29 — POST /api/saltwater-chat forwards body.history to runSaltwaterAgent
+What it checks: POSTing to the route with a body containing both question AND a non-empty history array (e.g. one prior user turn + one prior assistant turn) calls runSaltwaterAgent with both fields, not just question. The runSaltwaterAgent import is mocked; the test asserts the mock was called with { question, history } where history deeply equals the array sent in the body.
+Why it fails first; expected behavior: the route currently extracts only body.question and calls runSaltwaterAgent({ question }), dropping the history array silently. The component sends history (RED 37.27 proved that), but no test until now has asserted the route forwards it.
+
+RED 37.30 — runSaltwaterAgent passes prior history into the OpenAI messages array before the new question
+What it checks: When runSaltwaterAgent is called with { question, history } where history contains one user turn and one assistant turn, the global fetch mock that captures the OpenAI request is inspected: the messages array sent in the request body contains the prior user turn AND the prior assistant turn as { role, content } entries BEFORE the new question. The test asserts the prior user message appears before the prior assistant message, and both appear before the new question's user message.
+Why it fails first; expected behavior: the current runSaltwaterAgent only sends the system prompt and the new question in the messages array. Even though RED 37.29 made the route forward history to the agent, the agent's input type doesn't yet accept history, so the prior turns never reach OpenAI.
+
+It always returns unknown_tool regardless of input. It looks like Codex left a stub here that was never wired into the agent (the agent uses its own runSupportedTool instead). It's dead code but it's worth noting because it suggests the original Section 37 intent was for the tool-running logic to live in one place.
+
+Why Codex's implementation passes all 28 tests despite this:
+The orchestration tests (RED 37.16–37.20) mocked OpenAI responses and hand-crafted the tool_calls with the exact names the dispatcher expected. The tool tests (RED 37.10–37.15) tested each tool function with explicit arguments. No test asserted:
+
+The tool name in the registry matches the dispatcher
+The tool schemas declare the parameters those tools need
+A real OpenAI response (with the actual model deciding what to call) reaches the right tool
+
+These are real coverage gaps from Section 37.
+
+Three RED tests I'd write to close the gaps, in TESTING.md style (specs only, no code yet — you tell me if these are the right tests before I write the code):
+
+RED 37.31 — Tool registry names match the dispatcher in runSaltwaterAgent
+What it checks: For each tool in SALTWATER_AGENT_TOOLS, calling the dispatcher (runSupportedTool or whatever the agent's tool-call handler is) with that tool's name field and valid arguments returns a non-error result. No tool in the registry can produce { error: 'unknown_tool' } when dispatched by its declared name.
+Why it fails first; expected behavior: the registry uses short names (forecast, marine, etc.) but the dispatcher's switch statement matches long names (fetchSaltwaterForecast, etc.). Five of six tools fall through to unknown_tool.
+
+
+RED 37.32 — Tool schemas declare required parameters with descriptions OpenAI can act on
+What it checks: For each tool in SALTWATER_AGENT_TOOLS whose function requires inputs (forecast, marine, OBIS, GBIF, USGS, NOAA), the parameters JSON Schema declares the inputs the function actually needs — at minimum latitude and longitude for the location-based tools, targetDate for date-bound tools, siteId for USGS, stationId for NOAA — each with a type and a non-empty description, and listed in required. No tool schema uses an empty-properties object.
+Why it fails first; expected behavior: every tool currently uses the emptyParameters constant. OpenAI receives no parameter schema and calls every tool with {}. Even when the right tool fires, it runs against latitude: 0, longitude: 0, targetDate: ''.
+
+
+RED 37.33 — Agent does not invent data when a tool returns null or an error
+What it checks: When OpenAI returns a tool_call, the matching tool returns null (or an error object), the agent sends that back to OpenAI, and OpenAI's next response contains the invented fallback ("typical July temperatures around 80°F..."). The agent's final response is post-processed or the system prompt is reinforced such that the final response acknowledges the tool failure honestly and does not contain fabricated facts. Specifically: the system prompt must instruct the model to say it could not retrieve the data and stop, never to fall back on training data. The test asserts the system prompt contains language matching /never invent|do not fabricate|cannot use training data|honest data/i (or similar honesty enforcement language matching your honest-data thesis).
+Why it fails first; expected behavior: the current system prompt has no fallback-prohibition language. When a tool returns nothing useful, OpenAI fills the gap with training-data weather averages, directly violating AnglerCast's honest-data thesis from the README.
 ---
 
 ### Reference system prompt (GREEN-time starting point)
