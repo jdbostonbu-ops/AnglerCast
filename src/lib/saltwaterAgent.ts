@@ -1,4 +1,9 @@
-import { fetchSaltwaterNoaa, SALTWATER_AGENT_TOOLS } from '@/lib/saltwaterAgentTools';
+import {
+  fetchSaltwaterForecast,
+  fetchSaltwaterMarine,
+  fetchSaltwaterNoaa,
+  SALTWATER_AGENT_TOOLS,
+} from '@/lib/saltwaterAgentTools';
 
 type RunSaltwaterAgentInput = {
   question: string;
@@ -60,7 +65,23 @@ const requestOpenAI = async (
   return (await response.json()) as OpenAIChatCompletionResponse;
 };
 
-const parseNoaaToolArguments = (
+const parseLocationDateToolArguments = (
+  rawArguments: string,
+): { latitude: number; longitude: number; targetDate: string } => {
+  const parsedArguments = JSON.parse(rawArguments) as {
+    latitude?: unknown;
+    longitude?: unknown;
+    targetDate?: unknown;
+  };
+
+  return {
+    latitude: typeof parsedArguments.latitude === 'number' ? parsedArguments.latitude : 0,
+    longitude: typeof parsedArguments.longitude === 'number' ? parsedArguments.longitude : 0,
+    targetDate: typeof parsedArguments.targetDate === 'string' ? parsedArguments.targetDate : '',
+  };
+};
+
+const parseStationDateToolArguments = (
   rawArguments: string,
 ): { stationId: string; targetDate: string } => {
   const parsedArguments = JSON.parse(rawArguments) as {
@@ -72,6 +93,25 @@ const parseNoaaToolArguments = (
     stationId: typeof parsedArguments.stationId === 'string' ? parsedArguments.stationId : '',
     targetDate: typeof parsedArguments.targetDate === 'string' ? parsedArguments.targetDate : '',
   };
+};
+
+const runSupportedTool = async (
+  toolName: string,
+  rawArguments: string,
+): Promise<unknown> => {
+  if (toolName === 'fetchSaltwaterForecast') {
+    return fetchSaltwaterForecast(parseLocationDateToolArguments(rawArguments));
+  }
+
+  if (toolName === 'fetchSaltwaterMarine') {
+    return fetchSaltwaterMarine(parseLocationDateToolArguments(rawArguments));
+  }
+
+  if (toolName === 'fetchSaltwaterNoaa') {
+    return fetchSaltwaterNoaa(parseStationDateToolArguments(rawArguments));
+  }
+
+  return { error: 'unknown_tool' };
 };
 
 export const runSaltwaterAgent = async ({
@@ -88,16 +128,17 @@ export const runSaltwaterAgent = async ({
     },
   ];
 
-  const completion = await requestOpenAI(messages);
-  const message = completion.choices[0]?.message;
-  const toolCall = message?.tool_calls?.[0];
+  let completion = await requestOpenAI(messages);
+  let message = completion.choices[0]?.message;
+  let toolCall = message?.tool_calls?.[0];
 
-  if (toolCall !== undefined && toolCall.function.name === 'fetchSaltwaterNoaa') {
-    const toolResult = await fetchSaltwaterNoaa(
-      parseNoaaToolArguments(toolCall.function.arguments),
+  while (message !== undefined && toolCall !== undefined) {
+    const toolResult = await runSupportedTool(
+      toolCall.function.name,
+      toolCall.function.arguments,
     );
-    const followUpCompletion = await requestOpenAI([
-      ...messages,
+
+    messages.push(
       {
         role: 'assistant',
         content: message.content,
@@ -108,11 +149,11 @@ export const runSaltwaterAgent = async ({
         tool_call_id: toolCall.id,
         content: JSON.stringify(toolResult),
       },
-    ]);
+    );
 
-    return {
-      response: followUpCompletion.choices[0]?.message.content ?? '',
-    };
+    completion = await requestOpenAI(messages);
+    message = completion.choices[0]?.message;
+    toolCall = message?.tool_calls?.[0];
   }
 
   return {
