@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { SALTWATER_AGENT_TOOLS, runSaltwaterTool, fetchSaltwaterForecast } from '@/lib/saltwaterAgentTools';
+import { SALTWATER_AGENT_TOOLS, runSaltwaterTool, fetchSaltwaterForecast, fetchSaltwaterMarine } from '@/lib/saltwaterAgentTools';
 
 type ToolEntry = {
   type: string;
@@ -74,6 +74,46 @@ describe('fetchSaltwaterForecast', () => {
     expect(typeof urlCalled).toBe('string');
     const url = new URL(urlCalled as string);
     expect(url.hostname).toBe('api.open-meteo.com');
+    expect(url.searchParams.get('latitude')).toBe('41.4901');
+    expect(url.searchParams.get('longitude')).toBe('-71.3128');
+
+    expect(result).not.toBeNull();
+  });
+});
+
+describe('fetchSaltwaterMarine', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('builds the Open-Meteo Marine URL with lat/lng and parses the response', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        latitude: 41.458336,
+        longitude: -71.20833,
+        hourly: {
+          time: ['2026-06-28T00:00'],
+          wave_height: [0.58],
+          wave_direction: [162],
+          wave_period: [6.75],
+          sea_surface_temperature: [19.9],
+        },
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await fetchSaltwaterMarine({
+      latitude: 41.4901,
+      longitude: -71.3128,
+      targetDate: '2026-06-28',
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const urlCalled = fetchMock.mock.calls[0]?.[0];
+    expect(typeof urlCalled).toBe('string');
+    const url = new URL(urlCalled as string);
+    expect(url.hostname).toBe('marine-api.open-meteo.com');
     expect(url.searchParams.get('latitude')).toBe('41.4901');
     expect(url.searchParams.get('longitude')).toBe('-71.3128');
 
