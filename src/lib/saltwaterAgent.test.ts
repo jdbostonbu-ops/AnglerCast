@@ -341,6 +341,24 @@ it('stops after max iterations when OpenAI never returns a final answer', async 
     expect(result.reason).toBe('max_iterations_exceeded');
   });
 
+  it('returns the honest decline and invokes no tools when the question is fully out of scope', async () => {
+    const decline = "I don't have a data source for restaurants. I have access to weather, marine, species, and tide data. For restaurants, try Google Maps.";
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { content: decline } }],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await runSaltwaterAgent({ question: "What's a good vegetarian restaurant near Boston Harbor?" }) as { response: string };
+
+    expect(result.response).toBe(decline);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const calledUrls = fetchMock.mock.calls.map((c) => (typeof c[0] === 'string' ? c[0] : c[0].toString()));
+    expect(calledUrls[0]).toContain('api.openai.com');
+  });
+
   it('handles a tool returning null and continues the loop to a final answer', async () => {
     const fetchMock = vi.fn<typeof fetch>()
       .mockResolvedValueOnce({
