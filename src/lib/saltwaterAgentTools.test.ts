@@ -48,6 +48,7 @@ describe('fetchSaltwaterForecast', () => {
   });
 
   it('builds the Open-Meteo Forecast URL with lat/lng and parses the response', async () => {
+    
     const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
       ok: true,
       json: async () => ({
@@ -304,7 +305,7 @@ describe('fetchSaltwaterNoaa', () => {
   });
 
   it('RED 37.31 — every tool in SALTWATER_AGENT_TOOLS dispatches to a real tool function by its registered name', async () => {
-    const fetchMock = vi.fn().mockResolvedValue(
+    const fetchMock = vi.fn().mockImplementation(async () =>
       new Response(JSON.stringify({}), { status: 200 }),
     );
     vi.stubGlobal('fetch', fetchMock);

@@ -72,10 +72,87 @@ type UnknownSaltwaterToolResult = {
   error: 'unknown_tool';
 };
 
+const readNumberArg = (args: Record<string, unknown>, key: string): number =>
+  typeof args[key] === 'number' ? args[key] : 0;
+
+const readStringArg = (args: Record<string, unknown>, key: string): string =>
+  typeof args[key] === 'string' ? args[key] : '';
+
+const readOptionalNumberArg = (
+  args: Record<string, unknown>,
+  key: string,
+): number | undefined => (typeof args[key] === 'number' ? args[key] : undefined);
+
+const readOptionalStringArg = (
+  args: Record<string, unknown>,
+  key: string,
+): string | undefined => (typeof args[key] === 'string' ? args[key] : undefined);
+
+const readOptionalStringArrayArg = (
+  args: Record<string, unknown>,
+  key: string,
+): string[] | undefined => {
+  if (!Array.isArray(args[key])) {
+    return undefined;
+  }
+
+  return args[key].filter((value): value is string => typeof value === 'string');
+};
+
 export const runSaltwaterTool = async (
-  _name: string,
-  _args: Record<string, unknown>,
-): Promise<UnknownSaltwaterToolResult> => ({ error: 'unknown_tool' });
+  name: string,
+  args: Record<string, unknown>,
+): Promise<unknown | UnknownSaltwaterToolResult> => {
+  if (name === 'forecast') {
+    return fetchSaltwaterForecast({
+      latitude: readNumberArg(args, 'latitude'),
+      longitude: readNumberArg(args, 'longitude'),
+      targetDate: readStringArg(args, 'targetDate'),
+    });
+  }
+
+  if (name === 'marine') {
+    return fetchSaltwaterMarine({
+      latitude: readNumberArg(args, 'latitude'),
+      longitude: readNumberArg(args, 'longitude'),
+      targetDate: readStringArg(args, 'targetDate'),
+    });
+  }
+
+  if (name === 'obis') {
+    return fetchSaltwaterObis({
+      latitude: readNumberArg(args, 'latitude'),
+      longitude: readNumberArg(args, 'longitude'),
+      radiusDegrees: readOptionalNumberArg(args, 'radiusDegrees'),
+      scientificName: readOptionalStringArg(args, 'scientificName'),
+    });
+  }
+
+  if (name === 'gbif') {
+    return fetchSaltwaterGbif({
+      latitude: readNumberArg(args, 'latitude'),
+      longitude: readNumberArg(args, 'longitude'),
+      radiusDegrees: readOptionalNumberArg(args, 'radiusDegrees'),
+      scientificName: readOptionalStringArg(args, 'scientificName'),
+    });
+  }
+
+  if (name === 'usgs') {
+    return fetchSaltwaterUsgs({
+      siteId: readStringArg(args, 'siteId'),
+      parameterCodes: readOptionalStringArrayArg(args, 'parameterCodes'),
+    });
+  }
+
+  if (name === 'noaa') {
+    return fetchSaltwaterNoaa({
+      stationId: readStringArg(args, 'stationId'),
+      targetDate: readStringArg(args, 'targetDate'),
+    });
+  }
+
+  return { error: 'unknown_tool' };
+};
 
 type FetchSaltwaterForecastInput = {
   latitude: number;
