@@ -183,7 +183,7 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
       } as Response);
     vi.stubGlobal('fetch', fetchMock);
 
-    const result = await runSaltwaterAgent({ question: 'When is high tide today at Providence?' });
+    const result = await runSaltwaterAgent({ question: 'When is high tide today at Providence?' }) as { response: string };
 
     expect(fetchMock).toHaveBeenCalledTimes(3);
 
@@ -279,7 +279,7 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
       } as Response);
     vi.stubGlobal('fetch', fetchMock);
 
-    const result = await runSaltwaterAgent({ question: 'Where should I fish on Saturday, June 28?' });
+    const result = await runSaltwaterAgent({ question: 'Where should I fish on Saturday, June 28?' }) as { response: string };
 
     expect(fetchMock).toHaveBeenCalledTimes(7);
 
