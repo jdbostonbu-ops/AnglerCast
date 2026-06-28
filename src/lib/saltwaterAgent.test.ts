@@ -134,6 +134,48 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
     expect(calledUrls[0]).toContain('api.openai.com');
   });
 
+  it('recovers when a tool function returns null or an error shape and continues to a final answer', async () => {
+    const fetchMock = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: {
+            content: null,
+            tool_calls: [{
+              id: 'call_m',
+              type: 'function',
+              function: {
+                name: 'fetchSaltwaterMarine',
+                arguments: JSON.stringify({ latitude: 39.8283, longitude: -98.5795, targetDate: '2026-06-28' }),
+              },
+            }],
+          }}],
+        }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: false,
+        json: async () => ({ error: 'no data for location' }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: { content: 'I do not have marine data for that inland location.' } }],
+        }),
+      } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await runSaltwaterAgent({ question: 'Marine conditions in Kansas?' }) as { response: string };
+
+    expect(result.response).toBe('I do not have marine data for that inland location.');
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+
+    const thirdCallBody = JSON.parse(fetchMock.mock.calls[2]?.[1]?.body as string) as {
+      messages: { role: string; content?: string }[];
+    };
+    const toolMessage = thirdCallBody.messages.find((m) => m.role === 'tool');
+    expect(toolMessage).toBeDefined();
+  });
+
   it('sends the user question and the tool registry to OpenAI', async () => {
     const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
       ok: true,
