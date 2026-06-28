@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { SALTWATER_AGENT_TOOLS, runSaltwaterTool, fetchSaltwaterForecast, fetchSaltwaterMarine, fetchSaltwaterObis } from '@/lib/saltwaterAgentTools';
+import { SALTWATER_AGENT_TOOLS, runSaltwaterTool, fetchSaltwaterForecast, fetchSaltwaterMarine, fetchSaltwaterObis, fetchSaltwaterGbif } from '@/lib/saltwaterAgentTools';
 
 type ToolEntry = {
   type: string;
@@ -159,6 +159,55 @@ describe('fetchSaltwaterObis', () => {
     expect(url.searchParams.get('scientificname')).toBe('Morone saxatilis');
     expect(url.searchParams.get('geometry')).toBeDefined();
     expect(url.searchParams.get('size')).toBeDefined();
+
+    expect(result).not.toBeNull();
+  });
+});
+
+describe('fetchSaltwaterGbif', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('queries GBIF with decimal lat/lng range bounds, species, and limit, and parses the response', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        offset: 0,
+        limit: 2,
+        endOfRecords: false,
+        count: 309,
+        results: [
+          {
+            scientificName: 'Morone saxatilis (Walbaum, 1792)',
+            species: 'Morone saxatilis',
+            decimalLatitude: 41.764394,
+            decimalLongitude: -70.692292,
+            eventDate: '2026-05-19T08:29:57',
+            year: 2026,
+            month: 5,
+            stateProvince: 'Massachusetts',
+          },
+        ],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await fetchSaltwaterGbif({
+      latitude: 41.4901,
+      longitude: -71.3128,
+      scientificName: 'Morone saxatilis',
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const urlCalled = fetchMock.mock.calls[0]?.[0];
+    expect(typeof urlCalled).toBe('string');
+    const url = new URL(urlCalled as string);
+    expect(url.hostname).toBe('api.gbif.org');
+    expect(url.searchParams.get('scientificName')).toBe('Morone saxatilis');
+    expect(url.searchParams.get('decimalLatitude')).toBeDefined();
+    expect(url.searchParams.get('decimalLongitude')).toBeDefined();
+    expect(url.searchParams.get('limit')).toBeDefined();
 
     expect(result).not.toBeNull();
   });
