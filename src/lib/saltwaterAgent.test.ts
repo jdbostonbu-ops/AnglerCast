@@ -116,6 +116,24 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
     expect(systemMessage?.content).toMatch(/specific species|named species|named by the user/i);
   });
 
+  it('returns the clarifying question text and invokes no tools when OpenAI returns text only', async () => {
+    const clarification = 'Did you mean Saturday, June 28?';
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { content: clarification } }],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await runSaltwaterAgent({ question: 'Where should I fish this Saturday?' }) as { response: string };
+
+    expect(result.response).toBe(clarification);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const calledUrls = fetchMock.mock.calls.map((c) => (typeof c[0] === 'string' ? c[0] : c[0].toString()));
+    expect(calledUrls[0]).toContain('api.openai.com');
+  });
+
   it('sends the user question and the tool registry to OpenAI', async () => {
     const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
       ok: true,
@@ -321,5 +339,48 @@ it('stops after max iterations when OpenAI never returns a final answer', async 
 
     expect(result.ok).toBe(false);
     expect(result.reason).toBe('max_iterations_exceeded');
+  });
+
+  it('handles a tool returning null and continues the loop to a final answer', async () => {
+    const fetchMock = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: {
+            content: null,
+            tool_calls: [{
+              id: 'call_m',
+              type: 'function',
+              function: {
+                name: 'fetchSaltwaterMarine',
+                arguments: JSON.stringify({ latitude: 39.8283, longitude: -98.5795, targetDate: '2026-06-28' }),
+              },
+            }],
+          }}],
+        }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: false,
+        json: async () => ({ error: 'no data for location' }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: { content: 'I do not have marine data for that inland location.' } }],
+        }),
+      } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await runSaltwaterAgent({ question: 'Marine conditions in Kansas?' }) as { response: string };
+
+    expect(result.response).toBe('I do not have marine data for that inland location.');
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+
+    const thirdCallBody = JSON.parse(fetchMock.mock.calls[2]?.[1]?.body as string) as {
+      messages: { role: string; content?: string }[];
+    };
+    const toolMessage = thirdCallBody.messages.find((m) => m.role === 'tool');
+    expect(toolMessage).toBeDefined();
+    expect(toolMessage?.content).toBeDefined();
   });
 });
