@@ -1142,6 +1142,45 @@ Why it fails first; expected behavior: the current system prompt has no fallback
 RED 37.34 — runSaltwaterAgent dispatches tool_calls through the registry-aware runSaltwaterTool, not a private duplicate
 What it checks: When OpenAI returns a tool_call whose function.name is a registered short name from SALTWATER_AGENT_TOOLS (e.g. 'forecast', 'marine', 'noaa', 'obis', 'gbif', 'usgs'), the agent dispatches that call through the shared runSaltwaterTool exported from saltwaterAgentTools.ts. The test mocks runSaltwaterTool directly via vi.mock('@/lib/saltwaterAgentTools', ...) and asserts the mock is called with the tool name and parsed arguments. The agent must not maintain a separate, private switch statement that handles only a subset of tools or uses different name strings.
 Why it fails first; expected behavior: the agent currently has a private runSupportedTool function inside saltwaterAgent.ts that handles only fetchSaltwaterForecast, fetchSaltwaterMarine, and fetchSaltwaterNoaa (the old long names). When OpenAI calls a tool by its registry name ('forecast', etc.), this private dispatcher returns { error: 'unknown_tool' } for all six cases. The fix from RED 37.31 wired runSaltwaterTool correctly but the agent never calls it. This RED forces the agent to use the registry-aware dispatcher.
+
+## 37.5 — Refactor: orchestration tests use the registry-aware dispatcher seam
+
+After GREEN 37.34 wired `runSaltwaterAgent` to dispatch tool_calls through the shared `runSaltwaterTool` from `saltwaterAgentTools.ts` (instead of a private switch over individual tool functions), 5 existing orchestration tests began failing. Their mocks targeted the old seam: they stubbed `fetchSaltwaterForecast`, `fetchSaltwaterMarine`, etc. directly. The agent no longer calls those functions directly, so the mocks no longer intercept the dispatch.
+
+This section refactors each broken test to mock the new seam (`runSaltwaterTool`) without weakening what each test asserts. The orchestration behaviors each test was originally designed to cover — single tool_call round-trip, multi-step chaining, max iteration cap, null tool recovery, error-shape recovery — remain unchanged. Only the mock target is updated.
+
+Each entry below is a single test, refactored in its own RED → GREEN cycle.
+
+---
+
+REFACTOR 37.35 — Test "recovers when a tool function returns null or an error shape and continues to a final answer"
+- What it checks (unchanged): when a tool returns an error-shape result mid-loop, the agent feeds the error back to OpenAI and continues to a final answer.
+- Why it currently fails: the test mocks an individual tool function to return `{ error: ... }`. The agent dispatches through `runSaltwaterTool` now, so the mock is never reached and the loop receives whatever the real `runSaltwaterTool` returns (which is the real fetch path against undefined env, throwing or returning unexpected data).
+- Refactor: replace the individual tool function mock with a `vi.spyOn(toolsModule, 'runSaltwaterTool').mockResolvedValue({ error: ... })`. The test's assertions about the final agent response and the OpenAI message sequence remain the same.
+
+REFACTOR 37.36 — Test "runs a single tool_call, feeds the result back to OpenAI, and returns the final answer"
+- What it checks (unchanged): the agent dispatches the tool, sends the tool result back to OpenAI in the messages array with the matching `tool_call_id`, and returns the final answer text.
+- Why it currently fails: the test mocks `fetchSaltwaterNoaa` (or similar) directly. The agent dispatches through `runSaltwaterTool`, so the original mock isn't called and the real `runSaltwaterTool` runs against the second OpenAI mock that returned `{}` with no `choices`.
+- Refactor: replace the individual tool function mock with a `vi.spyOn(toolsModule, 'runSaltwaterTool').mockResolvedValue(...)` returning the same shape the test originally expected. The OpenAI mock sequence stays the same.
+
+REFACTOR 37.37 — Test "chains multiple tool_calls in sequence and returns the final synthesis"
+- What it checks (unchanged): when OpenAI returns tool_calls across multiple iterations, the agent dispatches each, feeds each result back, and returns the final answer after the loop terminates.
+- Why it currently fails: the test mocks multiple individual tool functions, none of which are reached now that the agent uses `runSaltwaterTool`.
+- Refactor: replace the multiple individual tool function mocks with a single `vi.spyOn(toolsModule, 'runSaltwaterTool')` that returns different values per call (`mockResolvedValueOnce` per iteration). The OpenAI mock sequence stays the same.
+
+REFACTOR 37.38 — Test "stops after max iterations when OpenAI never returns a final answer"
+- What it checks (unchanged): when OpenAI keeps returning tool_calls past the configured cap, the agent stops and returns `{ ok: false, reason: 'max_iterations_exceeded' }`.
+- Why it currently fails: the test mocks a tool function to always succeed, but the agent dispatches through `runSaltwaterTool` instead, so the mock isn't reached.
+- Refactor: replace the tool function mock with a `vi.spyOn(toolsModule, 'runSaltwaterTool').mockResolvedValue(...)`. The assertion about max iterations and the OpenAI call count stays the same.
+
+REFACTOR 37.39 — Test "handles a tool returning null and continues the loop to a final answer"
+- What it checks (unchanged): when a tool returns `null`, the agent feeds `null` back to OpenAI (serialized in the tool message), and OpenAI's next response is honored normally.
+- Why it currently fails: the test mocks an individual tool function to return `null`. The agent dispatches through `runSaltwaterTool`, so the null never reaches OpenAI as the tool result.
+- Refactor: replace the individual tool function mock with a `vi.spyOn(toolsModule, 'runSaltwaterTool').mockResolvedValue(null)`. The assertions about the agent continuing the loop stay the same.
+
+---
+
+After all five GREENs commit, the diagnostic console.log lines added during the GREEN 37.34 debugging pass will be cleaned up in a final commit. Those were not test-driven and exist only to confirm the bug fix; once the orchestration tests run cleanly against the new seam, they can come out.
 ---
 
 ### Reference system prompt (GREEN-time starting point)
