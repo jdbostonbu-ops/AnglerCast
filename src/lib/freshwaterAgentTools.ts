@@ -1,3 +1,8 @@
+type FreshwaterAgentToolProperty = {
+  type: 'number' | 'string';
+  description: string;
+};
+
 type FreshwaterAgentTool = {
   type: 'function';
   function: {
@@ -5,16 +10,46 @@ type FreshwaterAgentTool = {
     description: string;
     parameters: {
       type: 'object';
-      properties: Record<string, never>;
+      properties: Record<string, FreshwaterAgentToolProperty>;
       required: string[];
     };
   };
 };
 
-const emptyParameters = {
+const latitudeProperty = {
+  type: 'number',
+  description: 'Latitude for the freshwater fishing location.',
+} satisfies FreshwaterAgentToolProperty;
+
+const longitudeProperty = {
+  type: 'number',
+  description: 'Longitude for the freshwater fishing location.',
+} satisfies FreshwaterAgentToolProperty;
+
+const targetDateProperty = {
+  type: 'string',
+  description: 'Target date for the requested conditions in YYYY-MM-DD format.',
+} satisfies FreshwaterAgentToolProperty;
+
+const forecastParameters = {
   type: 'object',
-  properties: {},
-  required: [],
+  properties: {
+    latitude: latitudeProperty,
+    longitude: longitudeProperty,
+    targetDate: targetDateProperty,
+  },
+  required: ['latitude', 'longitude', 'targetDate'],
+} satisfies FreshwaterAgentTool['function']['parameters'];
+
+const usgsParameters = {
+  type: 'object',
+  properties: {
+    siteId: {
+      type: 'string',
+      description: 'USGS site identifier for the water station.',
+    },
+  },
+  required: ['siteId'],
 } satisfies FreshwaterAgentTool['function']['parameters'];
 
 export const FRESHWATER_AGENT_TOOLS: FreshwaterAgentTool[] = [
@@ -23,7 +58,7 @@ export const FRESHWATER_AGENT_TOOLS: FreshwaterAgentTool[] = [
     function: {
       name: 'forecast',
       description: 'Fetch Open-Meteo Forecast conditions for a freshwater fishing question.',
-      parameters: emptyParameters,
+      parameters: forecastParameters,
     },
   },
   {
@@ -31,7 +66,7 @@ export const FRESHWATER_AGENT_TOOLS: FreshwaterAgentTool[] = [
     function: {
       name: 'usgs',
       description: 'Fetch USGS water data for freshwater context.',
-      parameters: emptyParameters,
+      parameters: usgsParameters,
     },
   },
 ];
