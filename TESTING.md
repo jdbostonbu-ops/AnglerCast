@@ -1331,6 +1331,17 @@ GREEN phase: REFACTOR 37.48's test passes once OBIS and GBIF are removed from th
 
 ---
 
+## REFACTOR 37.53 — Update "sends the user question and the tool registry to OpenAI" test to expect four tools
+
+- What changes: The existing it('sends the user question and the tool registry to OpenAI', ...) test in src/lib/saltwaterAgent.test.ts asserts that the tools array sent in the OpenAI request body has length 6. With OBIS and GBIF removed from SALTWATER_AGENT_TOOLS per REFACTOR 37.52, that array is now length 4. The assertion is updated to expect 4 instead.
+
+- Why this refactor is needed: I missed this test in the original Section 37.7 spec. It was created during early Section 37 work to prove the agent forwards the tool registry to OpenAI, and the length assertion was a coincidence of "we have six tools." With the structural fix to remove OBIS/GBIF from the registry, the assertion needs to match the new size. The test's core purpose — proving the agent forwards the registry — is unchanged.
+
+RED phase: The test is currently failing after GREEN 37.52 because it still expects length 6.
+GREEN phase: Update the assertion to toHaveLength(4).
+
+---
+
 ### Reference system prompt (GREEN-time starting point)
 
 This is reference wording for Codex to use as a starting point. The tests above assert the SHAPE of the prompt via regex, not these exact sentences. Codex may tune the wording at GREEN as long as the regex shape continues to match.

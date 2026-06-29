@@ -207,7 +207,7 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
 
     expect(requestBody.tools).toBeDefined();
     expect(Array.isArray(requestBody.tools)).toBe(true);
-    expect(requestBody.tools).toHaveLength(6);
+    expect(requestBody.tools).toHaveLength(4);
   });
 
   it('runs a single tool_call, feeds the result back to OpenAI, and returns the final answer', async () => {
