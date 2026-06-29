@@ -185,3 +185,71 @@ describe('fetchFreshwaterForecast', () => {
     expect(result.latitude).toBe(41.4901);
   });
 });
+
+describe('fetchFreshwaterUsgs', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('RED 38.13 — queries USGS NWIS with the site ID and parses the time series response', async () => {
+    const { fetchFreshwaterUsgs } = await import('@/lib/freshwaterAgentTools');
+
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        value: {
+          timeSeries: [
+            {
+              sourceInfo: {
+                siteName: 'CONNECTICUT RIVER AT HARTFORD, CT',
+                geoLocation: {
+                  geogLocation: {
+                    latitude: 41.7659,
+                    longitude: -72.6709,
+                  },
+                },
+              },
+              variable: {
+                variableName: 'Gage height, feet',
+                unit: { unitCode: 'ft' },
+              },
+              values: [
+                {
+                  value: [
+                    { value: '3.42', dateTime: '2026-06-28T12:00:00.000-04:00' },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await fetchFreshwaterUsgs({ siteId: '01184000' }) as {
+      siteName: string;
+      latitude: number | null;
+      longitude: number | null;
+      parameters: Array<{ variableName: string; unit: string; latestValue: string; latestTime: string }>;
+    };
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const urlCalled = fetchMock.mock.calls[0]?.[0];
+    expect(typeof urlCalled).toBe('string');
+    const url = new URL(urlCalled as string);
+    expect(url.hostname).toBe('waterservices.usgs.gov');
+    expect(url.pathname).toBe('/nwis/iv/');
+    expect(url.searchParams.get('sites')).toBe('01184000');
+    expect(url.searchParams.get('format')).toBe('json');
+
+    expect(result.siteName).toBe('CONNECTICUT RIVER AT HARTFORD, CT');
+    expect(result.latitude).toBe(41.7659);
+    expect(result.longitude).toBe(-72.6709);
+    expect(result.parameters).toHaveLength(1);
+    expect(result.parameters[0]?.variableName).toBe('Gage height, feet');
+    expect(result.parameters[0]?.unit).toBe('ft');
+    expect(result.parameters[0]?.latestValue).toBe('3.42');
+    expect(result.parameters[0]?.latestTime).toBe('2026-06-28T12:00:00.000-04:00');
+  });
+});
