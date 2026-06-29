@@ -2,6 +2,7 @@ import {
   FRESHWATER_AGENT_TOOLS,
   runFreshwaterTool,
 } from '@/lib/freshwaterAgentTools';
+import { getSpeciesForWaterType } from '@/lib/species';
 
 type RunFreshwaterAgentInput = {
   question: string;
@@ -57,6 +58,14 @@ const freshwaterAgentSystemPrompt =
 
 const maxToolIterations = 8;
 
+const getFreshwaterSpeciesContext = (): string => {
+  const speciesList = getSpeciesForWaterType('freshwater')
+    .map((species) => `${species.commonName} (${species.scientificName})`)
+    .join(', ');
+
+  return `Freshwater common-fished species list: ${speciesList}`;
+};
+
 const isFreshwaterAgentHistoryMessage = (
   message: unknown,
 ): message is FreshwaterAgentHistoryMessage => {
@@ -99,6 +108,10 @@ export const runFreshwaterAgent = async ({
     {
       role: 'system',
       content: freshwaterAgentSystemPrompt,
+    },
+    {
+      role: 'system',
+      content: getFreshwaterSpeciesContext(),
     },
     ...history.filter(isFreshwaterAgentHistoryMessage),
     {
