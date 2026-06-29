@@ -94,7 +94,12 @@ const readStringArg = (args: Record<string, unknown>, key: string): string =>
 export const fetchFreshwaterForecast = async (
   _input: FetchFreshwaterForecastInput,
 ): Promise<unknown> => {
-  const response = await fetch('https://api.open-meteo.com/v1/forecast');
+  const url = new URL('https://api.open-meteo.com/v1/forecast');
+  url.searchParams.set('temperature_unit', 'fahrenheit');
+  url.searchParams.set('wind_speed_unit', 'mph');
+  url.searchParams.set('precipitation_unit', 'inch');
+
+  const response = await fetch(url.toString());
 
   return response.json();
 };
