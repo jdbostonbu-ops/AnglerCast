@@ -49,4 +49,12 @@ describe('POST /api/freshwater-chat', () => {
     expect(responseWhitespace.status).toBe(400);
     expect(mockRunFreshwaterAgent).not.toHaveBeenCalled();
   });
+
+  it('RED 38.25 — returns 500 when runFreshwaterAgent throws an unexpected error', async () => {
+    mockRunFreshwaterAgent.mockRejectedValue(new Error('agent crashed'));
+
+    const response = await POST(buildRequest({ question: 'What is the river height?' }));
+
+    expect(response.status).toBe(500);
+  });
 });
