@@ -79,4 +79,28 @@ describe('runFreshwaterAgent', () => {
     expect(systemContent).toMatch(/do not have|don't have|outside.{0,40}sources/i);
     expect(systemContent).toMatch(/google maps|external source/i);
   });
+
+  it('RED 38.4 — redirects open-ended species questions to the Sighting-rate search on the freshwater page instead of dispatching a tool', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { role: 'assistant', content: 'Use the Sighting-rate search below.' } }],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await runFreshwaterAgent({ question: 'What fish can I find in the Connecticut River?' });
+
+    const requestBody = JSON.parse(fetchMock.mock.calls[0]?.[1]?.body as string) as {
+      messages: Array<{ role: string; content: string | null }>;
+    };
+    const systemContent = requestBody.messages
+      .filter((m) => m.role === 'system')
+      .map((m) => m.content ?? '')
+      .join(' ');
+
+    expect(systemContent).toMatch(/sighting.?rate|sighting search/i);
+    expect(systemContent).toMatch(/freshwater page/i);
+    expect(systemContent).toMatch(/do not call|never call|don't call|redirect/i);
+  });
 });
