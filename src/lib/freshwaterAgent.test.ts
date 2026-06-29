@@ -356,4 +356,38 @@ describe('runFreshwaterAgent', () => {
 
     runFreshwaterToolSpy.mockRestore();
   });
+
+  it('RED 38.18 — stops after max iterations when OpenAI never returns a final answer', async () => {
+    const toolsModule = await import('@/lib/freshwaterAgentTools');
+    const runFreshwaterToolSpy = vi
+      .spyOn(toolsModule, 'runFreshwaterTool')
+      .mockResolvedValue({ parameters: [] });
+
+    const toolCallJson = {
+      choices: [{ message: {
+        content: null,
+        tool_calls: [{
+          id: 'call_x',
+          type: 'function',
+          function: {
+            name: 'usgs',
+            arguments: JSON.stringify({ siteId: '01184000' }),
+          },
+        }],
+      }}],
+    };
+
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      json: async () => toolCallJson,
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await runFreshwaterAgent({ question: 'What is the river height?' }) as { ok?: boolean; reason?: string; response?: string };
+
+    expect(result.ok).toBe(false);
+    expect(result.reason).toBe('max_iterations_exceeded');
+
+    runFreshwaterToolSpy.mockRestore();
+  });
 });
