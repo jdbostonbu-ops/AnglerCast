@@ -1,6 +1,7 @@
 'use client';
 
 import { type FormEvent, useState } from 'react';
+import { Spinner } from '@/components/Spinner';
 
 type FreshwaterChatResponse = {
   response?: string;
@@ -9,18 +10,25 @@ type FreshwaterChatResponse = {
 export const FreshwaterChat = () => {
   const [question, setQuestion] = useState('');
   const [responseText, setResponseText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const response = await fetch('/api/freshwater-chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question }),
-    });
-    const data = (await response.json()) as FreshwaterChatResponse;
+    setIsLoading(true);
 
-    setResponseText(data.response ?? '');
+    try {
+      const response = await fetch('/api/freshwater-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question }),
+      });
+      const data = (await response.json()) as FreshwaterChatResponse;
+
+      setResponseText(data.response ?? '');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -33,7 +41,12 @@ export const FreshwaterChat = () => {
         value={question}
         onChange={(event) => setQuestion(event.currentTarget.value)}
       />
-      <button type="submit">Submit</button>
+      <button type="submit" disabled={isLoading}>Submit</button>
+      {isLoading ? (
+        <span role="status">
+          <Spinner />
+        </span>
+      ) : null}
       {responseText !== '' ? <p>{responseText}</p> : null}
     </form>
   );
