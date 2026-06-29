@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { FRESHWATER_AGENT_TOOLS } from '@/lib/freshwaterAgentTools';
 
 type ToolEntry = {
@@ -104,5 +104,43 @@ describe('FRESHWATER_AGENT_TOOLS', () => {
         ).toContain(parameterName);
       }
     }
+  });
+});
+
+describe('fetchFreshwaterForecast', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('RED 38.11 — requests imperial units from Open-Meteo Forecast', async () => {
+    const { fetchFreshwaterForecast } = await import('@/lib/freshwaterAgentTools');
+
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        latitude: 41.4901,
+        longitude: -71.3128,
+        hourly: {
+          time: ['2026-06-28T00:00'],
+          temperature_2m: [70],
+          wind_speed_10m: [5],
+          precipitation: [0],
+        },
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await fetchFreshwaterForecast({
+      latitude: 41.4901,
+      longitude: -71.3128,
+      targetDate: '2026-06-28',
+    });
+
+    const urlCalled = fetchMock.mock.calls[0]?.[0];
+    expect(typeof urlCalled).toBe('string');
+    const url = new URL(urlCalled as string);
+    expect(url.searchParams.get('temperature_unit')).toBe('fahrenheit');
+    expect(url.searchParams.get('wind_speed_unit')).toBe('mph');
+    expect(url.searchParams.get('precipitation_unit')).toBe('inch');
   });
 });
