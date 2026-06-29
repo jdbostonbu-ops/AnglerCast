@@ -9,6 +9,7 @@ import { SavedSpotsSection } from '@/components/SavedSpotsSection';
 import { CatchComposer } from '@/components/CatchComposer';
 import { CatchFeed } from '@/components/CatchFeed';
 import { MapHint } from '@/components/MapHint';
+import { FreshwaterChat } from '@/components/FreshwaterChat';
 
 // Leaflet needs the browser, so load the map client-side only (no server-side render).
 const OccurrenceMap = dynamic(
@@ -168,6 +169,16 @@ const FreshwaterPage = () => {
           Search a freshwater location and see the historical sighting record from real public
           occurrence data — with sample size and confidence, never a guarantee. 
         </p>
+      </section>
+
+      <section className="section">
+        <h2>Ask the freshwater agent</h2>
+        <p className="section__lead">
+          Tell the agent where and when you want to fish and it will check live forecasts and
+          historical water-flow records from two public APIs to plan your trip. It will ask you
+          to confirm the date before checking anything.
+        </p>
+        <FreshwaterChat />
       </section>
 
       <main className="section">

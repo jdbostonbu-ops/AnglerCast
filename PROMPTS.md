@@ -964,3 +964,573 @@ Tell Jacqueline what command to run.
 ## 115. Add Remaining Prompts
 
 Add all remaining prompts to PROMPTS.md file.
+
+## 116. RED 38.3 - Freshwater Agent Out-of-Scope Prompt
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.3 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Update src/lib/freshwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts the system prompt sent to OpenAI contains:
+1. Language about declining out-of-scope requests, matching /do not have|don't have|outside.{0,40}sources/i
+2. A pointer to an external source like Google Maps, matching /google maps|external source/i
+
+Update the system prompt to add a sentence instructing the model that if the user asks for something outside the two declared data sources (Open-Meteo Forecast and USGS), it should honestly say it does not have that data source, name the sources it does have, and suggest an external source such as Google Maps. Do not add the species list, redirect rules, tool registry, or honest-data rule — those are separate REDs.
+
+Tell Jacqueline what command to run.
+
+## 117. RED 38.4 - Freshwater Open-Ended Species Redirect
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.4 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Update src/lib/freshwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts the system prompt sent to OpenAI contains:
+1. A reference to the Sighting-rate search (matching /sighting.?rate|sighting search/i)
+2. A reference to the freshwater page (matching /freshwater page/i)
+3. Explicit language instructing the agent not to call tools for these questions (matching /do not call|never call|don't call|redirect/i)
+
+Update the system prompt to add language that instructs the model: for open-ended "what fish in [location]" questions, redirect the user to the Sighting-rate search below on the freshwater page (click a species, pick a month, interact with the map) and do not call any tools for these questions.
+
+Do not add the specific-species redirect (RED 38.5), the destination redirect (RED 38.6), the honest-data rule (RED 38.7), or the species list injection (RED 38.22). Those are separate REDs not yet written.
+
+Tell Jacqueline what command to run.
+
+## 118. RED 38.5 - Freshwater Specific Species Redirect
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.5 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Update src/lib/freshwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts the system prompt sent to OpenAI:
+1. Contains a reference to the Explore tab or its FAQ agent (matching /explore tab|FAQ/i)
+2. Does NOT contain language instructing the agent to query species directly (no match for /query.{0,80}(species|named|directly)/i)
+
+Update the system prompt to add language that instructs the model: for "tell me about [species]" questions, redirect the user to the Explore tab at the top of the page and its FAQ agent for species information. Do not include any language about querying a named species directly.
+
+Do not add the destination redirect (RED 38.6), the honest-data rule (RED 38.7), the species list injection (RED 38.22), or any tool dispatch logic. Those are separate REDs not yet written.
+
+Tell Jacqueline what command to run.
+
+## 119. RED 38.6 - Freshwater Destination Commonality Redirect
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.6 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Update src/lib/freshwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts the system prompt sent to OpenAI contains:
+1. A reference to a Destination component (matching /destination/i)
+2. A reference to the Explore page (matching /explore page/i)
+
+Update the system prompt to add language that instructs the model: for "what's common at [destination]" or destination-based species commonality questions, redirect the user to the Destination component on the Explore page, which provides species commonality information based on a destination's latitude and longitude. Do not call a tool for these questions.
+
+Do not add the honest-data rule (RED 38.7), the species list injection (RED 38.22), or any tool dispatch logic. Those are separate REDs not yet written.
+
+Tell Jacqueline what command to run.
+
+## 120. RED 38.7 - Freshwater Agent Honest Data Prompt
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.7 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Update src/lib/freshwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts the system prompt sent to OpenAI contains:
+1. Honesty enforcement language matching /never invent|do not fabricate|do not (make up|invent)|cannot use training data|honest data|do not guess/i
+2. Tool-failure handling language matching /(tool|forecast|data|api).{0,80}(fail|error|null|empty|missing|cannot|unable)/i
+
+Update the system prompt to add language that instructs the model: never invent, do not guess, and cannot use training data to fill missing facts. If a tool, forecast, data API, or source returns null, empty, missing data, an error, or cannot be reached, say that honestly and do not make up values such as typical weather averages. This aligns with AnglerCast's honest-data thesis ("Real data computes the facts. The AI explains and assembles — it does not invent").
+
+Do not add the species list injection (RED 38.22), tool registry, tool dispatch, or any other logic. Those are separate REDs not yet written.
+
+Tell Jacqueline what command to run.
+
+## 121. RED 38.8 - Freshwater Agent Tool Registry
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.8 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgentTools.test.ts. Create src/lib/freshwaterAgentTools.ts with the minimal implementation required to make that test pass — nothing more.
+
+The test asserts an exported constant `FRESHWATER_AGENT_TOOLS` is an array of exactly two OpenAI-shaped function tools with:
+- Names: 'forecast' and 'usgs' (no other names)
+- Each tool's `type` is 'function'
+- Each tool's `function.name` is a non-empty string
+- Each tool's `function.description` is a non-empty string
+- Each tool's `function.parameters.type` is 'object'
+- Each tool's `function.parameters.properties` is defined
+- Each tool's `function.parameters.required` is an array
+
+The test does NOT yet assert specific parameter schemas — that is RED 38.10, a separate test not yet written. For now the parameters object only needs to be a valid object schema with a properties field and a required array (both can be minimal). Reference src/lib/saltwaterAgentTools.ts for the established pattern, but only implement what RED 38.8 requires.
+
+Do NOT implement: runFreshwaterTool dispatcher (RED 38.9), parameter schemas (RED 38.10), imperial units (RED 38.11), or the actual fetch functions (RED 38.12 and RED 38.13). Those are separate REDs not yet written.
+
+Tell Jacqueline what command to run.
+
+## 122. RED 38.9 - Freshwater Tool Dispatcher
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.9 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgentTools.test.ts. Update src/lib/freshwaterAgentTools.ts minimally so that test passes — nothing more.
+
+The test asserts:
+1. An exported async function `runFreshwaterTool(name: string, args: Record<string, unknown>)` exists.
+2. When called with 'forecast' and valid arguments ({ latitude, longitude, targetDate }), it returns something OTHER than { error: 'unknown_tool' }.
+3. When called with 'usgs' and valid arguments ({ siteId }), it returns something OTHER than { error: 'unknown_tool' }.
+4. When called with any unregistered name (e.g. 'not_a_real_tool'), it returns { error: 'unknown_tool' }.
+
+Implementation:
+- Add two minimal exported fetch functions, fetchFreshwaterForecast and fetchFreshwaterUsgs. The test mocks the global fetch to return an empty JSON object, so the fetch functions just need to call fetch and return its parsed JSON. They do not yet need to build correct URLs, request imperial units, or parse specific response shapes — those are RED 38.11, 38.12, and 38.13 (separate REDs not yet written).
+- Add a runFreshwaterTool dispatcher that switches on the tool name, calls the matching fetch function with coerced arguments (use small helpers to safely read latitude/longitude/targetDate as numbers/strings, and siteId as a string), and falls through to { error: 'unknown_tool' } for any other name.
+
+Reference src/lib/saltwaterAgentTools.ts for the established dispatcher pattern (readNumberArg, readStringArg helpers, switch-like if/return structure). Only implement what RED 38.9 requires — minimal code only.
+
+Do not modify any other files. Do not yet implement parameter schemas (RED 38.10), imperial units (RED 38.11), specific URL building (RED 38.12 and RED 38.13), or any agent orchestration logic.
+
+Tell Jacqueline what command to run.
+
+## 123. RED 38.10 - Freshwater Tool Parameter Schemas
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.10 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgentTools.test.ts. Update src/lib/freshwaterAgentTools.ts minimally so that test passes — nothing more.
+
+The test asserts each tool in FRESHWATER_AGENT_TOOLS declares the parameters its underlying function actually needs in its JSON Schema, with a non-empty `description` on each property and each parameter listed in `required`. Specifically:
+
+- forecast: latitude (number), longitude (number), targetDate (string)
+- usgs: siteId (string)
+
+The currently-minimal parameter schemas need to be replaced with per-tool schemas. If the SaltwaterAgentTool-style type is being reused with a constrained `properties` type, widen it to accept real property-schema entries with type and description.
+
+Do not modify the runFreshwaterTool dispatcher, the fetch function bodies, or any test files.
+
+Tell Jacqueline what command to run.
+
+## 124. RED 38.11 - Freshwater Forecast Imperial Units
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.11 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgentTools.test.ts. Update src/lib/freshwaterAgentTools.ts minimally so that test passes — nothing more.
+
+The test asserts that when fetchFreshwaterForecast is called, the URL it builds for Open-Meteo Forecast (api.open-meteo.com) includes three query parameters:
+- temperature_unit=fahrenheit
+- wind_speed_unit=mph
+- precipitation_unit=inch
+
+Update fetchFreshwaterForecast to add the corresponding url.searchParams.set(...) calls for these three parameters. Reference src/lib/saltwaterAgentTools.ts fetchSaltwaterForecast for the established pattern.
+
+Do not modify the URL builder for fetchFreshwaterUsgs (USGS uses native parameter codes and is not affected by Open-Meteo unit parameters). Do not modify any other tool, the dispatcher, the registry, or any test files.
+
+Tell Jacqueline what command to run.
+
+## 125. RED 38.12 - Freshwater Forecast URL and Response
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.12 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgentTools.test.ts. Update src/lib/freshwaterAgentTools.ts minimally so that test passes — nothing more.
+
+The test asserts that when fetchFreshwaterForecast is called, the URL it builds for api.open-meteo.com includes:
+- latitude query parameter equal to the input latitude as a string
+- longitude query parameter equal to the input longitude as a string
+- start_date query parameter equal to the input targetDate
+- end_date query parameter equal to the input targetDate
+- hourly query parameter that contains 'temperature_2m', 'wind_speed_10m', and 'precipitation'
+
+The test also asserts the response is parsed and returned (the test verifies result.latitude equals the mocked latitude).
+
+Update fetchFreshwaterForecast to:
+1. Build the URL with the required searchParams (latitude, longitude, start_date, end_date, hourly comma-separated list including temperature_2m, wind_speed_10m, precipitation). Keep the existing imperial unit parameters from GREEN 38.11.
+2. Parse the JSON response and return it (typed appropriately so the test's result.latitude access compiles cleanly).
+
+Reference src/lib/saltwaterAgentTools.ts fetchSaltwaterForecast for the established pattern.
+
+Do not modify fetchFreshwaterUsgs, the runFreshwaterTool dispatcher, the registry, or any test files.
+
+Tell Jacqueline what command to run.
+
+## 126. RED 38.13 - Freshwater USGS Tool
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.13 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgentTools.test.ts. Update src/lib/freshwaterAgentTools.ts minimally so that test passes — nothing more.
+
+The test asserts:
+1. fetchFreshwaterUsgs builds a URL where hostname is 'waterservices.usgs.gov', pathname is '/nwis/iv/', sites=<input siteId>, and format=json.
+2. The returned object has the shape:
+   { siteName: string, latitude: number | null, longitude: number | null, parameters: Array<{ variableName: string, unit: string, latestValue: string, latestTime: string }> }
+3. siteName comes from value.timeSeries[0].sourceInfo.siteName
+4. latitude comes from value.timeSeries[0].sourceInfo.geoLocation.geogLocation.latitude
+5. longitude comes from value.timeSeries[0].sourceInfo.geoLocation.geogLocation.longitude
+6. parameters is built by mapping each timeSeries entry to { variableName, unit, latestValue, latestTime } extracted from variable.variableName, variable.unit.unitCode, values[0].value[0].value, and values[0].value[0].dateTime
+
+Reference src/lib/saltwaterAgentTools.ts fetchSaltwaterUsgs for the established pattern (it returns exactly this shape and parses exactly these fields). The freshwater version should match.
+
+Do not add a parameterCodes query parameter unless required by the test (it is not). Do not modify fetchFreshwaterForecast, the dispatcher, the registry, or any test files.
+
+Tell Jacqueline what command to run.
+
+## 127. RED 38.14 - Freshwater Agent Sends Tool Registry
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.14 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Update src/lib/freshwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts the OpenAI request body contains:
+1. A user message with content matching the input question (e.g. 'Where should I fish this Saturday?')
+2. A `tools` field that is an array of length 2
+
+Implementation:
+1. Import FRESHWATER_AGENT_TOOLS from '@/lib/freshwaterAgentTools'.
+2. Add the FRESHWATER_AGENT_TOOLS array to the OpenAI request body as the `tools` field.
+3. Ensure the user message is included in the messages array (it likely already is, but verify against the existing prompt construction).
+
+Do not add: history support (RED 38.20), tool dispatch loop (RED 38.16), defensive handling of missing choices (RED 38.21), species list injection (RED 38.22). Those are separate REDs not yet written.
+
+Tell Jacqueline what command to run.
+
+## 128. RED 38.16 - Freshwater Agent Single Tool Call
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.16 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Update src/lib/freshwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts:
+1. When OpenAI returns an assistant message with a tool_call, the agent calls runFreshwaterTool with the tool name and parsed arguments object.
+2. The agent then makes a second OpenAI call.
+3. The second OpenAI request body contains a tool message with role 'tool' and a matching tool_call_id ('call_1').
+4. The agent returns the second OpenAI response's content as { response: string }.
+
+Implementation:
+1. Import runFreshwaterTool from '@/lib/freshwaterAgentTools'.
+2. After the first OpenAI call, check if the assistant message has tool_calls. If so:
+   - For each tool_call (this RED only tests one, but later REDs may require multiple — keep it simple, iterate over tool_calls), parse the arguments JSON into an object and call runFreshwaterTool(name, parsedArgs).
+   - Push the assistant message back onto the messages array, then push one tool message per tool_call_id with the JSON-stringified tool result as content.
+   - Make a second OpenAI call.
+3. Return the latest assistant message's content as { response: string }.
+
+Reference src/lib/saltwaterAgent.ts for the established orchestration pattern. The freshwater agent should match the same loop shape, scaled to its registry.
+
+Do not add: max iterations cap (RED 38.18), null/error tool result recovery (RED 38.19), history support (RED 38.20), defensive choices handling (RED 38.21), species list injection (RED 38.22). Those are separate REDs not yet written. But because the loop must be able to iterate over tool_calls (the saltwater pattern), implementing a basic while-loop is acceptable as long as it satisfies only this test's assertions.
+
+Tell Jacqueline what command to run.
+
+## 129. RED 38.18 - Freshwater Agent Max Iteration Safety
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.18 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Update src/lib/freshwaterAgent.ts minimally so that test passes — nothing more.
+
+The test mocks OpenAI to always return an assistant message with a tool_call (no final answer), then asserts the agent returns { ok: false, reason: 'max_iterations_exceeded' }. Without an iteration cap, the agent loops forever, exhausting heap memory and crashing the test process.
+
+Implementation:
+1. Add a `maxToolIterations` constant set to 8 (matches the saltwater agent's cap).
+2. Inside the tool-dispatch loop, before processing tool_calls, check whether the iteration count has reached the cap. If so, return { ok: false, reason: 'max_iterations_exceeded' }.
+3. Increment the iteration count after each round of dispatching (one round = one OpenAI tool_call response, regardless of how many tool_calls it contains).
+
+The agent's return type may need to be a union of { response: string } and { ok: false; reason: 'max_iterations_exceeded' } — reference src/lib/saltwaterAgent.ts for the established SaltwaterAgentResult union pattern. The freshwater equivalent should match.
+
+Do not add: null/error tool result recovery (RED 38.19), history support (RED 38.20), defensive choices handling (RED 38.21), species list injection (RED 38.22). Those are separate REDs not yet written.
+
+Tell Jacqueline what command to run.
+
+## 130. RED 38.20 - Freshwater Agent Sends History to OpenAI
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.20 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Update src/lib/freshwaterAgent.ts minimally so that test passes — nothing more.
+
+The test calls runFreshwaterAgent with { question, history } where history contains a user turn and an assistant turn, and asserts that the OpenAI messages array contains:
+- The prior user message ("first question") at some index
+- The prior assistant message ("first reply") at a later index
+- The new question ("follow-up question") at an even later index
+
+Implementation:
+1. Accept an optional `history` parameter in the agent's input type. The history array contains entries of shape { role: 'user' | 'assistant'; content: string }.
+2. Add a type guard or filter to validate history entries match the expected shape before passing them to OpenAI (defensive against malformed inputs).
+3. In the messages array sent to OpenAI, insert the filtered history entries AFTER the system messages and BEFORE the new user question.
+
+Reference src/lib/saltwaterAgent.ts for the established history pattern (RunSaltwaterAgentInput type, isSaltwaterAgentHistoryMessage type guard, message array construction). The freshwater equivalent should match.
+
+Do not add: defensive choices handling (RED 38.21), species list injection (RED 38.22). Those are separate REDs not yet written.
+
+Tell Jacqueline what command to run.
+
+## 131. RED 38.22 - Freshwater Common-Fished Species Context
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.22 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Update src/lib/freshwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts the OpenAI messages array sent in the request body contains the freshwater common-fished species list. Specifically, the names "Brook Trout", "Largemouth Bass", and "Bluegill" must appear somewhere in the joined content of the messages array.
+
+Implementation:
+1. Import `getSpeciesForWaterType` from '@/lib/species'.
+2. Call `getSpeciesForWaterType('freshwater')` to get the species list (40 freshwater common-fished species).
+3. Include those species names in the messages array sent to OpenAI — either inside the system prompt content or as an additional system message inserted right after the main system prompt. Each species should be referenced by both common name and scientific name, matching the saltwater pattern.
+
+Reference src/lib/saltwaterAgent.ts for the established getSaltwaterSpeciesContext pattern. The freshwater equivalent should match.
+
+Do not modify any other agent behavior, tool registry, dispatcher, route, component, or test files.
+
+Tell Jacqueline what command to run.
+
+## 132. RED 38.23 - Freshwater Chat Route Success Path
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.23 from TESTING.md Section 38. The failing test is at src/app/api/freshwater-chat/route.test.ts. Create src/app/api/freshwater-chat/route.ts with the minimal implementation required to make that test pass — nothing more.
+
+The test expects:
+1. An exported async function `POST(request: Request): Promise<Response>`.
+2. The handler parses the JSON body and extracts a `question` field.
+3. The handler calls `runFreshwaterAgent` from '@/lib/freshwaterAgent' with an object containing the question.
+4. The handler returns the agent's result as JSON with status 200.
+
+Do NOT implement: 400 response for missing/empty/whitespace questions (RED 38.24), 500 response on agent errors (RED 38.25), history forwarding (RED 38.26). Those are separate REDs not yet written. The minimal-code rule applies — only what RED 38.23 requires.
+
+Reference src/app/api/saltwater-chat/route.ts for the established pattern, but implement only the success path with no validation, no try/catch, and no history extraction.
+
+Tell Jacqueline what command to run.
+
+## 133. RED 38.24 - Freshwater Chat Route Question Validation
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.24 from TESTING.md Section 38. The failing test is at src/app/api/freshwater-chat/route.test.ts. Update src/app/api/freshwater-chat/route.ts minimally so that test passes — nothing more.
+
+The test asserts three cases:
+1. POST with body `{}` (no question key) returns status 400 and never calls the agent.
+2. POST with body `{ question: '' }` returns status 400 and never calls the agent.
+3. POST with body `{ question: '   \n  ' }` (whitespace only) returns status 400 and never calls the agent.
+
+Implementation:
+1. After parsing the JSON body, validate the `question` field:
+   - Must be a string (typeof check)
+   - After `.trim()`, must be non-empty
+2. If validation fails, return a JSON response with status 400 BEFORE calling runFreshwaterAgent. A reasonable body shape is `{ error: 'Question is required.' }` but the test only checks the status code.
+3. Otherwise proceed to call runFreshwaterAgent as before.
+
+Reference src/app/api/saltwater-chat/route.ts for the established validation pattern. The freshwater equivalent should match.
+
+Do NOT add: 500 error handling (RED 38.25), history forwarding (RED 38.26). Those are separate REDs not yet written.
+
+Tell Jacqueline what command to run.
+
+## 134. RED 38.25 - Freshwater Chat Route Agent Error
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.25 from TESTING.md Section 38. The failing test is at src/app/api/freshwater-chat/route.test.ts. Update src/app/api/freshwater-chat/route.ts minimally so that test passes — nothing more.
+
+The test asserts that when runFreshwaterAgent throws an error (mocked to reject with new Error('agent crashed')), the route returns a response with status 500.
+
+Implementation:
+1. Wrap the call to runFreshwaterAgent in a try/catch.
+2. On catch, return a JSON response with status 500. A reasonable body shape is `{ error: 'Freshwater agent failed.' }` but the test only checks the status code.
+
+Reference src/app/api/saltwater-chat/route.ts for the established try/catch pattern. The freshwater equivalent should match. Do not add a console.error call — the test does not require it and the minimal-code rule applies.
+
+Do NOT add: history forwarding (RED 38.26). That is a separate RED not yet written.
+
+Tell Jacqueline what command to run.
+
+## 135. RED 38.26 - Freshwater Chat Route Forwards History
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.26 from TESTING.md Section 38. The failing test is at src/app/api/freshwater-chat/route.test.ts. Update src/app/api/freshwater-chat/route.ts minimally so that test passes — nothing more.
+
+The test asserts the route extracts body.history (in addition to body.question) and passes both fields to runFreshwaterAgent. Specifically, when POST receives a body like { question: 'July 4 2026', history: [...] }, runFreshwaterAgent must be called with { question: 'July 4 2026', history: [...] } where the history array matches exactly.
+
+Implementation:
+1. Extend the request body type to include an optional `history` field.
+2. After validating the question, extract history from the body (defensively check it's an array, fall through to undefined or empty otherwise).
+3. Pass both question and history to runFreshwaterAgent.
+
+Reference src/app/api/saltwater-chat/route.ts for the established history-forwarding pattern. The freshwater equivalent should match.
+
+Do not modify any test files, the agent, the tool registry, the dispatcher, or any other files.
+
+Tell Jacqueline what command to run.
+
+## 136. RED 38.27 - FreshwaterChat Initial Render
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.27 from TESTING.md Section 38. The failing test is at src/components/FreshwaterChat.test.tsx. Create src/components/FreshwaterChat.tsx with the minimal implementation required to make that test pass — nothing more.
+
+The test expects:
+1. An exported React component named `FreshwaterChat`.
+2. A labeled text input — the label text matches /question/i and the underlying element is an <input> (not textarea).
+3. A submit button.
+
+Do NOT implement: fetch on submit (RED 38.28), spinner / disabled button during loading (RED 38.29), history-tracking and sending on follow-up (RED 38.30), error message on failure (RED 38.31). Those are separate REDs not yet written. The minimal-code rule applies — only what RED 38.27 requires.
+
+Reference src/components/SaltwaterChat.tsx for the established Section 37 pattern (minimal implementation that passes its own RED 37.24 — labeled input + button). The freshwater equivalent should match that minimal shape, with no styling beyond what HTML provides by default.
+
+This is a 'use client' component.
+
+Tell Jacqueline what command to run.
+
+## 137. RED 38.28 - FreshwaterChat Submit and Response
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.28 from TESTING.md Section 38. The failing test is at src/components/FreshwaterChat.test.tsx. Update src/components/FreshwaterChat.tsx minimally so that test passes — nothing more.
+
+The test:
+1. Stubs global fetch to resolve with { ok: true, json: async () => ({ response: 'Did you mean Saturday, June 28?' }) }.
+2. Types a question into the input and clicks the submit button.
+3. Asserts the response text "Did you mean Saturday, June 28?" appears somewhere in the rendered output.
+
+Implementation:
+1. Add a submit handler to the form that POSTs to /api/freshwater-chat with a JSON body containing { question: <input value> }.
+2. Parse the response JSON and store the `response` field in component state.
+3. Render the stored response text somewhere visible.
+
+Do NOT implement: spinner / disabled button while loading (RED 38.29), history tracking and forwarding on follow-up (RED 38.30), error message on fetch failure (RED 38.31). Those are separate REDs not yet written. The minimal-code rule applies.
+
+Reference src/components/SaltwaterChat.tsx Codex-minimal version for the established pattern. The freshwater equivalent should match that minimal shape.
+
+Tell Jacqueline what command to run.
+
+## 138. RED 38.29 - FreshwaterChat Spinner
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.29 from TESTING.md Section 38. The failing test is at src/components/FreshwaterChat.test.tsx. Update src/components/FreshwaterChat.tsx minimally so that test passes — nothing more.
+
+The test asserts:
+1. While the fetch is pending, an element with role="status" (a spinner) is present in the DOM.
+2. While the fetch is pending, the submit button is disabled.
+3. After the fetch resolves and the response renders, the spinner is gone (no element with role="status") and the submit button is no longer disabled.
+
+Implementation:
+1. Add an `isLoading` boolean state, initialized to false.
+2. Set `isLoading` to true immediately before the fetch and false in a `finally` block after the fetch (whether it resolves or rejects).
+3. When `isLoading` is true, render a `<span role="status">` containing the existing Spinner component from '@/components/Spinner' (import it if not already imported).
+4. When `isLoading` is true, set the submit button's `disabled` attribute to true.
+
+Reference src/components/SaltwaterChat.tsx Codex-minimal version for the established Spinner + role="status" pattern. The freshwater equivalent should match.
+
+Do NOT implement: history tracking and forwarding on follow-up (RED 38.30), error message on fetch failure (RED 38.31). Those are separate REDs not yet written.
+
+Tell Jacqueline what command to run.
+
+## 139. RED 38.30 - FreshwaterChat History
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.30 from TESTING.md Section 38. The failing test is at src/components/FreshwaterChat.test.tsx. Update src/components/FreshwaterChat.tsx minimally so that test passes — nothing more.
+
+The test:
+1. Types a first question and submits — fetch resolves with response 1.
+2. After the response renders, clears the input, types a second question, and submits — fetch resolves with response 2.
+3. Asserts the second fetch call's request body contains:
+   - question matching the second question
+   - history: an array with at least 2 entries
+   - The history serialized text contains both the first question's content and the first response's content
+
+Implementation:
+1. Add a `history` state, an array of `{ role: 'user' | 'assistant'; content: string }` entries.
+2. Include `history` in the POST body alongside `question`.
+3. After a successful response, append both the new user question and the new assistant response to history (in that order).
+
+Reference src/components/SaltwaterChat.tsx Codex-minimal version for the established history-tracking pattern. The freshwater equivalent should match.
+
+Do NOT implement: error message on fetch failure (RED 38.31). That is a separate RED not yet written.
+
+Tell Jacqueline what command to run.
+
+## 140. RED 38.31 - FreshwaterChat Error Handling
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.31 from TESTING.md Section 38. The failing test is at src/components/FreshwaterChat.test.tsx. Update src/components/FreshwaterChat.tsx minimally so that test passes — nothing more.
+
+The test stubs global fetch to reject with `new Error('Network down')` and asserts:
+1. After the rejected fetch settles, an element containing text matching /something went wrong/i is present in the DOM.
+2. After the rejected fetch settles, the spinner element (role="status") is gone.
+
+Implementation:
+1. Add an `errorMessage` state initialized to an empty string.
+2. Wrap the fetch call in a try/catch. In the catch block, set errorMessage to "Something went wrong. Please try again." (or any string matching /something went wrong/i).
+3. Ensure `isLoading` is set to false in a `finally` block (so the spinner clears even on error).
+4. When errorMessage is non-empty, render it somewhere visible in the component.
+
+Reference src/components/SaltwaterChat.tsx Codex-minimal version for the established try/catch/finally pattern. The freshwater equivalent should match.
+
+Also handle the case where the fetch resolves but response.ok is false — set the same error message and return early (do not try to parse the response). The test does not assert this case explicitly but it matches the saltwater pattern and is required for honest error surfacing.
+
+Tell Jacqueline what command to run.
+
+## 141. RED 38.15 - Freshwater Agent Text-Only Response
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.15 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Update src/lib/freshwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts that when OpenAI returns an assistant message with content and no tool_calls:
+1. runFreshwaterAgent returns that content unchanged as `{ response: string }`.
+2. runFreshwaterTool is not called.
+3. The agent makes only the initial OpenAI request.
+
+Do not add tool dispatch behavior beyond what the test requires, do not add history support, do not add max iteration safety, and do not add species list injection. Those are separate REDs.
+
+Tell Jacqueline what command to run.
+
+## 142. RED 38.17 - Freshwater Agent Handles Parallel Tool Calls
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.17 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Update src/lib/freshwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts that when OpenAI returns an assistant message containing multiple tool_calls in a single message (for example, forecast and usgs), the agent must:
+1. Dispatch runFreshwaterTool once per tool_call in that message.
+2. Push the assistant message back to OpenAI exactly once.
+3. Push one tool message per tool_call_id after that assistant message.
+4. Only then request the next OpenAI completion and return its final content.
+
+Use the same iterate-over-all-tool_calls pattern as the saltwater agent. The iteration count is one per OpenAI tool-call response, not one per individual tool call.
+
+Do not add max iteration safety, null/error tool recovery, history support, defensive choices handling, species list injection, or any other behavior beyond this RED.
+
+Tell Jacqueline what command to run.
+
+## 143. RED 38.19 - Freshwater Agent Serializes Null or Error Tool Results
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.19 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Update src/lib/freshwaterAgent.ts minimally so that test passes — nothing more.
+
+The test mocks runFreshwaterTool to return either an error shape or null, then asserts the agent:
+1. Serializes that tool result into the tool message content.
+2. Sends the tool message back to OpenAI.
+3. Continues to the next OpenAI completion.
+4. Returns the next assistant response as `{ response: string }`.
+
+Do not invent a special result shape for tool failures. Do not add history support, defensive choices handling, species list injection, route behavior, or component behavior.
+
+Tell Jacqueline what command to run.
+
+## 144. RED 38.21 - Freshwater Agent Handles Missing Choices
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.21 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Update src/lib/freshwaterAgent.ts minimally so that test passes — nothing more.
+
+The test sends an OpenAI response body that has no `choices` field, such as `{ error: { message: 'rate limit exceeded' } }`. The agent must not crash when reading the assistant message.
+
+Fix the OpenAI response access defensively, following the saltwater RED 37.41 pattern. A reasonable implementation is to use `completion.choices?.[0]?.message` wherever the agent reads the first message. Return a defined FreshwaterAgentResult shape such as `{ response: '' }`.
+
+Do not modify the system prompt, tool registry, dispatcher, route, component, or any test files.
+
+Tell Jacqueline what command to run.
+
+## 145. Freshwater Page Wiring - Eyeball Verification
+
+Read AGENTS.md and TESTING.md file.
+
+Section 38 notes that RED 38.32 was dropped in favor of eyeball-verified page wiring, consistent with how saltwater shipped. Wire the freshwater page so the `FreshwaterChat` component appears on the freshwater page and can be checked manually in the browser.
+
+Do not add or modify tests. Keep the wiring minimal and do not change the FreshwaterChat behavior beyond what the component REDs already required.
+
+Tell Jacqueline what command to run.
