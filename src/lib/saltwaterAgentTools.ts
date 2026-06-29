@@ -41,15 +41,6 @@ const locationDateParameters = {
   required: ['latitude', 'longitude', 'targetDate'],
 } satisfies SaltwaterAgentTool['function']['parameters'];
 
-const locationParameters = {
-  type: 'object',
-  properties: {
-    latitude: latitudeProperty,
-    longitude: longitudeProperty,
-  },
-  required: ['latitude', 'longitude'],
-} satisfies SaltwaterAgentTool['function']['parameters'];
-
 const usgsParameters = {
   type: 'object',
   properties: {
@@ -93,22 +84,6 @@ export const SALTWATER_AGENT_TOOLS: SaltwaterAgentTool[] = [
   {
     type: 'function',
     function: {
-      name: 'obis',
-      description: 'Fetch OBIS saltwater occurrence records.',
-      parameters: locationParameters,
-    },
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'gbif',
-      description: 'Fetch GBIF saltwater occurrence records.',
-      parameters: locationParameters,
-    },
-  },
-  {
-    type: 'function',
-    function: {
       name: 'usgs',
       description: 'Fetch USGS water data for saltwater context.',
       parameters: usgsParameters,
@@ -133,16 +108,6 @@ const readNumberArg = (args: Record<string, unknown>, key: string): number =>
 
 const readStringArg = (args: Record<string, unknown>, key: string): string =>
   typeof args[key] === 'string' ? args[key] : '';
-
-const readOptionalNumberArg = (
-  args: Record<string, unknown>,
-  key: string,
-): number | undefined => (typeof args[key] === 'number' ? args[key] : undefined);
-
-const readOptionalStringArg = (
-  args: Record<string, unknown>,
-  key: string,
-): string | undefined => (typeof args[key] === 'string' ? args[key] : undefined);
 
 const readOptionalStringArrayArg = (
   args: Record<string, unknown>,
@@ -172,24 +137,6 @@ export const runSaltwaterTool = async (
       latitude: readNumberArg(args, 'latitude'),
       longitude: readNumberArg(args, 'longitude'),
       targetDate: readStringArg(args, 'targetDate'),
-    });
-  }
-
-  if (name === 'obis') {
-    return fetchSaltwaterObis({
-      latitude: readNumberArg(args, 'latitude'),
-      longitude: readNumberArg(args, 'longitude'),
-      radiusDegrees: readOptionalNumberArg(args, 'radiusDegrees'),
-      scientificName: readOptionalStringArg(args, 'scientificName'),
-    });
-  }
-
-  if (name === 'gbif') {
-    return fetchSaltwaterGbif({
-      latitude: readNumberArg(args, 'latitude'),
-      longitude: readNumberArg(args, 'longitude'),
-      radiusDegrees: readOptionalNumberArg(args, 'radiusDegrees'),
-      scientificName: readOptionalStringArg(args, 'scientificName'),
     });
   }
 
