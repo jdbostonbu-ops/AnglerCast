@@ -1435,6 +1435,7 @@ RED 38.30 — FreshwaterChat sends prior conversation history with each follow-u
 RED 38.31 — FreshwaterChat displays an error message and clears the spinner when the API call fails.
 Page wiring RED test (mirrors Section 37 RED 37.28's page test)
 RED 38.32 — The freshwater page renders the FreshwaterChat component.
+RED 38.32 was dropped in favor of eyeball-verified page wiring (Path B), consistent with how saltwater shipped.
 
 ---
 

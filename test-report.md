@@ -1,111 +1,170 @@
 # Test Run & Git Summary Report
-**Generated on:** 6/28/2026, 9:25:59 PM
+**Generated on:** 6/28/2026, 10:58:50 PM
 
 ## 🕒 Recent Git Commit Log
-* **78966bf** - Jacqueline Delgado, 8 minutes ago : REFACTOR 37.51 — RED 37.43 uses forecast+marine instead of obis+gbif as parallel-call pair
-* **39febcc** - Jacqueline Delgado, 10 minutes ago : REFACTOR 37.50 — drop OBIS and GBIF entries from RED 37.32's required-parameters map
-* **9b150fd** - Jacqueline Delgado, 13 minutes ago : updated testing md and added refactor test plan 37.51-37.53
-* **9439689** - Jacqueline Delgado, 14 minutes ago : REFACTOR 37.49 — drop OBIS and GBIF entries from RED 37.31's argument map
-* **cb5012f** - Jacqueline Delgado, 16 minutes ago : REFACTOR 37.53 — agent tool-forwarding test expects four tools after OBIS/GBIF removal
-* **be92417** - Jacqueline Delgado, 19 minutes ago : GREEN 37.52 — remove OBIS and GBIF from agentic RAG registry and dispatcher
-* **095cfd6** - Jacqueline Delgado, 21 minutes ago : RED 37.48 — registry-shape test expects four tools and excludes OBIS and GBIF
-* **208eec1** - Jacqueline Delgado, 24 minutes ago : added Section 37.7  to refactor agentic rag
-* **7d730b4** - Jacqueline Delgado, 31 minutes ago : GREEN 37.47 — remove obsolete narrow-to-list and query-directly language from saltwaterAgentSystemPrompt
-* **3733acb** - Jacqueline Delgado, 32 minutes ago : RED 37.46 — replace query-directly test with Explore-tab redirect test
-* **638e65e** - Jacqueline Delgado, 34 minutes ago : RED 37.45 — replace narrow-to-list test with Sighting-rate redirect test
-* **b79041e** - Jacqueline Delgado, 48 minutes ago : GREEN 37.44 — agent redirects species questions to Sighting-rate search and Explore tab
-* **f8be58e** - Jacqueline Delgado, 51 minutes ago : RED 37.44 — runSaltwaterAgent redirects species questions to in-app components
-* **ef39d91** - Jacqueline Delgado, 52 minutes ago : added a test in testing md 37.44 to coach ai to direct user to other pages not fetch OBIS or GBIF data is too large, it uses too many tokens
-* **19e58e9** - Jacqueline Delgado, 82 minutes ago : GREEN 37.43 — agent processes all tool_calls in a single assistant message
-* **18b3cfd** - Jacqueline Delgado, 84 minutes ago : RED 37.43 — runSaltwaterAgent processes all tool_calls in a single assistant message
-* **19441d9** - Jacqueline Delgado, 85 minutes ago : added 37.43 test in testing md to increase tool calls from 0 to 8
-* **c0f599d** - Jacqueline Delgado, 86 minutes ago : added 37.43 RED test to increase tool calls to 8 from 0
-* **12a2b96** - Jacqueline Delgado, 2 hours ago : GREEN 37.42 — saltwater species list injected into OpenAI request context
-* **f6cee5f** - Jacqueline Delgado, 2 hours ago : RED 37.42 — runSaltwaterAgent injects the saltwater common-fished species list into the OpenAI request context
-* **30854d3** - Jacqueline Delgado, 2 hours ago : added 37.42 red test for agentics RAG to select from the common species list of 40
-* **d9c2475** - Jacqueline Delgado, 2 hours ago : GREEN 37.41 — defensive access to completion.choices prevents crash
-* **f9e9eed** - Jacqueline Delgado, 2 hours ago : RED 37.41 — does not crash when OpenAI response has no choices field
-* **3574a3a** - Jacqueline Delgado, 2 hours ago : added 37.41 test in testing md for agentics rag
-* **c016fd5** - Jacqueline Delgado, 2 hours ago : GREEN 37.40 — Forecast and Marine tools request imperial units from Open-Meteo
-* **b56a920** - Jacqueline Delgado, 2 hours ago : RED 37.40 — Forecast and Marine tools request imperial units from Open-Meteo
-* **75f7324** - Jacqueline Delgado, 2 hours ago : updated testing md and added red test 37.2 forecast and marine tools to change celcius to farenheit
-* **25c135b** - Jacqueline Delgado, 2 hours ago : GREEN 37.39 — null tool result test uses runSaltwaterTool seam
-* **c498a5c** - Jacqueline Delgado, 2 hours ago : GREEN 37.38 — max iterations test uses runSaltwaterTool seam
-* **49997e3** - Jacqueline Delgado, 2 hours ago : GREEN 37.37 — multi-tool chain test uses runSaltwaterTool seam
-* **0e77a6d** - Jacqueline Delgado, 2 hours ago : GREEN 37.36 — single tool_call test uses runSaltwaterTool seam
-* **0daa65a** - Jacqueline Delgado, 2 hours ago : GREEN 37.35 — recovers when tool returns error uses runSaltwaterTool seam
-* **df17d89** - Jacqueline Delgado, 2 hours ago : updated testing report md and saltwater agent ts file
-* **bfeb512** - Jacqueline Delgado, 3 hours ago : RED 37.35–37.39 — orchestration tests fail after GREEN 37.34; documented in Section 37.5
-* **da45611** - Jacqueline Delgado, 3 hours ago : RED 37.34 — runSaltwaterAgent dispatches tool_calls through shared runSaltwaterTool
-* **eadfdd8** - Jacqueline Delgado, 3 hours ago : updated testing md and added more tests for agentic rag
-* **b63021f** - Jacqueline Delgado, 3 hours ago : GREEN 37.33 — system prompt forbids inventing data when a tool fails
-* **848be49** - Jacqueline Delgado, 3 hours ago : RED 37.33 — system prompt instructs the agent never to invent data when a tool fails
-* **9232145** - Jacqueline Delgado, 3 hours ago : GREEN 37.32 — tool schemas declare required parameters with descriptions
-* **e9791a1** - Jacqueline Delgado, 3 hours ago : RED 37.32 — every tool schema declares the parameters its function actually needs
-* **0f32f7c** - Jacqueline Delgado, 3 hours ago : GREEN 37.31 — registry names match dispatcher (test fixture: fresh Response per fetch call)
-* **03f21f1** - Jacqueline Delgado, 3 hours ago : RED 37.31 — every tool in SALTWATER_AGENT_TOOLS dispatches to a real tool function by its registered name
-* **ab44304** - Jacqueline Delgado, 4 hours ago : GREEN 37.30 — runSaltwaterAgent passes prior history into OpenAI messages array
-* **107fe2f** - Jacqueline Delgado, 4 hours ago : RED 37.30 — runSaltwaterAgent passes prior history into OpenAI messages array
-* **f02429d** - Jacqueline Delgado, 4 hours ago : GREEN 37.29 — route forwards body.history to runSaltwaterAgent
-* **102ccf1** - Jacqueline Delgado, 4 hours ago : RED 37.29 — POST /api/saltwater-chat forwards body.history to runSaltwaterAgent
-* **e75f438** - Jacqueline Delgado, 5 hours ago : Wire SaltwaterChat into the saltwater page above the sighting-rate search
-* **4d4d2d6** - Jacqueline Delgado, 5 hours ago : GREEN 37.28: SaltwaterChat shows an error message when the API call fails
-* **44d6250** - Jacqueline Delgado, 5 hours ago : RED 37.28: SaltwaterChat shows an error message when the API call fails
-* **77b2563** - Jacqueline Delgado, 5 hours ago : GREEN 37.27: SaltwaterChat sends prior conversation history with each follow-up request
-* **7f4431b** - Jacqueline Delgado, 5 hours ago : RED 37.27: SaltwaterChat sends prior conversation history with each follow-up request
-* **9fa311c** - Jacqueline Delgado, 5 hours ago : GREEN 37.26: SaltwaterChat shows a spinner and disables the button while the request is in flight
-* **2835b7b** - Jacqueline Delgado, 5 hours ago : RED 37.26: SaltwaterChat shows a spinner and disables the button while the request is in flight
-* **30a4f78** - Jacqueline Delgado, 6 hours ago : GREEN 37.25: SaltwaterChat displays the agent's response after a successful submission
-* **b8e3fb7** - Jacqueline Delgado, 6 hours ago : RED 37.25: SaltwaterChat displays the agent's response after a successful submission
-* **0d0bc99** - Jacqueline Delgado, 6 hours ago : GREEN 37.24: SaltwaterChat renders a labeled question input and a submit button
-* **a2120c4** - Jacqueline Delgado, 6 hours ago : RED 37.24: SaltwaterChat renders a labeled question input and a submit button
-* **cbdfaa9** - Jacqueline Delgado, 6 hours ago : GREEN 37.23: POST /api/saltwater-chat returns 500 when runSaltwaterAgent throws
-* **2b30353** - Jacqueline Delgado, 6 hours ago : RED 37.23: POST /api/saltwater-chat returns 500 when runSaltwaterAgent throws
-* **7c98088** - Jacqueline Delgado, 6 hours ago : GREEN 37.22: POST /api/saltwater-chat returns 400 for missing or empty question
-* **ca51eb3** - Jacqueline Delgado, 6 hours ago : RED 37.22: POST /api/saltwater-chat returns 400 for missing or empty question
-* **3654d7a** - Jacqueline Delgado, 6 hours ago : GREEN 37.21: POST /api/saltwater-chat surfaces runSaltwaterAgent's response
-* **549fb1c** - Jacqueline Delgado, 6 hours ago : RED 37.21: POST /api/saltwater-chat surfaces runSaltwaterAgent's response
-* **0ab45e5** - Jacqueline Delgado, 6 hours ago : Fix: align User test fixtures with current Prisma schema (profileName, profileImageUrl)
-* **04e3009** - Jacqueline Delgado, 7 hours ago : GUARD 37.20: saltwater agent recovers when a tool function returns null or an error shape
-* **f2a2c84** - Jacqueline Delgado, 7 hours ago : GUARD 37.5: saltwater agent returns the honest decline and invokes no tools
-* **ccadef9** - Jacqueline Delgado, 7 hours ago : updated TESTING.md for a new agentics RAG for saltwater and freshwater pages
-* **a6bf0d6** - Jacqueline Delgado, 7 hours ago : GUARD 37.2: saltwater agent returns clarifying text and invokes no tools
-* **bd92121** - Jacqueline Delgado, 7 hours ago : GREEN 37.19: saltwater agent stops after max iterations to prevent infinite loops
-* **84d9a68** - Jacqueline Delgado, 7 hours ago : RED 37.19: saltwater agent stops after max iterations to prevent infinite loops
-* **038a8b8** - Jacqueline Delgado, 7 hours ago : GREEN 37.18: saltwater agent chains multiple tool_calls and returns the final synthesis
-* **b968154** - Jacqueline Delgado, 7 hours ago : RED 37.18: saltwater agent chains multiple tool_calls and returns the final synthesis
-* **8412c09** - Jacqueline Delgado, 7 hours ago : GREEN 37.17: saltwater agent dispatches a single tool_call and feeds the result back to OpenAI
-* **1d9f7fd** - Jacqueline Delgado, 7 hours ago : RED 37.17: saltwater agent dispatches a single tool_call and feeds the result back to OpenAI
-* **998ea4f** - Jacqueline Delgado, 8 hours ago : GREEN 37.16: saltwater agent sends user question and tool registry to OpenAI
-* **c3e6c36** - Jacqueline Delgado, 8 hours ago : RED 37.16: saltwater agent sends user question and tool registry to OpenAI
-* **1e2390a** - Jacqueline Delgado, 8 hours ago : GREEN 37.15: fetchSaltwaterNoaa queries NOAA CO-OPS for tide predictions
-* **09b63d3** - Jacqueline Delgado, 8 hours ago : RED 37.15: fetchSaltwaterNoaa queries NOAA CO-OPS for tide predictions
-* **5ae441f** - Jacqueline Delgado, 8 hours ago : GREEN 37.14: fetchSaltwaterUsgs queries USGS NWIS by site ID and parses time series
-* **829672e** - Jacqueline Delgado, 8 hours ago : RED 37.14: fetchSaltwaterUsgs queries USGS NWIS by site ID and parses time series
-* **2fa6555** - Jacqueline Delgado, 8 hours ago : GREEN 37.13: fetchSaltwaterGbif queries GBIF with lat/lng range, species, and limit
-* **b692ef5** - Jacqueline Delgado, 8 hours ago : RED 37.13: fetchSaltwaterGbif queries GBIF with lat/lng range, species, and limit
-* **784ca93** - Jacqueline Delgado, 8 hours ago : GREEN 37.12: fetchSaltwaterObis queries OBIS with geometry, species, and size
-* **5088987** - Jacqueline Delgado, 8 hours ago : RED 37.12: fetchSaltwaterObis queries OBIS with geometry, species, and size
-* **fbb7865** - Jacqueline Delgado, 8 hours ago : GREEN 37.11: fetchSaltwaterMarine builds Open-Meteo Marine URL and parses response
-* **23f1949** - Jacqueline Delgado, 8 hours ago : RED 37.11: fetchSaltwaterMarine builds Open-Meteo Marine URL and parses response
-* **0bd645c** - Jacqueline Delgado, 8 hours ago : GREEN 37.10: fetchSaltwaterForecast builds Open-Meteo URL and parses response
-* **966cd86** - Jacqueline Delgado, 8 hours ago : RED 37.10: fetchSaltwaterForecast builds Open-Meteo URL and parses response
-* **e665156** - Jacqueline Delgado, 8 hours ago : GREEN 37.9: saltwater agent tool dispatcher returns unknown_tool error for unknown names
-* **d255bb7** - Jacqueline Delgado, 8 hours ago : RED 37.9: saltwater agent tool dispatcher returns unknown_tool error for unknown names
-* **cea1fe4** - Jacqueline Delgado, 8 hours ago : GREEN 37.8: saltwater agent tool registry exposes six OpenAI-shaped function tools
-* **b8e1f69** - Jacqueline Delgado, 8 hours ago : RED 37.8: saltwater agent tool registry exposes six OpenAI-shaped function tools
-* **71fe2bd** - Jacqueline Delgado, 8 hours ago : GREEN 37.7: saltwater agent system prompt distinguishes specific-species queries from open-ended
-* **670d51b** - Jacqueline Delgado, 8 hours ago : RED 37.7: saltwater agent system prompt distinguishes specific-species queries from open-ended
-* **2f075a3** - Jacqueline Delgado, 8 hours ago : GREEN 37.6: saltwater agent system prompt instructs species narrowing on open-ended queries
-* **be6909c** - Jacqueline Delgado, 8 hours ago : RED 37.6: saltwater agent system prompt instructs species narrowing on open-ended queries
-* **020864e** - Jacqueline Delgado, 8 hours ago : GREEN 37.4: saltwater agent system prompt instructs decline of out-of-scope requests
-* **134282b** - Jacqueline Delgado, 8 hours ago : RED 37.4: saltwater agent system prompt instructs decline of out-of-scope requests
-* **36bfc14** - Jacqueline Delgado, 8 hours ago : GREEN 37.3: saltwater agent system prompt declares the six APIs
-* **fa96a9f** - Jacqueline Delgado, 8 hours ago : RED 37.3: saltwater agent system prompt declares the six APIs
-* **bcebfb6** - Jacqueline Delgado, 8 hours ago : GREEN 37.1: saltwater agent system prompt instructs date confirmation
-* **ece7f06** - Jacqueline Delgado, 9 hours ago : RED 37.1: saltwater agent system prompt instructs date confirmation
-* **8e9109a** - Jacqueline Delgado, 28 hours ago : updated test-report md file
-* **ab6627e** - Jacqueline Delgado, 28 hours ago : Fix: whitelist /reset-request in route guard (forgot password flow)
+* **ca5fc20** - Jacqueline Delgado, 45 seconds ago : RED 38.31 — FreshwaterChat displays error message and clears spinner when API call fails
+* **734a4cc** - Jacqueline Delgado, 2 minutes ago : GREEN 38.30 — FreshwaterChat sends prior conversation history with each follow-up request
+* **302a4aa** - Jacqueline Delgado, 3 minutes ago : RED 38.30 — FreshwaterChat sends prior conversation history with each follow-up request
+* **db75194** - Jacqueline Delgado, 4 minutes ago : GREEN 38.29 — FreshwaterChat shows spinner and disables submit while fetch in flight
+* **a66a934** - Jacqueline Delgado, 5 minutes ago : RED 38.29 — FreshwaterChat shows spinner and disables submit while fetch in flight, then hides them after response renders
+* **7582275** - Jacqueline Delgado, 7 minutes ago : GREEN 38.28 — FreshwaterChat displays agent response after successful submission
+* **8139924** - Jacqueline Delgado, 8 minutes ago : RED 38.28 — FreshwaterChat displays agent response after successful submission
+* **27aa473** - Jacqueline Delgado, 10 minutes ago : GREEN 38.27 — FreshwaterChat renders a labeled text input and a submit button
+* **cc1692c** - Jacqueline Delgado, 11 minutes ago : RED 38.27 — FreshwaterChat renders a labeled text input and a submit button on initial render
+* **eb9dbcc** - Jacqueline Delgado, 12 minutes ago : GREEN 38.26 — POST /api/freshwater-chat forwards body.history to runFreshwaterAgent
+* **74dcb5b** - Jacqueline Delgado, 13 minutes ago : RED 38.26 — POST /api/freshwater-chat forwards body.history to runFreshwaterAgent
+* **a84ced7** - Jacqueline Delgado, 14 minutes ago : GREEN 38.25 — POST /api/freshwater-chat returns 500 when runFreshwaterAgent throws
+* **17d2206** - Jacqueline Delgado, 15 minutes ago : RED 38.25 — POST /api/freshwater-chat returns 500 when runFreshwaterAgent throws
+* **f499620** - Jacqueline Delgado, 16 minutes ago : GREEN 38.24 — POST /api/freshwater-chat returns 400 when question is missing, empty, or whitespace
+* **005140c** - Jacqueline Delgado, 17 minutes ago : RED 38.24 — POST /api/freshwater-chat returns 400 when question is missing, empty, or whitespace
+* **5475c88** - Jacqueline Delgado, 17 minutes ago : GREEN 38.23 — POST /api/freshwater-chat calls runFreshwaterAgent and returns response
+* **3451bc8** - Jacqueline Delgado, 19 minutes ago : RED 38.23 — POST /api/freshwater-chat calls runFreshwaterAgent and returns its response
+* **0785a99** - Jacqueline Delgado, 20 minutes ago : GREEN 38.22 — runFreshwaterAgent injects freshwater common-fished species list into OpenAI request context
+* **d4bbfbd** - Jacqueline Delgado, 21 minutes ago : RED 38.22 — runFreshwaterAgent injects freshwater common-fished species list into OpenAI request context
+* **957539c** - Jacqueline Delgado, 22 minutes ago : RED 38.21 — runFreshwaterAgent does not crash when OpenAI response has no choices field (already passing, regression guard)
+* **1fabf3b** - Jacqueline Delgado, 23 minutes ago : GREEN 38.20 — runFreshwaterAgent passes prior history into OpenAI messages array before new question
+* **fe62525** - Jacqueline Delgado, 24 minutes ago : RED 38.20 — runFreshwaterAgent passes prior history into OpenAI messages array before the new question
+* **6833ea6** - Jacqueline Delgado, 25 minutes ago : RED 38.19 — runFreshwaterAgent recovers when tool returns null and continues to final answer (already passing, regression guard)
+* **3fc9bad** - Jacqueline Delgado, 27 minutes ago : GREEN 38.18 — runFreshwaterAgent stops after max iterations when OpenAI never returns final answer
+* **c9ed69d** - Jacqueline Delgado, 28 minutes ago : RED 38.18 — runFreshwaterAgent stops after max iterations when OpenAI never returns a final answer
+* **77fc7d3** - Jacqueline Delgado, 30 minutes ago : RED 38.17 — runFreshwaterAgent processes all tool_calls in a single assistant message (already passing, regression guard)
+* **97e611a** - Jacqueline Delgado, 33 minutes ago : GREEN 38.16 — runFreshwaterAgent dispatches single tool_call and returns synthesized answer
+* **f0aa580** - Jacqueline Delgado, 36 minutes ago : RED 38.16 — runFreshwaterAgent runs a single tool_call, feeds result back to OpenAI, and returns final answer
+* **1df1529** - Jacqueline Delgado, 37 minutes ago : RED 38.15 — runFreshwaterAgent returns clarifying question text without invoking tools (already passing, regression guard)
+* **f00dda1** - Jacqueline Delgado, 38 minutes ago : GREEN 38.14 — runFreshwaterAgent sends user question and tool registry to OpenAI
+* **1065a2d** - Jacqueline Delgado, 40 minutes ago : RED 38.14 — runFreshwaterAgent sends the user question and the tool registry to OpenAI
+* **977df1d** - Jacqueline Delgado, 42 minutes ago : GREEN 38.13 — fetchFreshwaterUsgs queries USGS NWIS and parses time series response
+* **d04452a** - Jacqueline Delgado, 43 minutes ago : RED 38.13 — fetchFreshwaterUsgs queries USGS NWIS with the site ID and parses the time series response
+* **b2c243a** - Jacqueline Delgado, 44 minutes ago : GREEN 38.12 — fetchFreshwaterForecast builds Open-Meteo URL and parses response
+* **ed999e7** - Jacqueline Delgado, 46 minutes ago : RED 38.12 — fetchFreshwaterForecast builds Open-Meteo Forecast URL with lat/lng/targetDate and parses the response
+* **8ed9c76** - Jacqueline Delgado, 49 minutes ago : GREEN 38.11 — fetchFreshwaterForecast requests imperial units from Open-Meteo
+* **bd690d8** - Jacqueline Delgado, 51 minutes ago : RED 38.11 — fetchFreshwaterForecast requests imperial units from Open-Meteo
+* **1f92849** - Jacqueline Delgado, 53 minutes ago : GREEN 38.10 — freshwater tool schemas declare required parameters with descriptions
+* **7e7cbf5** - Jacqueline Delgado, 54 minutes ago : RED 38.10 — every freshwater tool schema declares the parameters its function actually needs
+* **cc58733** - Jacqueline Delgado, 58 minutes ago : GREEN 38.9 — runFreshwaterTool dispatches forecast and usgs by registered name
+* **76cdf37** - Jacqueline Delgado, 59 minutes ago : RED 38.9 — runFreshwaterTool dispatches both registered tool names to underlying fetch functions
+* **73e13ff** - Jacqueline Delgado, 62 minutes ago : GREEN 38.8 — FRESHWATER_AGENT_TOOLS exposes forecast and usgs as two OpenAI-shaped tools
+* **0bc9802** - Jacqueline Delgado, 63 minutes ago : RED 38.8 — FRESHWATER_AGENT_TOOLS exposes exactly two OpenAI-shaped function tools
+* **34fa57c** - Jacqueline Delgado, 65 minutes ago : GREEN 38.7 — system prompt enforces honest data rule and tool failure handling
+* **a7c23a5** - Jacqueline Delgado, 66 minutes ago : RED 38.7 — runFreshwaterAgent enforces the honest data rule and tool failure handling
+* **bcba18c** - Jacqueline Delgado, 67 minutes ago : GREEN 38.6 — system prompt redirects destination-based species questions to Destination component on Explore page
+* **6401891** - Jacqueline Delgado, 68 minutes ago : RED 38.6 — runFreshwaterAgent redirects destination-based species questions to the Destination component on the Explore page
+* **69f80ee** - Jacqueline Delgado, 68 minutes ago : GREEN 38.5 — system prompt redirects specific-species questions to Explore tab FAQ agent
+* **f413402** - Jacqueline Delgado, 70 minutes ago : RED 38.5 — runFreshwaterAgent redirects specific-species questions to the Explore tab FAQ agent
+* **23f5b6d** - Jacqueline Delgado, 70 minutes ago : GREEN 38.4 — system prompt redirects open-ended species questions to Sighting-rate search on freshwater page
+* **10e4cd6** - Jacqueline Delgado, 72 minutes ago : RED 38.4 — runFreshwaterAgent redirects open-ended species questions to the Sighting-rate search on the freshwater page
+* **2d4e6aa** - Jacqueline Delgado, 73 minutes ago : GREEN 38.3 — system prompt declines out-of-scope requests and suggests external source
+* **318f8b1** - Jacqueline Delgado, 74 minutes ago : RED 38.3 — runFreshwaterAgent instructs the model to decline out-of-scope requests and suggest an external source
+* **9729171** - Jacqueline Delgado, 75 minutes ago : GREEN 38.2 — system prompt declares Open-Meteo Forecast and USGS as only data sources
+* **e4304ea** - Jacqueline Delgado, 76 minutes ago : RED 38.2 — runFreshwaterAgent declares exactly two data sources in the system prompt
+* **873149b** - Jacqueline Delgado, 77 minutes ago : GREEN 38.1 — runFreshwaterAgent confirms user date before calling tools
+* **7395f9f** - Jacqueline Delgado, 79 minutes ago : RED 38.1 — runFreshwaterAgent instructs the model to confirm the user date before calling any tools
+* **88c7884** - Jacqueline Delgado, 81 minutes ago : added section 38 for freshwater agentics RAG
+* **60fd72f** - Jacqueline Delgado, 2 hours ago : cleanup: remove diagnostic console logs from agent and route
+* **78966bf** - Jacqueline Delgado, 2 hours ago : REFACTOR 37.51 — RED 37.43 uses forecast+marine instead of obis+gbif as parallel-call pair
+* **39febcc** - Jacqueline Delgado, 2 hours ago : REFACTOR 37.50 — drop OBIS and GBIF entries from RED 37.32's required-parameters map
+* **9b150fd** - Jacqueline Delgado, 2 hours ago : updated testing md and added refactor test plan 37.51-37.53
+* **9439689** - Jacqueline Delgado, 2 hours ago : REFACTOR 37.49 — drop OBIS and GBIF entries from RED 37.31's argument map
+* **cb5012f** - Jacqueline Delgado, 2 hours ago : REFACTOR 37.53 — agent tool-forwarding test expects four tools after OBIS/GBIF removal
+* **be92417** - Jacqueline Delgado, 2 hours ago : GREEN 37.52 — remove OBIS and GBIF from agentic RAG registry and dispatcher
+* **095cfd6** - Jacqueline Delgado, 2 hours ago : RED 37.48 — registry-shape test expects four tools and excludes OBIS and GBIF
+* **208eec1** - Jacqueline Delgado, 2 hours ago : added Section 37.7  to refactor agentic rag
+* **7d730b4** - Jacqueline Delgado, 2 hours ago : GREEN 37.47 — remove obsolete narrow-to-list and query-directly language from saltwaterAgentSystemPrompt
+* **3733acb** - Jacqueline Delgado, 2 hours ago : RED 37.46 — replace query-directly test with Explore-tab redirect test
+* **638e65e** - Jacqueline Delgado, 2 hours ago : RED 37.45 — replace narrow-to-list test with Sighting-rate redirect test
+* **b79041e** - Jacqueline Delgado, 2 hours ago : GREEN 37.44 — agent redirects species questions to Sighting-rate search and Explore tab
+* **f8be58e** - Jacqueline Delgado, 2 hours ago : RED 37.44 — runSaltwaterAgent redirects species questions to in-app components
+* **ef39d91** - Jacqueline Delgado, 2 hours ago : added a test in testing md 37.44 to coach ai to direct user to other pages not fetch OBIS or GBIF data is too large, it uses too many tokens
+* **19e58e9** - Jacqueline Delgado, 3 hours ago : GREEN 37.43 — agent processes all tool_calls in a single assistant message
+* **18b3cfd** - Jacqueline Delgado, 3 hours ago : RED 37.43 — runSaltwaterAgent processes all tool_calls in a single assistant message
+* **19441d9** - Jacqueline Delgado, 3 hours ago : added 37.43 test in testing md to increase tool calls from 0 to 8
+* **c0f599d** - Jacqueline Delgado, 3 hours ago : added 37.43 RED test to increase tool calls to 8 from 0
+* **12a2b96** - Jacqueline Delgado, 3 hours ago : GREEN 37.42 — saltwater species list injected into OpenAI request context
+* **f6cee5f** - Jacqueline Delgado, 3 hours ago : RED 37.42 — runSaltwaterAgent injects the saltwater common-fished species list into the OpenAI request context
+* **30854d3** - Jacqueline Delgado, 3 hours ago : added 37.42 red test for agentics RAG to select from the common species list of 40
+* **d9c2475** - Jacqueline Delgado, 3 hours ago : GREEN 37.41 — defensive access to completion.choices prevents crash
+* **f9e9eed** - Jacqueline Delgado, 3 hours ago : RED 37.41 — does not crash when OpenAI response has no choices field
+* **3574a3a** - Jacqueline Delgado, 3 hours ago : added 37.41 test in testing md for agentics rag
+* **c016fd5** - Jacqueline Delgado, 4 hours ago : GREEN 37.40 — Forecast and Marine tools request imperial units from Open-Meteo
+* **b56a920** - Jacqueline Delgado, 4 hours ago : RED 37.40 — Forecast and Marine tools request imperial units from Open-Meteo
+* **75f7324** - Jacqueline Delgado, 4 hours ago : updated testing md and added red test 37.2 forecast and marine tools to change celcius to farenheit
+* **25c135b** - Jacqueline Delgado, 4 hours ago : GREEN 37.39 — null tool result test uses runSaltwaterTool seam
+* **c498a5c** - Jacqueline Delgado, 4 hours ago : GREEN 37.38 — max iterations test uses runSaltwaterTool seam
+* **49997e3** - Jacqueline Delgado, 4 hours ago : GREEN 37.37 — multi-tool chain test uses runSaltwaterTool seam
+* **0e77a6d** - Jacqueline Delgado, 4 hours ago : GREEN 37.36 — single tool_call test uses runSaltwaterTool seam
+* **0daa65a** - Jacqueline Delgado, 4 hours ago : GREEN 37.35 — recovers when tool returns error uses runSaltwaterTool seam
+* **df17d89** - Jacqueline Delgado, 4 hours ago : updated testing report md and saltwater agent ts file
+* **bfeb512** - Jacqueline Delgado, 4 hours ago : RED 37.35–37.39 — orchestration tests fail after GREEN 37.34; documented in Section 37.5
+* **da45611** - Jacqueline Delgado, 4 hours ago : RED 37.34 — runSaltwaterAgent dispatches tool_calls through shared runSaltwaterTool
+* **eadfdd8** - Jacqueline Delgado, 4 hours ago : updated testing md and added more tests for agentic rag
+* **b63021f** - Jacqueline Delgado, 4 hours ago : GREEN 37.33 — system prompt forbids inventing data when a tool fails
+* **848be49** - Jacqueline Delgado, 5 hours ago : RED 37.33 — system prompt instructs the agent never to invent data when a tool fails
+* **9232145** - Jacqueline Delgado, 5 hours ago : GREEN 37.32 — tool schemas declare required parameters with descriptions
+* **e9791a1** - Jacqueline Delgado, 5 hours ago : RED 37.32 — every tool schema declares the parameters its function actually needs
+* **0f32f7c** - Jacqueline Delgado, 5 hours ago : GREEN 37.31 — registry names match dispatcher (test fixture: fresh Response per fetch call)
+* **03f21f1** - Jacqueline Delgado, 5 hours ago : RED 37.31 — every tool in SALTWATER_AGENT_TOOLS dispatches to a real tool function by its registered name
+* **ab44304** - Jacqueline Delgado, 5 hours ago : GREEN 37.30 — runSaltwaterAgent passes prior history into OpenAI messages array
+* **107fe2f** - Jacqueline Delgado, 5 hours ago : RED 37.30 — runSaltwaterAgent passes prior history into OpenAI messages array
+* **f02429d** - Jacqueline Delgado, 6 hours ago : GREEN 37.29 — route forwards body.history to runSaltwaterAgent
+* **102ccf1** - Jacqueline Delgado, 6 hours ago : RED 37.29 — POST /api/saltwater-chat forwards body.history to runSaltwaterAgent
+* **e75f438** - Jacqueline Delgado, 7 hours ago : Wire SaltwaterChat into the saltwater page above the sighting-rate search
+* **4d4d2d6** - Jacqueline Delgado, 7 hours ago : GREEN 37.28: SaltwaterChat shows an error message when the API call fails
+* **44d6250** - Jacqueline Delgado, 7 hours ago : RED 37.28: SaltwaterChat shows an error message when the API call fails
+* **77b2563** - Jacqueline Delgado, 7 hours ago : GREEN 37.27: SaltwaterChat sends prior conversation history with each follow-up request
+* **7f4431b** - Jacqueline Delgado, 7 hours ago : RED 37.27: SaltwaterChat sends prior conversation history with each follow-up request
+* **9fa311c** - Jacqueline Delgado, 7 hours ago : GREEN 37.26: SaltwaterChat shows a spinner and disables the button while the request is in flight
+* **2835b7b** - Jacqueline Delgado, 7 hours ago : RED 37.26: SaltwaterChat shows a spinner and disables the button while the request is in flight
+* **30a4f78** - Jacqueline Delgado, 7 hours ago : GREEN 37.25: SaltwaterChat displays the agent's response after a successful submission
+* **b8e3fb7** - Jacqueline Delgado, 7 hours ago : RED 37.25: SaltwaterChat displays the agent's response after a successful submission
+* **0d0bc99** - Jacqueline Delgado, 7 hours ago : GREEN 37.24: SaltwaterChat renders a labeled question input and a submit button
+* **a2120c4** - Jacqueline Delgado, 7 hours ago : RED 37.24: SaltwaterChat renders a labeled question input and a submit button
+* **cbdfaa9** - Jacqueline Delgado, 7 hours ago : GREEN 37.23: POST /api/saltwater-chat returns 500 when runSaltwaterAgent throws
+* **2b30353** - Jacqueline Delgado, 7 hours ago : RED 37.23: POST /api/saltwater-chat returns 500 when runSaltwaterAgent throws
+* **7c98088** - Jacqueline Delgado, 7 hours ago : GREEN 37.22: POST /api/saltwater-chat returns 400 for missing or empty question
+* **ca51eb3** - Jacqueline Delgado, 7 hours ago : RED 37.22: POST /api/saltwater-chat returns 400 for missing or empty question
+* **3654d7a** - Jacqueline Delgado, 7 hours ago : GREEN 37.21: POST /api/saltwater-chat surfaces runSaltwaterAgent's response
+* **549fb1c** - Jacqueline Delgado, 7 hours ago : RED 37.21: POST /api/saltwater-chat surfaces runSaltwaterAgent's response
+* **0ab45e5** - Jacqueline Delgado, 8 hours ago : Fix: align User test fixtures with current Prisma schema (profileName, profileImageUrl)
+* **04e3009** - Jacqueline Delgado, 8 hours ago : GUARD 37.20: saltwater agent recovers when a tool function returns null or an error shape
+* **f2a2c84** - Jacqueline Delgado, 8 hours ago : GUARD 37.5: saltwater agent returns the honest decline and invokes no tools
+* **ccadef9** - Jacqueline Delgado, 8 hours ago : updated TESTING.md for a new agentics RAG for saltwater and freshwater pages
+* **a6bf0d6** - Jacqueline Delgado, 8 hours ago : GUARD 37.2: saltwater agent returns clarifying text and invokes no tools
+* **bd92121** - Jacqueline Delgado, 9 hours ago : GREEN 37.19: saltwater agent stops after max iterations to prevent infinite loops
+* **84d9a68** - Jacqueline Delgado, 9 hours ago : RED 37.19: saltwater agent stops after max iterations to prevent infinite loops
+* **038a8b8** - Jacqueline Delgado, 9 hours ago : GREEN 37.18: saltwater agent chains multiple tool_calls and returns the final synthesis
+* **b968154** - Jacqueline Delgado, 9 hours ago : RED 37.18: saltwater agent chains multiple tool_calls and returns the final synthesis
+* **8412c09** - Jacqueline Delgado, 9 hours ago : GREEN 37.17: saltwater agent dispatches a single tool_call and feeds the result back to OpenAI
+* **1d9f7fd** - Jacqueline Delgado, 9 hours ago : RED 37.17: saltwater agent dispatches a single tool_call and feeds the result back to OpenAI
+* **998ea4f** - Jacqueline Delgado, 9 hours ago : GREEN 37.16: saltwater agent sends user question and tool registry to OpenAI
+* **c3e6c36** - Jacqueline Delgado, 9 hours ago : RED 37.16: saltwater agent sends user question and tool registry to OpenAI
+* **1e2390a** - Jacqueline Delgado, 9 hours ago : GREEN 37.15: fetchSaltwaterNoaa queries NOAA CO-OPS for tide predictions
+* **09b63d3** - Jacqueline Delgado, 9 hours ago : RED 37.15: fetchSaltwaterNoaa queries NOAA CO-OPS for tide predictions
+* **5ae441f** - Jacqueline Delgado, 9 hours ago : GREEN 37.14: fetchSaltwaterUsgs queries USGS NWIS by site ID and parses time series
+* **829672e** - Jacqueline Delgado, 9 hours ago : RED 37.14: fetchSaltwaterUsgs queries USGS NWIS by site ID and parses time series
+* **2fa6555** - Jacqueline Delgado, 9 hours ago : GREEN 37.13: fetchSaltwaterGbif queries GBIF with lat/lng range, species, and limit
+* **b692ef5** - Jacqueline Delgado, 9 hours ago : RED 37.13: fetchSaltwaterGbif queries GBIF with lat/lng range, species, and limit
+* **784ca93** - Jacqueline Delgado, 9 hours ago : GREEN 37.12: fetchSaltwaterObis queries OBIS with geometry, species, and size
+* **5088987** - Jacqueline Delgado, 9 hours ago : RED 37.12: fetchSaltwaterObis queries OBIS with geometry, species, and size
+* **fbb7865** - Jacqueline Delgado, 9 hours ago : GREEN 37.11: fetchSaltwaterMarine builds Open-Meteo Marine URL and parses response
+* **23f1949** - Jacqueline Delgado, 9 hours ago : RED 37.11: fetchSaltwaterMarine builds Open-Meteo Marine URL and parses response
+* **0bd645c** - Jacqueline Delgado, 9 hours ago : GREEN 37.10: fetchSaltwaterForecast builds Open-Meteo URL and parses response
+* **966cd86** - Jacqueline Delgado, 9 hours ago : RED 37.10: fetchSaltwaterForecast builds Open-Meteo URL and parses response
+* **e665156** - Jacqueline Delgado, 9 hours ago : GREEN 37.9: saltwater agent tool dispatcher returns unknown_tool error for unknown names
+* **d255bb7** - Jacqueline Delgado, 9 hours ago : RED 37.9: saltwater agent tool dispatcher returns unknown_tool error for unknown names
+* **cea1fe4** - Jacqueline Delgado, 9 hours ago : GREEN 37.8: saltwater agent tool registry exposes six OpenAI-shaped function tools
+* **b8e1f69** - Jacqueline Delgado, 9 hours ago : RED 37.8: saltwater agent tool registry exposes six OpenAI-shaped function tools
+* **71fe2bd** - Jacqueline Delgado, 9 hours ago : GREEN 37.7: saltwater agent system prompt distinguishes specific-species queries from open-ended
+* **670d51b** - Jacqueline Delgado, 10 hours ago : RED 37.7: saltwater agent system prompt distinguishes specific-species queries from open-ended
+* **2f075a3** - Jacqueline Delgado, 10 hours ago : GREEN 37.6: saltwater agent system prompt instructs species narrowing on open-ended queries
+* **be6909c** - Jacqueline Delgado, 10 hours ago : RED 37.6: saltwater agent system prompt instructs species narrowing on open-ended queries
+* **020864e** - Jacqueline Delgado, 10 hours ago : GREEN 37.4: saltwater agent system prompt instructs decline of out-of-scope requests
+* **134282b** - Jacqueline Delgado, 10 hours ago : RED 37.4: saltwater agent system prompt instructs decline of out-of-scope requests
+* **36bfc14** - Jacqueline Delgado, 10 hours ago : GREEN 37.3: saltwater agent system prompt declares the six APIs
+* **fa96a9f** - Jacqueline Delgado, 10 hours ago : RED 37.3: saltwater agent system prompt declares the six APIs
+* **bcebfb6** - Jacqueline Delgado, 10 hours ago : GREEN 37.1: saltwater agent system prompt instructs date confirmation
+* **ece7f06** - Jacqueline Delgado, 10 hours ago : RED 37.1: saltwater agent system prompt instructs date confirmation
+* **8e9109a** - Jacqueline Delgado, 29 hours ago : updated test-report md file
+* **ab6627e** - Jacqueline Delgado, 29 hours ago : Fix: whitelist /reset-request in route guard (forgot password flow)
 * **801cbb8** - Jacqueline Delgado, 2 days ago : updated faq with new data qa md files
 * **eb71110** - Jacqueline Delgado, 3 days ago : updated readme added zapier ai weekly blog
 * **e84e9aa** - Jacqueline Delgado, 3 days ago : updated TESTING md
@@ -162,24 +221,24 @@
 * **b9f3fd5** - Jacqueline Delgado, 3 days ago : feat: wire waterType into SightingRateSearch on both pages, fix fetchReports return type
 * **a6c22a8** - Jacqueline Delgado, 3 days ago : feat: Species field is a common-name dropdown that submits the scientific name
 * **fdf8059** - Jacqueline Delgado, 3 days ago : test: add RED for Species field as common-name dropdown
-* **e47914d** - Jacqueline Delgado, 3 days ago : fix: CatchPost exits edit mode after a successful save
-* **a9c1c95** - Jacqueline Delgado, 3 days ago : test: add RED for CatchPost closing editor after successful save
-* **08072e4** - Jacqueline Delgado, 3 days ago : feat: bump refreshKey after post/delete/update so feed updates instantly
-* **677acc1** - Jacqueline Delgado, 3 days ago : feat: CatchFeed re-fetches immediately when refreshKey changes
-* **bd449dd** - Jacqueline Delgado, 3 days ago : test: add RED for CatchFeed immediate refresh on refreshKey change
-* **67b2329** - Jacqueline Delgado, 3 days ago : feat: minimum visible duration so action spinners are perceptible on fast actions
-* **100edb0** - Jacqueline Delgado, 3 days ago : added prompt md and made changed to testing-report md file
-* **05e0fcd** - Jacqueline Delgado, 3 days ago : feat: add animated spinner to post, delete, and save buttons during async actions
-* **671be81** - Jacqueline Delgado, 3 days ago : feat: wire catch reports feed onto freshwater page
-* **1fb3dd4** - Jacqueline Delgado, 3 days ago : feat: clear composer textarea after successful post, keep text on failure
-* **839e640** - Jacqueline Delgado, 3 days ago : test: add RED for CatchComposer clearing textarea after successful post
-* **dd33144** - Jacqueline Delgado, 3 days ago : polish: add gap between avatar and author name in catch posts
-* **2bf56d1** - Jacqueline Delgado, 3 days ago : polish: space out post timestamp and show Posting state on post button
-* **2bbf0d9** - Jacqueline Delgado, 3 days ago : feat: display relative timestamp on catch posts, add createdAt to test fixture
-* **849db7b** - Jacqueline Delgado, 3 days ago : test: add RED for CatchPost timestamp display
-* **4c5a4f6** - Jacqueline Delgado, 3 days ago : feat: implement formatRelativeTime helper
-* **d05557a** - Jacqueline Delgado, 3 days ago : test: add RED for formatRelativeTime helper
-* **017f607** - Jacqueline Delgado, 3 days ago : fix: add id and name to composer and edit textareas for accessibility
+* **e47914d** - Jacqueline Delgado, 4 days ago : fix: CatchPost exits edit mode after a successful save
+* **a9c1c95** - Jacqueline Delgado, 4 days ago : test: add RED for CatchPost closing editor after successful save
+* **08072e4** - Jacqueline Delgado, 4 days ago : feat: bump refreshKey after post/delete/update so feed updates instantly
+* **677acc1** - Jacqueline Delgado, 4 days ago : feat: CatchFeed re-fetches immediately when refreshKey changes
+* **bd449dd** - Jacqueline Delgado, 4 days ago : test: add RED for CatchFeed immediate refresh on refreshKey change
+* **67b2329** - Jacqueline Delgado, 4 days ago : feat: minimum visible duration so action spinners are perceptible on fast actions
+* **100edb0** - Jacqueline Delgado, 4 days ago : added prompt md and made changed to testing-report md file
+* **05e0fcd** - Jacqueline Delgado, 4 days ago : feat: add animated spinner to post, delete, and save buttons during async actions
+* **671be81** - Jacqueline Delgado, 4 days ago : feat: wire catch reports feed onto freshwater page
+* **1fb3dd4** - Jacqueline Delgado, 4 days ago : feat: clear composer textarea after successful post, keep text on failure
+* **839e640** - Jacqueline Delgado, 4 days ago : test: add RED for CatchComposer clearing textarea after successful post
+* **dd33144** - Jacqueline Delgado, 4 days ago : polish: add gap between avatar and author name in catch posts
+* **2bf56d1** - Jacqueline Delgado, 4 days ago : polish: space out post timestamp and show Posting state on post button
+* **2bbf0d9** - Jacqueline Delgado, 4 days ago : feat: display relative timestamp on catch posts, add createdAt to test fixture
+* **849db7b** - Jacqueline Delgado, 4 days ago : test: add RED for CatchPost timestamp display
+* **4c5a4f6** - Jacqueline Delgado, 4 days ago : feat: implement formatRelativeTime helper
+* **d05557a** - Jacqueline Delgado, 4 days ago : test: add RED for formatRelativeTime helper
+* **017f607** - Jacqueline Delgado, 4 days ago : fix: add id and name to composer and edit textareas for accessibility
 * **eab0e2c** - Jacqueline Delgado, 4 days ago : feat: disable delete/save buttons while in progress to prevent double-action
 * **eee79de** - Jacqueline Delgado, 4 days ago : test: add RED for CatchPost double-delete and double-save prevention
 * **558db64** - Jacqueline Delgado, 4 days ago : fix: full-width composer textarea and spacing between catch posts
@@ -299,19 +358,19 @@
 * **6e9d389** - Jacqueline Delgado, 9 days ago : test: expect search route to return map occurrences filtered by month
 * **b420c24** - Jacqueline Delgado, 9 days ago : feat: request 2000 records from OBIS for a confident sample
 * **0ce7543** - Jacqueline Delgado, 9 days ago : test: expect OBIS fetch to request 2000 records
-* **03a1939** - Jacqueline Delgado, 9 days ago : updated TESTING, RESULTS, README mark down files to reflect the new test
-* **15ea65a** - Jacqueline Delgado, 9 days ago : feat: frame percentage as share of records not a chance
-* **8df3177** - Jacqueline Delgado, 9 days ago : test: expect sighting-rate prompt to frame percentage as share of records
-* **6cb2927** - Jacqueline Delgado, 9 days ago : updated RESULTS.md, testing and readme mark down files
-* **a5803be** - Jacqueline Delgado, 9 days ago : feat: restore upbeat angler voice in AI explanation
-* **a07137d** - Jacqueline Delgado, 9 days ago : test: expect sighting-rate prompt to use upbeat angler tone
-* **035c2db** - Jacqueline Delgado, 9 days ago : updated readme test count
-* **4d461cd** - Jacqueline Delgado, 9 days ago : updated testing and results md files
-* **e227c9d** - Jacqueline Delgado, 9 days ago : feat: angler voice without self-reference in AI explanation
-* **27a046e** - Jacqueline Delgado, 9 days ago : test: expect sighting-rate prompt to forbid self-reference
-* **def070f** - Jacqueline Delgado, 9 days ago : updated readme, testing, and results file
-* **c0da6a9** - Jacqueline Delgado, 9 days ago : feat: instruct AI to call counts records not fish
-* **3a94d2a** - Jacqueline Delgado, 9 days ago : test: expect sighting-rate prompt to say records not fish count
+* **03a1939** - Jacqueline Delgado, 10 days ago : updated TESTING, RESULTS, README mark down files to reflect the new test
+* **15ea65a** - Jacqueline Delgado, 10 days ago : feat: frame percentage as share of records not a chance
+* **8df3177** - Jacqueline Delgado, 10 days ago : test: expect sighting-rate prompt to frame percentage as share of records
+* **6cb2927** - Jacqueline Delgado, 10 days ago : updated RESULTS.md, testing and readme mark down files
+* **a5803be** - Jacqueline Delgado, 10 days ago : feat: restore upbeat angler voice in AI explanation
+* **a07137d** - Jacqueline Delgado, 10 days ago : test: expect sighting-rate prompt to use upbeat angler tone
+* **035c2db** - Jacqueline Delgado, 10 days ago : updated readme test count
+* **4d461cd** - Jacqueline Delgado, 10 days ago : updated testing and results md files
+* **e227c9d** - Jacqueline Delgado, 10 days ago : feat: angler voice without self-reference in AI explanation
+* **27a046e** - Jacqueline Delgado, 10 days ago : test: expect sighting-rate prompt to forbid self-reference
+* **def070f** - Jacqueline Delgado, 10 days ago : updated readme, testing, and results file
+* **c0da6a9** - Jacqueline Delgado, 10 days ago : feat: instruct AI to call counts records not fish
+* **3a94d2a** - Jacqueline Delgado, 10 days ago : test: expect sighting-rate prompt to say records not fish count
 * **f8cf379** - Jacqueline Delgado, 10 days ago : updated the color for the dead email text chose not to make it an email link
 * **c394599** - Jacqueline Delgado, 10 days ago : updated readme from 42 files tested to 48 files tested
 * **1efcb68** - Jacqueline Delgado, 10 days ago : updated readme file from 94 test passing to 118 testpassing
@@ -405,10 +464,10 @@
 * **1cc4578** - Jacqueline Delgado, 11 days ago : test: add RED for fetchUsgsWaterConditions USGS nearest-gauge seam
 * **355a3d1** - Jacqueline Delgado, 11 days ago : feat: add fetchForecastConditions Open-Meteo Forecast seam
 * **32a154a** - Jacqueline Delgado, 11 days ago : test: add RED for fetchForecastConditions Open-Meteo Forecast seam
-* **e082198** - Jacqueline Delgado, 11 days ago : feat: add fetchMarineConditions Open-Meteo Marine seam
-* **efe72f5** - Jacqueline Delgado, 11 days ago : test: add RED for fetchMarineConditions Open-Meteo Marine seam
-* **c0f5d7a** - Jacqueline Delgado, 11 days ago : feat: expand freshwater species list with CT game and panfish species
-* **abd83fa** - Jacqueline Delgado, 11 days ago : feat: expand freshwater species list with CT game and panfish species
+* **e082198** - Jacqueline Delgado, 12 days ago : feat: add fetchMarineConditions Open-Meteo Marine seam
+* **efe72f5** - Jacqueline Delgado, 12 days ago : test: add RED for fetchMarineConditions Open-Meteo Marine seam
+* **c0f5d7a** - Jacqueline Delgado, 12 days ago : feat: expand freshwater species list with CT game and panfish species
+* **abd83fa** - Jacqueline Delgado, 12 days ago : feat: expand freshwater species list with CT game and panfish species
 * **19f9d4c** - Jacqueline Delgado, 12 days ago : feat: expand saltwater species list to 40 with OBIS-backed game and food fish
 * **e33d427** - Jacqueline Delgado, 12 days ago : feat: expand saltwater species list to 40 with OBIS-backed game and food fish
 * **9383567** - Jacqueline Delgado, 12 days ago : feat: merge and dedupe GBIF + OBIS occurrence records in fetchOccurrenceRecords
@@ -430,10 +489,10 @@
 * **c5213ee** - Jacqueline Delgado, 12 days ago : Add sighting-rate search form with coordinate validation (Feature 15 UI), test-first
 * **273cda7** - Jacqueline Delgado, 12 days ago : Align recommendation confidence to three tiers (low/moderate/high) matching sighting-rate search, test-first
 * **dbfbed8** - Jacqueline Delgado, 12 days ago : Wire occurrence fetch and sighting-rate search routes (Feature 16.1, 16.6), test-first
-* **982e31e** - Jacqueline Delgado, 12 days ago : Wire auth and saved-spot API routes to logic (Feature 16.2-16.5), test-first
-* **fa85296** - Jacqueline Delgado, 12 days ago : Add live Neon migration: User and SavedSpot tables (Feature 5 live database)
-* **bdf35e6** - Jacqueline Delgado, 12 days ago : Stop tracking build output and generated files (apply .gitignore)
-* **92fcd0c** - Jacqueline Delgado, 12 days ago : Add empirical sighting-rate search logic (Feature 15): rate, confidence tiers, Null Island filter, test-first
+* **982e31e** - Jacqueline Delgado, 13 days ago : Wire auth and saved-spot API routes to logic (Feature 16.2-16.5), test-first
+* **fa85296** - Jacqueline Delgado, 13 days ago : Add live Neon migration: User and SavedSpot tables (Feature 5 live database)
+* **bdf35e6** - Jacqueline Delgado, 13 days ago : Stop tracking build output and generated files (apply .gitignore)
+* **92fcd0c** - Jacqueline Delgado, 13 days ago : Add empirical sighting-rate search logic (Feature 15): rate, confidence tiers, Null Island filter, test-first
 * **5040651** - Jacqueline Delgado, 13 days ago : Add Knots/ETA travel time (Feature 14) with distance calc and ETA sanity-check guard, test-first
 * **cbfa375** - Jacqueline Delgado, 13 days ago : Add species marker-style lookup (Feature 13), test-first
 * **608cd4b** - Jacqueline Delgado, 13 days ago : Add rugged nautical redesign to landing page (Feature 11)
@@ -447,134 +506,12 @@
 * **c35aeb8** - Jacqueline Delgado, 13 days ago : Initial commit: TDD on emailVerification.test.ts
 
 ## 📊 Test Metrics Summary
-* **Total Tests:** 123
-* **Passed:** 😄 123
+* **Total Tests:** 1
+* **Passed:** 😄 1
 * **Failed:** 😡 0
 
 ## 📝 Detailed Test Breakdown
 
 | File | Test Case | Status | Duration |
 | :--- | :--- | :--- | :--- |
-| src/app/page.test.tsx | HomePage | ✅ Pass | 77.59533299999998ms |
-| src/components/CatchComposer.test.tsx | CatchComposer when the user has a profile name | ✅ Pass | 185.62145800000008ms |
-| src/components/CatchComposer.test.tsx | CatchComposer when the user has no profile name | ✅ Pass | 25.36770899999999ms |
-| src/components/CatchComposer.test.tsx | CatchComposer prevents double submitting | ✅ Pass | 10.185790999999995ms |
-| src/components/CatchComposer.test.tsx | CatchComposer clears after a successful post | ✅ Pass | 417.481583ms |
-| src/components/CatchFeed.test.tsx | CatchFeed polling | ✅ Pass | 15.092750000000024ms |
-| src/components/CatchFeed.test.tsx | CatchFeed renders new posts | ✅ Pass | 29.337709000000018ms |
-| src/components/CatchFeed.test.tsx | CatchFeed stops polling on unmount | ✅ Pass | 2.2622089999999844ms |
-| src/components/CatchFeed.test.tsx | CatchFeed renders posts as CatchPost with edit and delete | ✅ Pass | 26.12683400000003ms |
-| src/components/CatchFeed.test.tsx | CatchFeed refreshes immediately when the refresh key changes | ✅ Pass | 3.137292000000002ms |
-| src/components/CatchPost.test.tsx | CatchPost edit button visibility | ✅ Pass | 61.951917000000094ms |
-| src/components/CatchPost.test.tsx | CatchPost edit mode | ✅ Pass | 22.32320799999991ms |
-| src/components/CatchPost.test.tsx | CatchPost save | ✅ Pass | 37.38629100000003ms |
-| src/components/CatchPost.test.tsx | CatchPost delete confirmation | ✅ Pass | 17.652500000000032ms |
-| src/components/CatchPost.test.tsx | CatchPost delete cancel | ✅ Pass | 10.32995900000003ms |
-| src/components/CatchPost.test.tsx | CatchPost prevents double delete | ✅ Pass | 22.724458000000027ms |
-| src/components/CatchPost.test.tsx | CatchPost prevents double save | ✅ Pass | 13.599583000000052ms |
-| src/components/CatchPost.test.tsx | CatchPost timestamp | ✅ Pass | 1.8919159999999238ms |
-| src/components/CatchPost.test.tsx | CatchPost closes the editor after saving | ✅ Pass | 427.0735840000001ms |
-| src/components/ConfirmDialog.test.tsx | ConfirmDialog | ✅ Pass | 116.04750000000001ms |
-| src/components/DeleteConfirmationDialog.test.tsx | DeleteConfirmationDialog | ✅ Pass | 112.69229199999995ms |
-| src/components/EmptyRecordsNotice.test.tsx | EmptyRecordsNotice | ✅ Pass | 21.95799999999997ms |
-| src/components/ExploreFaqChat.test.tsx | ExploreFaqChat | ✅ Pass | 514.600958ms |
-| src/components/HomeButtons.test.tsx | HomeButtons | ✅ Pass | 27.436874999999986ms |
-| src/components/LatestBlogPost.test.tsx | LatestBlogPost | ✅ Pass | 58.23891600000002ms |
-| src/components/MapHint.test.tsx | MapHint | ✅ Pass | 10.309834000000023ms |
-| src/components/NavBar.test.tsx | NavBar | ✅ Pass | 96.46254199999998ms |
-| src/components/PasswordField.test.tsx | PasswordField | ✅ Pass | 74.99324999999999ms |
-| src/components/PasswordField.test.tsx | toggles the button label between Show password and Hide password | ✅ Pass | 16.343250000000012ms |
-| src/components/PostButton.test.tsx | PostButton | ✅ Pass | 48.90575000000001ms |
-| src/components/ProfileForm.test.tsx | ProfileForm rendering | ✅ Pass | 46.95524999999998ms |
-| src/components/ProfileForm.test.tsx | ProfileForm image upload | ✅ Pass | 6.138374999999996ms |
-| src/components/ProfileForm.test.tsx | ProfileForm submit | ✅ Pass | 19.133207999999968ms |
-| src/components/ProfileForm.test.tsx | ProfileForm empty name validation | ✅ Pass | 19.121208000000024ms |
-| src/components/ProfileForm.test.tsx | ProfileForm image preview | ✅ Pass | 10.000999999999976ms |
-| src/components/SaltwaterChat.test.tsx | SaltwaterChat | ✅ Pass | 730.768167ms |
-| src/components/SightingRateSearch.test.tsx | SightingRateSearch | ✅ Pass | 542.726208ms |
-| src/components/SightingRateSearch.test.tsx | SightingRateSearch species dropdown | ✅ Pass | 189.2955840000002ms |
-| src/lib/bestMonth.test.ts | findBestMonth | ✅ Pass | 1.0672089999999343ms |
-| src/lib/blogLoader.test.ts | loadBlogPosts | ✅ Pass | 13.847250000000031ms |
-| src/lib/blogLoader.test.ts | getLatestBlogPost — Apps Script JSON endpoint (Section 36) | ✅ Pass | 1.9367090000000644ms |
-| src/lib/catchReport.test.ts | createCatchReport | ✅ Pass | 2.8973330000000033ms |
-| src/lib/catchReport.test.ts | getCatchReports water type filtering | ✅ Pass | 1.8818750000000364ms |
-| src/lib/catchReport.test.ts | getCatchReports ordering | ✅ Pass | 0.14654200000006767ms |
-| src/lib/catchReport.test.ts | getCatchReports author info | ✅ Pass | 0.22366699999997763ms |
-| src/lib/catchReport.test.ts | updateCatchReport ownership | ✅ Pass | 0.19991600000003018ms |
-| src/lib/catchReport.test.ts | updateCatchReport rejects non-owner | ✅ Pass | 0.14929099999994833ms |
-| src/lib/catchReport.test.ts | deleteCatchReport ownership | ✅ Pass | 0.1616669999999658ms |
-| src/lib/catchReport.test.ts | deleteCatchReport rejects non-owner | ✅ Pass | 0.10820799999999053ms |
-| src/lib/clearSession.test.ts | clearSession | ✅ Pass | 1.8419159999999692ms |
-| src/lib/coordinates.test.ts | parseCoordinate | ✅ Pass | 1.5034580000000233ms |
-| src/lib/distance.test.ts | computeDistance | ✅ Pass | 0.9099169999999503ms |
-| src/lib/email.test.ts | sendVerificationEmail | ✅ Pass | 9.760833999999988ms |
-| src/lib/email.test.ts | sendPasswordResetEmail | ✅ Pass | 0.9146660000000111ms |
-| src/lib/emailVerification.test.ts | createEmailVerificationCode | ✅ Pass | 959.1499580000001ms |
-| src/lib/eta.test.ts | checkEtaIsReasonable | ✅ Pass | 1.369291999999973ms |
-| src/lib/forecastConditions.test.ts | fetchForecastConditions | ✅ Pass | 7.370791999999938ms |
-| src/lib/formatRelativeTime.test.ts | formatRelativeTime | ✅ Pass | 6.50141700000006ms |
-| src/lib/homeHighlights.test.ts | getHomeHighlights | ✅ Pass | 7.823582999999985ms |
-| src/lib/locationSpecies.test.ts | fetchSpeciesAtLocation | ✅ Pass | 3.9112089999999853ms |
-| src/lib/login.test.ts | checkLoginCredentials | ✅ Pass | 1.9877919999998994ms |
-| src/lib/marineConditions.test.ts | fetchMarineConditions | ✅ Pass | 6.000209000000041ms |
-| src/lib/markerStyle.test.ts | getMarkerStyle | ✅ Pass | 2.1377500000000964ms |
-| src/lib/obisFetch.test.ts | fetchObisOccurrences | ✅ Pass | 7.295166999999992ms |
-| src/lib/occurrenceFetch.test.ts | fetchOccurrenceRecords | ✅ Pass | 11.15787499999999ms |
-| src/lib/occurrenceRecords.test.ts | prepareOccurrenceRecordsForMap | ✅ Pass | 1.392415999999912ms |
-| src/lib/passwordReset.test.ts | createPasswordResetCode | ✅ Pass | 252.55495800000006ms |
-| src/lib/passwordReset.test.ts | verifyPasswordResetCode | ✅ Pass | 380.6627920000001ms |
-| src/lib/passwordReset.test.ts | requestPasswordReset | ✅ Pass | 65.41149999999993ms |
-| src/lib/passwordReset.test.ts | resetPasswordWithCode | ✅ Pass | 686.1308330000002ms |
-| src/lib/profile.test.ts | saveProfileName | ✅ Pass | 1.7175419999999804ms |
-| src/lib/profile.test.ts | saveProfileImage | ✅ Pass | 0.25845800000001873ms |
-| src/lib/profile.test.ts | getDisplayAvatar | ✅ Pass | 0.14345800000000963ms |
-| src/lib/profile.test.ts | getDisplayAvatar fallback | ✅ Pass | 0.10437500000000455ms |
-| src/lib/profile.test.ts | canPostCatch | ✅ Pass | 0.23983400000008714ms |
-| src/lib/rag.test.ts | cosineSimilarity | ✅ Pass | 1.0274160000000165ms |
-| src/lib/rag.test.ts | chunkMarkdownContent | ✅ Pass | 1.2898749999999382ms |
-| src/lib/rag.test.ts | retrieveTopChunks | ✅ Pass | 2.3856660000000147ms |
-| src/lib/rag.test.ts | chunkMarkdownContent — heading context | ✅ Pass | 1.0243749999999636ms |
-| src/lib/recommendation.test.ts | createRecommendation | ✅ Pass | 3.2568750000000364ms |
-| src/lib/routeGuard.test.ts | shouldRedirectToLogin | ✅ Pass | 2.512833999999998ms |
-| src/lib/saltwaterAgent.test.ts | runSaltwaterAgent | ✅ Pass | 12.590165999999954ms |
-| src/lib/saltwaterAgentTools.test.ts | SALTWATER_AGENT_TOOLS | ✅ Pass | 2.8837080000000697ms |
-| src/lib/saltwaterAgentTools.test.ts | runSaltwaterTool | ✅ Pass | 0.44925000000000637ms |
-| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterForecast | ✅ Pass | 2.5669579999999996ms |
-| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterMarine | ✅ Pass | 1.022958000000017ms |
-| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterObis | ✅ Pass | 0.6485409999999092ms |
-| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterGbif | ✅ Pass | 1.1642500000000382ms |
-| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterUsgs | ✅ Pass | 0.8286669999999958ms |
-| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterNoaa | ✅ Pass | 3.1694170000000668ms |
-| src/lib/savedSpot.test.ts | SavedSpot data access | ✅ Pass | 4.081457999999998ms |
-| src/lib/session.test.ts | session | ✅ Pass | 3.4970409999999674ms |
-| src/lib/sightingRate.test.ts | computeSightingRate | ✅ Pass | 1.969665999999961ms |
-| src/lib/sightingRateExplanation.test.ts | explainSightingRate | ✅ Pass | 4.098833000000013ms |
-| src/lib/species.test.ts | getSpeciesForWaterType | ✅ Pass | 2.768000000000029ms |
-| src/lib/species.test.ts | getCommonName | ✅ Pass | 0.3005829999999605ms |
-| src/lib/tideConditions.test.ts | fetchTidePredictions | ✅ Pass | 2.5254580000000715ms |
-| src/lib/travelEta.test.ts | explainTravelEta | ✅ Pass | 2.8658750000000737ms |
-| src/lib/userSpots.test.ts | User SavedSpot relationship | ✅ Pass | 4.045916000000034ms |
-| src/lib/usgsWaterConditions.test.ts | fetchUsgsWaterConditions | ✅ Pass | 6.639583000000016ms |
-| src/lib/verifyMessages.test.ts | messageForVerifyReason | ✅ Pass | 2.510041000000001ms |
-| src/app/login/page.test.tsx | LoginPage | ✅ Pass | 31.17450000000008ms |
-| src/app/reset-request/page.test.tsx | ResetRequestPage | ✅ Pass | 98.09529199999997ms |
-| src/app/reset-confirm/page.test.tsx | ResetConfirmPage | ✅ Pass | 149.1134169999999ms |
-| src/app/api/catch-reports/route.test.ts | GET /api/catch-reports | ✅ Pass | 4.963542000000018ms |
-| src/app/api/catch-reports/route.test.ts | POST /api/catch-reports | ✅ Pass | 1.8458749999999782ms |
-| src/app/api/catch-reports/route.test.ts | DELETE /api/catch-reports | ✅ Pass | 0.7064169999999876ms |
-| src/app/api/catch-reports/route.test.ts | PATCH /api/catch-reports | ✅ Pass | 0.5174590000000308ms |
-| src/app/api/eta/route.test.ts | POST /api/eta | ✅ Pass | 7.311249999999973ms |
-| src/app/api/explore-chat/route.test.ts | POST /api/explore-chat | ✅ Pass | 9.502374999999972ms |
-| src/app/api/saltwater-chat/route.test.ts | POST /api/saltwater-chat | ✅ Pass | 13.995167000000038ms |
-| src/app/api/profile/route.test.ts | POST /api/profile | ✅ Pass | 14.556708000000071ms |
-| src/app/api/profile/route.test.ts | GET /api/profile | ✅ Pass | 8.258249999999975ms |
-| src/app/api/search/route.test.ts | POST /api/search | ✅ Pass | 6.789582999999993ms |
-| src/app/api/spots/route.test.ts | /api/spots route handlers | ✅ Pass | 7.110708000000045ms |
-| src/app/api/auth/login/route.test.ts | POST /api/auth/login | ✅ Pass | 6.1159999999999854ms |
-| src/app/api/auth/logout/route.test.ts | /api/auth/logout route handler | ✅ Pass | 2.72524999999996ms |
-| src/app/api/auth/reset-confirm/route.test.ts | POST /api/auth/reset-confirm | ✅ Pass | 7.711208000000056ms |
-| src/app/api/auth/me/route.test.ts | /api/auth/me route handler | ✅ Pass | 4.941874999999982ms |
-| src/app/api/auth/reset-request/route.test.ts | POST /api/auth/reset-request | ✅ Pass | 8.603124999999977ms |
-| src/app/api/auth/signup/route.test.ts | POST /api/auth/signup | ✅ Pass | 7.227916999999934ms |
-| src/app/api/profile/image/route.test.ts | POST /api/profile/image | ✅ Pass | 6.017665999999963ms |
-| src/app/api/auth/verify/route.test.ts | POST /api/auth/verify | ✅ Pass | 7.683791999999926ms |
+| src/components/FreshwaterChat.test.tsx | FreshwaterChat | ✅ Pass | 292.57866699999994ms |

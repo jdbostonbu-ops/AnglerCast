@@ -788,3 +788,179 @@ Tell Jacqueline what command to run.
 ## 105. Add Remaining Prompts
 
 Add remaining prompts in PROMPTS.md file.
+
+## 106. RED 37.40 - Saltwater Open-Meteo Imperial Units
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.40 from TESTING.md Section 37. The failing tests are at src/lib/saltwaterAgentTools.test.ts. Update src/lib/saltwaterAgentTools.ts minimally so both tests pass — nothing more.
+
+The tests assert:
+1. fetchSaltwaterForecast builds an Open-Meteo Forecast URL with three additional query parameters: temperature_unit=fahrenheit, wind_speed_unit=mph, precipitation_unit=inch.
+2. fetchSaltwaterMarine builds an Open-Meteo Marine URL with one additional query parameter: length_unit=imperial.
+
+Add the corresponding `url.searchParams.set(...)` calls in each function. Do not change any other tool function, the tool registry, the dispatcher, or the agent.
+
+Tell Jacqueline what command to run.
+
+## 107. RED 37.41 - Saltwater Agent Handles Missing Choices
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.41 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Update src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+The test sends an OpenAI response body that has no `choices` field (e.g. an error payload like `{ error: { message: 'rate limit exceeded' } }`). The agent currently crashes with `Cannot read properties of undefined (reading '0')` because the code accesses `completion.choices[0]?.message` without guarding against `completion.choices` itself being undefined.
+
+Fix: make the access defensive. Two existing lines need to handle the case where `completion.choices` may be undefined:
+- Line accessing `completion.choices[0]?.message` after the first OpenAI call
+- Same line inside the while loop after follow-up OpenAI calls
+
+A reasonable pattern is to extract a small helper or just use `completion.choices?.[0]?.message` (note the `?.` BEFORE `[0]`).
+
+The agent should return a `SaltwaterAgentResult` shape — either `{ response: '' }` or any non-crashing object — when this happens. Do not invent an error reason that isn't already in the SaltwaterAgentResult union; the test only asserts the function does not throw and returns a defined object.
+
+Do not modify the system prompt, tool registry, dispatcher, or any test files.
+
+Tell Jacqueline what command to run.
+
+## 108. RED 37.42 - Saltwater Common-Fished Species Context
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.42 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Update src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts that the OpenAI messages array sent in the request body contains the saltwater common-fished species list. Specifically, the names "Striped Bass", "Bluefish", and "Atlantic Cod" must appear somewhere in the joined content of the messages array.
+
+Implementation requirements:
+1. Import `getSpeciesForWaterType` from '@/lib/species'.
+2. Call `getSpeciesForWaterType('saltwater')` to get the species list.
+3. Include those species names in the messages array sent to OpenAI — either inside the system prompt content (preferred) or as an additional system message inserted right after the main system prompt. Each species should be referenced by both common name and scientific name so OpenAI can use the scientific name as a `scientificName` argument when calling OBIS or GBIF.
+
+Do not modify the tool registry, the dispatcher, or any test files. Do not modify the existing `saltwaterAgentSystemPrompt` constant body (the existing prompt assertions in RED 37.1 through RED 37.5 and RED 37.33 must still pass) — append the species list as a separate string concatenation or as a second system message.
+
+Tell Jacqueline what command to run.
+
+## 109. RED 37.43 - Saltwater Agent Handles Parallel Tool Calls
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.43 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Update src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts that when OpenAI returns an assistant message containing multiple tool_calls in a single message (e.g. two parallel calls — one to 'obis' and one to 'gbif'), the agent must:
+1. Dispatch runSaltwaterTool once per tool_call in that message (so two dispatches total for two tool_calls).
+2. Push the assistant message back to OpenAI exactly once, with N tool messages (one per tool_call_id) following it, before requesting the next completion.
+
+The current loop reads only `message.tool_calls?.[0]` and dispatches a single tool. The assistant message it pushes back to OpenAI still contains both tool_calls, but only one tool response is attached. OpenAI rejects this with "An assistant message with 'tool_calls' must be followed by tool messages responding to each 'tool_call_id'".
+
+Required change: iterate over all entries in `message.tool_calls`, dispatch each one through runSaltwaterTool, then push the single assistant message and one tool message per tool_call_id. Then continue the loop. The maxToolIterations cap counts iterations (each round-trip), not individual tool dispatches within an iteration.
+
+Do not modify the system prompt, tool registry, dispatcher, or any test files. The existing single-tool_call tests must continue to pass.
+
+Tell Jacqueline what command to run.
+
+## 110. RED 37.44 - Saltwater Species Questions Redirect
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 37.44 from TESTING.md Section 37. The failing test is at src/lib/saltwaterAgent.test.ts. Update src/lib/saltwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts:
+1. When the agent is asked an open-ended species question ("What fish can I find in Boston, MA on July 4 2026?"), runSaltwaterTool is NOT called at all.
+2. The system prompt sent to OpenAI contains all of the following:
+   - A mention of OBIS or GBIF
+   - A reference to the Sighting-rate search (matching /sighting.?rate|sighting search/i)
+   - A reference to the Explore tab or its FAQ agent (matching /explore tab|FAQ/i)
+   - Explicit language instructing the agent not to call those tools (matching /do not call|never call|don't call|redirect/i)
+
+Implementation:
+- Update the saltwaterAgentSystemPrompt constant (or append to it) so the prompt instructs OpenAI to redirect species questions to the in-app components instead of calling OBIS or GBIF. The redirect explanation should include:
+  - The reason: OBIS contains millions of records, queries too large for the context window
+  - That AnglerCast curated 40 commonly fished species (already injected via RED 37.42)
+  - For "what fish in [location]" questions: point to the Sighting-rate search below on the /saltwater page, mentioning clicking a species, picking a month, and interacting with the map
+  - For "tell me about [species]" questions: point to the Explore tab and its FAQ agent
+  - Explicit "do not call obis or gbif for these question types" instruction
+- Do not remove OBIS or GBIF from SALTWATER_AGENT_TOOLS or from the dispatcher. They stay registered intentionally.
+
+Do not modify any other test files, the tool registry, the dispatcher, the tool functions, or the species list injection logic. Existing tests must continue to pass.
+
+Tell Jacqueline what command to run.
+
+## 111. REFACTOR 37.47 - Remove Obsolete Saltwater Species Prompt Language
+
+Read AGENTS.md and TESTING.md file.
+
+Implement REFACTOR 37.47 from TESTING.md Section 37.6. Two failing tests in src/lib/saltwaterAgent.test.ts depend on this change:
+- REFACTOR 37.45 (asserts the system prompt does NOT match /narrow.{0,80}(species|list)/i)
+- REFACTOR 37.46 (asserts the system prompt does NOT match /query.{0,80}(species|named|directly)/i)
+
+Update src/lib/saltwaterAgent.ts minimally so both tests pass. Edit the saltwaterAgentSystemPrompt constant to remove the two obsolete sentences:
+
+1. The sentence beginning "For open-ended species questions where more than 40 species would match, narrow the answer to..."
+2. The sentence beginning "When the user names a specific species, query that named species directly..."
+
+After the edit, the prompt should contain only the redirect-based species instructions added in GREEN 37.44 (which already point to the Sighting-rate search and Explore tab) plus the unchanged date-confirmation, six-data-sources declaration, out-of-scope-decline, honest-data, and tool-failure-handling instructions.
+
+These existing tests must still pass after your edit:
+- "instructs the model to confirm the user date before calling any tools" (RED 37.1)
+- "declares exactly the six APIs in the system prompt as the only data sources" (RED 37.2)
+- "instructs the model to decline out-of-scope requests and suggest an external source" (RED 37.3)
+- "RED 37.33 — system prompt instructs the agent never to invent data when a tool fails"
+- "RED 37.42 — injects the saltwater common-fished species list into the OpenAI request context"
+- "RED 37.44 — redirects species questions to in-app components instead of dispatching OBIS or GBIF"
+
+Do not modify any test files. Do not modify the tool registry, the dispatcher, or any tool functions.
+
+Tell Jacqueline what command to run.
+
+## 112. REFACTOR 37.52 - Remove OBIS and GBIF from Saltwater Agent Registry
+
+Read AGENTS.md and TESTING.md file.
+
+Implement REFACTOR 37.52 from TESTING.md Section 37.7. The failing test is at src/lib/saltwaterAgentTools.test.ts (REFACTOR 37.48 — registry expects four tools). Update src/lib/saltwaterAgentTools.ts minimally so that test passes — nothing more.
+
+Required changes in src/lib/saltwaterAgentTools.ts:
+1. Remove the two entries for 'obis' and 'gbif' from the SALTWATER_AGENT_TOOLS array. After the change, the array contains exactly four tools: forecast, marine, usgs, noaa.
+2. Remove the two `if (name === 'obis')` and `if (name === 'gbif')` branches from the runSaltwaterTool function. After the change, runSaltwaterTool dispatches forecast, marine, usgs, and noaa by their registered names and returns { error: 'unknown_tool' } for any other name (including 'obis' and 'gbif').
+3. Keep the fetchSaltwaterObis and fetchSaltwaterGbif exported functions in the file. They are not used by the agentic RAG, but the separate Sighting-rate search component depends on them and they must remain exported.
+
+Do not modify any test files. Do not modify the tool parameter schemas. Do not modify the fetch function bodies. Do not modify the agent in src/lib/saltwaterAgent.ts. Existing tests that may temporarily expect six tools or reference obis/gbif in maps will be addressed in REFACTOR 37.49, 37.50, and 37.51 — leave them as-is for now.
+
+Tell Jacqueline what command to run.
+
+## 113. RED 38.1 - Freshwater Agent Date Confirmation Prompt
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.1 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Create src/lib/freshwaterAgent.ts with the minimal implementation required to make that test pass — nothing more.
+
+The test expects:
+1. An exported async function `runFreshwaterAgent` that accepts an object with at least a `question: string` field.
+2. The function makes a POST to https://api.openai.com/v1/chat/completions with a JSON body containing a `messages` array.
+3. At least one system message in that array contains date-confirmation language matching the regex /confirm.{0,40}date|propose.{0,40}date/i.
+4. The function returns an object with a `response` field set to the content from the OpenAI assistant message.
+
+Do NOT implement: tool dispatch, history parameter, species list injection, redirect language, the honest-data rule, or any other prompt sections beyond date confirmation. Those are separate RED tests that have not yet been written. The minimal-code rule applies — only what RED 38.1 requires.
+
+Tell Jacqueline what command to run.
+
+## 114. RED 38.2 - Freshwater Agent Two Data Sources Prompt
+
+Read AGENTS.md and TESTING.md file.
+
+Implement RED 38.2 from TESTING.md Section 38. The failing test is at src/lib/freshwaterAgent.test.ts. Update src/lib/freshwaterAgent.ts minimally so that test passes — nothing more.
+
+The test asserts the system prompt sent to OpenAI:
+1. Mentions "Open-Meteo Forecast" (matching /open[-\s]?meteo.{0,20}forecast/i)
+2. Mentions "USGS" (matching /usgs/i)
+3. Does NOT mention "Open-Meteo Marine" (no match for /open[-\s]?meteo.{0,20}marine/i)
+4. Does NOT mention "OBIS" (no match for /\bOBIS\b/)
+5. Does NOT mention "GBIF" (no match for /\bGBIF\b/)
+6. Does NOT mention "NOAA CO-OPS" (no match for /NOAA.{0,20}CO-OPS/i)
+
+Update the system prompt to add a sentence declaring Open-Meteo Forecast and USGS as the only two data sources for this freshwater agent. Do not mention any other APIs. Do not add tool registry, species list, redirect language, or honest-data rule — those are separate REDs not yet written.
+
+Tell Jacqueline what command to run.
+
+## 115. Add Remaining Prompts
+
+Add all remaining prompts to PROMPTS.md file.
