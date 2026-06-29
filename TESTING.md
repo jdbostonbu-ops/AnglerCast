@@ -1282,6 +1282,55 @@ GREEN phase: saltwaterAgentSystemPrompt is edited to remove the two obsolete sen
 
 ---
 
+## Section 37.7 — Refactor: remove OBIS and GBIF from the agentic RAG's tool registry
+
+After GREEN 37.44 and GREEN 37.47 introduced text-based redirect instructions for species questions, dev testing showed OpenAI continues to dispatch the obis tool despite the redirect language, causing 193,000-token OBIS responses that exceed gpt-4o-mini's 128,000-token context window. Text instructions are not a reliable enforcement mechanism against tool-calling behavior in this model. The structural fix is to remove obis and gbif from SALTWATER_AGENT_TOOLS entirely so OpenAI literally cannot dispatch them.
+Scope is the agentic RAG only. The fetchSaltwaterObis and fetchSaltwaterGbif functions remain exported from saltwaterAgentTools.ts because the separate Sighting-rate search component depends on them. No changes to any other agent, component, or page.
+
+## REFACTOR 37.48 — Update the registry-shape test to expect four tools instead of six
+
+- What changes: The existing test it('exposes exactly six OpenAI-shaped function tools with unique names and valid JSON Schema parameters', ...) in src/lib/saltwaterAgentTools.test.ts is renamed and its assertions are updated. The new test asserts SALTWATER_AGENT_TOOLS contains exactly four tools (forecast, marine, usgs, noaa) and that the names obis and gbif are NOT present.
+
+- Why this refactor is needed: The original RED 37.8 captured the original design — six APIs (Open-Meteo Forecast, Open-Meteo 
+Marine, OBIS, GBIF, USGS, NOAA CO-OPS) registered as agent tools. The new design removes OBIS and GBIF from the registry to prevent gpt-4o-mini from dispatching them. The "six tools" assertion must update to "four tools" before any source change can land.
+RED phase: The test is updated to expect four tools. It fails because the current registry still has six.
+GREEN phase (paired with REFACTOR 37.52): When the source change in REFACTOR 37.52 removes OBIS and GBIF from SALTWATER_AGENT_TOOLS, this test passes.
+
+REFACTOR 37.49 — Drop OBIS and GBIF entries from RED 37.31's argument map
+- What changes: The existing validArgumentsByToolName mapping inside it('RED 37.31 — every tool in SALTWATER_AGENT_TOOLS dispatches to a real tool function by its registered name', ...) has its obis, gbif, fetchSaltwaterObis, and fetchSaltwaterGbif keys removed. The test loop iterates over SALTWATER_AGENT_TOOLS, so after REFACTOR 37.52 removes those entries, the loop won't reference them — but the now-unused map entries violate the minimal-code rule.
+
+- Why this refactor is needed: Once OBIS and GBIF are out of the registry, the argument-map entries for them are dead test fixtures. Per the project's minimal-code-only rule, fixtures that no test branch reaches must be removed.
+RED phase: The test passes both before and after the map entries are deleted because the loop doesn't reach them once the registry shrinks. This refactor is a no-op for test outcomes but enforces the minimal-code rule.
+
+Note: Because this refactor doesn't change a test outcome, it is committed together with REFACTOR 37.50 and REFACTOR 37.51 as a single cleanup commit after REFACTOR 37.52 lands.
+
+## REFACTOR 37.50 — Drop OBIS and GBIF entries from RED 37.32's required-parameters map
+
+- What changes: The existing requiredParametersByToolName mapping inside it('RED 37.32 — every tool schema declares the parameters its function actually needs', ...) has its obis and gbif keys removed.
+
+- Why this refactor is needed: Same as REFACTOR 37.49 — once the registry no longer contains OBIS or GBIF, the schema-expectation entries for them are dead fixtures.
+RED phase: No test outcome change. Cleanup commit only.
+
+## REFACTOR 37.51 — Replace OBIS+GBIF parallel-tool_call pair in RED 37.43 with forecast+marine
+- What changes: The existing it('RED 37.43 — processes all tool_calls in a single assistant message before requesting the next OpenAI completion', ...) uses obis and gbif as the example pair of parallel tool_calls. The new version uses forecast and marine as the parallel pair, with matching argument objects (latitude, longitude, targetDate). All other assertions stay the same.
+
+- Why this refactor is needed: RED 37.43 must still prove the orchestration loop handles N parallel tool_calls per assistant message, but the example pair must reference tools that remain in the registry. OBIS and GBIF are out after REFACTOR 37.52.
+RED phase: The test is updated to use forecast and marine. It passes because the orchestration loop already handles parallel tool_calls (per GREEN 37.43). This refactor preserves the test's intent and assertion strength while updating the example.
+
+REFACTOR 37.52 — Remove OBIS and GBIF from SALTWATER_AGENT_TOOLS and runSaltwaterTool
+- What changes: In src/lib/saltwaterAgentTools.ts:
+
+Remove the two entries for obis and gbif from the SALTWATER_AGENT_TOOLS array (it becomes a four-tool array).
+Remove the two if (name === 'obis') and if (name === 'gbif') branches from runSaltwaterTool.
+Keep fetchSaltwaterObis and fetchSaltwaterGbif exported. They are not used by the agentic RAG anymore, but the separate Sighting-rate search component depends on them.
+
+- Why this refactor is needed: The structural enforcement: OpenAI cannot dispatch tools that are not in the registry. Removing OBIS and GBIF from SALTWATER_AGENT_TOOLS makes the context-overflow bug impossible.
+RED phase: No direct test for this refactor itself. The RED state was created by REFACTOR 37.48 (registry expects four tools, currently has six).
+
+GREEN phase: REFACTOR 37.48's test passes once OBIS and GBIF are removed from the registry. All other registry-related tests (RED 37.31, RED 37.32) automatically adjust because they iterate over SALTWATER_AGENT_TOOLS. The dispatcher-default test (it('returns an unknown_tool error shape when called with a tool name that is not in the registry')) keeps passing because 'obis' and 'gbif' now correctly fall through to the unknown-tool default.
+
+---
+
 ### Reference system prompt (GREEN-time starting point)
 
 This is reference wording for Codex to use as a starting point. The tests above assert the SHAPE of the prompt via regex, not these exact sentences. Codex may tune the wording at GREEN as long as the regex shape continues to match.
