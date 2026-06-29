@@ -172,4 +172,30 @@ describe('runFreshwaterAgent', () => {
     expect(systemContent).toMatch(/never invent|do not fabricate|do not (make up|invent)|cannot use training data|honest data|do not guess/i);
     expect(systemContent).toMatch(/(tool|forecast|data|api).{0,80}(fail|error|null|empty|missing|cannot|unable)/i);
   });
+
+  it('RED 38.14 — sends the user question and the tool registry to OpenAI', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { content: 'ok' } }],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await runFreshwaterAgent({ question: 'Where should I fish this Saturday?' });
+
+    const requestInit = fetchMock.mock.calls[0]?.[1];
+    const requestBody = JSON.parse(requestInit?.body as string) as {
+      messages: { role: string; content: string }[];
+      tools?: unknown[];
+    };
+
+    const userMessage = requestBody.messages.find((m) => m.role === 'user');
+    expect(userMessage).toBeDefined();
+    expect(userMessage?.content).toBe('Where should I fish this Saturday?');
+
+    expect(requestBody.tools).toBeDefined();
+    expect(Array.isArray(requestBody.tools)).toBe(true);
+    expect(requestBody.tools).toHaveLength(2);
+  });
 });
