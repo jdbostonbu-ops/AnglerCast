@@ -153,6 +153,63 @@ How it works:
 
 ---
 
+## 🐟 Agentic RAG — The Saltwater & Freshwater Trip Planners
+
+The **Saltwater** and **Freshwater** pages each include an **agentic RAG** — an AI agent that doesn't just answer from documents, it actually goes out and queries real public APIs in real time to plan a fishing trip. Tell it where and when you want to fish, and it checks live forecasts, water conditions, and tide predictions before answering.
+
+Two agents share the same architecture; their differences match what real-world fishing data sources support.
+
+How the loop works:
+
+- 🛠️ **OpenAI function calling.** Each agent declares its tools as JSON Schema functions registered with `gpt-4o-mini`. The model decides whether and which tools to call based on the user's question. The orchestration loop dispatches every `tool_call` in the assistant message, feeds each result back as a `tool` message with its matching `tool_call_id`, and continues until OpenAI returns a final text answer or the iteration cap is reached.
+- 🔒 **Capped iterations.** A `maxToolIterations` constant of 8 prevents runaway loops. If OpenAI keeps requesting tool calls past the cap, the agent returns `{ ok: false, reason: 'max_iterations_exceeded' }` rather than burning tokens forever.
+- 📅 **Date confirmation first.** Before dispatching any tool, the agent confirms the user's date — if the user said "this weekend," the agent proposes the concrete date it thinks they mean and waits for confirmation. No tool runs against an ambiguous date.
+- 🚫 **Honest failure.** When a tool returns null, an error, or no data, the agent says so plainly and never falls back on training-data fabrications like "typical weather averages." The honest-data thesis applies to the agent the same way it applies to the rest of the app.
+- 💬 **Conversation history.** Each turn's user and assistant messages are sent back to OpenAI on follow-ups, so "Yes" or "What about Sunday?" carries the prior context the agent already established.
+- 🌡️ **Imperial units at the API layer.** The forecast tool requests Fahrenheit, mph, and inches directly from Open-Meteo via query parameters — the LLM never converts units, because LLM math is the kind of thing that goes subtly wrong.
+
+### The Saltwater Agent
+
+Available on the saltwater page. Tools registered with OpenAI:
+
+| Tool | Source | Returns |
+|---|---|---|
+| `forecast` | Open-Meteo Forecast | Hourly air temperature, wind speed, precipitation (imperial units) |
+| `marine` | Open-Meteo Marine | Hourly wave height, wave direction, wave period, sea surface temperature |
+| `usgs` | USGS NWIS | Live water conditions at the nearest gauge station |
+| `noaa` | NOAA CO-OPS | High/low tide predictions for the nearest coastal station |
+
+### The Freshwater Agent
+
+Available on the freshwater page. Tools registered with OpenAI:
+
+| Tool | Source | Returns |
+|---|---|---|
+| `forecast` | Open-Meteo Forecast | Hourly air temperature, wind speed, precipitation (imperial units) |
+| `usgs` | USGS NWIS | Live streamflow, gage height, water temperature at the nearest gauge station |
+
+> Open-Meteo Marine is omitted because freshwater isn't marine. NOAA CO-OPS is omitted because freshwater stations don't have tide predictions — Great Lakes water levels move with weather, not tides.
+
+### Redirects Instead of Overflowing the Context Window
+
+GBIF and OBIS aren't registered as agent tools. Their responses for an open species query can run to 193,000+ tokens — larger than the model's entire context window — and any general "what fish are in this location" answer at that scale would be the model picking from noise.
+
+So the agentic RAG **does not answer species questions itself**. Instead, the system prompt instructs it to redirect:
+
+- 🐠 **"What fish can I find in [location]?"** → Redirect to the Sighting-rate search on the same page, which uses a sampled query against GBIF + OBIS and renders an honest historical rate with a map.
+- 🎣 **"Tell me about [species]?"** → Redirect to the Explore tab and its FAQ RAG agent, which already has curated, source-grounded answers for the 40 common species per water type.
+- 🗺️ **"What's common at [destination]?"** → Redirect to the destination tool on the Explore page.
+
+The agent explains *why* it's redirecting (OBIS has tens of millions of records; AnglerCast curated 40 commonly fished species per water type), so the user understands the redirect is a design choice grounded in the honest-data thesis — not a limitation the agent is hiding.
+
+### Out-of-Scope Decline
+
+If a user asks for something neither tool nor in-app redirect covers — "any good restaurants nearby?" — the agent says it doesn't have a data source for that, names the sources it does have, and suggests Google Maps. It doesn't invent restaurant data, and it doesn't pretend to know.
+
+> Real APIs in. Honest answers or honest redirects out. The agent never invents a forecast, a tide, a fish, or a restaurant.
+
+---
+
 ## 📰 Weekly Blog — AI-Written, Source-Grounded
 
 The home page features a **weekly fishing blog post** that publishes itself. Every Friday, an automated **Zapier** pipeline writes a fresh, source-grounded article and surfaces it below the seasonal data cards — no manual posting, no redeploy.
