@@ -15,13 +15,13 @@ type ToolEntry = {
 };
 
 describe('SALTWATER_AGENT_TOOLS', () => {
-  it('exposes exactly six OpenAI-shaped function tools with unique names and valid JSON Schema parameters', () => {
+  it('REFACTOR 37.48 — exposes exactly four OpenAI-shaped function tools and excludes OBIS and GBIF from the agentic RAG registry', () => {
     const tools = SALTWATER_AGENT_TOOLS as ReadonlyArray<ToolEntry>;
-    expect(tools).toHaveLength(6);
-
+    expect(tools).toHaveLength(4);
     const names = tools.map((tool) => tool.function.name);
-    expect(new Set(names).size).toBe(6);
-
+    expect(new Set(names).size).toBe(4);
+    expect(names).not.toContain('obis');
+    expect(names).not.toContain('gbif');
     tools.forEach((tool) => {
       expect(tool.type).toBe('function');
       expect(typeof tool.function.name).toBe('string');
