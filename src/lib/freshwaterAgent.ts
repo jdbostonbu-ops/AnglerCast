@@ -20,7 +20,7 @@ type FreshwaterAgentResult = {
 };
 
 const freshwaterAgentSystemPrompt =
-  'Before calling any tools, confirm the user date. If the user uses a relative date, propose the concrete date and wait for confirmation.';
+  'Before calling any tools, confirm the user date. If the user uses a relative date, propose the concrete date and wait for confirmation. Your only data sources for this freshwater agent are Open-Meteo Forecast and USGS.';
 
 export const runFreshwaterAgent = async ({
   question,
