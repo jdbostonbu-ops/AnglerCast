@@ -103,4 +103,27 @@ describe('runFreshwaterAgent', () => {
     expect(systemContent).toMatch(/freshwater page/i);
     expect(systemContent).toMatch(/do not call|never call|don't call|redirect/i);
   });
+
+  it('RED 38.5 — redirects specific-species questions to the Explore tab FAQ agent instead of dispatching a tool', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { role: 'assistant', content: 'Check the Explore tab.' } }],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await runFreshwaterAgent({ question: 'Tell me about Brook Trout.' });
+
+    const requestBody = JSON.parse(fetchMock.mock.calls[0]?.[1]?.body as string) as {
+      messages: Array<{ role: string; content: string | null }>;
+    };
+    const systemContent = requestBody.messages
+      .filter((m) => m.role === 'system')
+      .map((m) => m.content ?? '')
+      .join(' ');
+
+    expect(systemContent).toMatch(/explore tab|FAQ/i);
+    expect(systemContent).not.toMatch(/query.{0,80}(species|named|directly)/i);
+  });
 });
