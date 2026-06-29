@@ -1230,6 +1230,58 @@ Note: OBIS and GBIF remain registered in SALTWATER_AGENT_TOOLS as a deliberate c
 
 ---
 
+## REFACTOR 37.45 — Replace RED 37.4's "narrow to 40 species" test with a redirect-to-Sighting-rate-search test
+
+- What changes: The existing it('instructs the model to narrow open-ended species queries to the common-fished saltwater list when more than 40 species would match', ...) block in src/lib/saltwaterAgent.test.ts is replaced entirely. The new it(...) block asserts the system prompt instructs the agent to redirect open-ended species questions to the Sighting-rate search component, not to call OBIS or GBIF and not to narrow results from a list.
+
+- Why this refactor is needed: The original RED 37.4 captured the design at the time it was written — narrow OBIS/GBIF queries to a curated 40-species list before dispatch. That design proved unworkable because OBIS returns historical occurrence data by location (not by date or species count), and the responses overflow the model's context window regardless of filtering. The new design (RED 37.44) redirects all open-ended species questions to the Sighting-rate search component, which already does statistical sampling. RED 37.4's "narrow" language now actively contradicts RED 37.44's "redirect" language inside the same system prompt, and OpenAI follows whichever instruction comes first.
+
+New test assertion: The new test calls runSaltwaterAgent with a representative open-ended species question, captures the system prompt content, and asserts the prompt contains language redirecting the user to the Sighting-rate search (matching /sighting.?rate|sighting search/i) but does NOT contain language instructing the agent to narrow species queries to a list (no match for /narrow.{0,40}(species|list)/i).
+
+RED phase: The current test passes (its old assertions about narrowing still match the legacy prompt language). After the test is replaced, it fails because the legacy prompt language about narrowing is still present — the new test's negative assertion catches it.
+
+GREEN phase (paired with REFACTOR 37.47): Once the contradictory narrow-language is removed from saltwaterAgentSystemPrompt per REFACTOR 37.47, this test passes.
+
+## REFACTOR 37.46 — Replace RED 37.5's "query named species directly" test with a redirect-to-Explore-tab test
+
+- What changes: The existing it('instructs the model to query a specific named species directly without filtering', ...) block in src/lib/saltwaterAgent.test.ts is replaced entirely. The new it(...) block asserts the system prompt instructs the agent to redirect specific-species information questions to the Explore tab's FAQ agent, not to call OBIS or GBIF directly.
+
+- Why this refactor is needed: The original RED 37.5 captured the design at the time it was written — when a user named a specific species, the agent would dispatch OBIS or GBIF with that scientific name to fetch occurrence data. That design overlaps with the new design (RED 37.44), where specific-species questions are redirected to the Explore tab's existing FAQ RAG agent, which already has curated answers for the 40 commonly fished saltwater species. RED 37.5's "query directly" language now contradicts RED 37.44's "redirect to Explore tab" language, and OpenAI follows whichever instruction comes first.
+
+New test assertion: The new test calls runSaltwaterAgent with a representative specific-species question (e.g. "Tell me about Bluefish"), captures the system prompt content, and asserts the prompt contains language redirecting the user to the Explore tab and its FAQ agent (matching /explore tab|FAQ/i) but does NOT contain language instructing the agent to query the named species directly (no match for /query.{0,40}(species|named)|query.{0,40}directly/i).
+
+RED phase: The current test passes (its old assertions about querying directly still match the legacy prompt language). After the test is replaced, it fails because the legacy prompt language about querying named species directly is still present — the new test's negative assertion catches it.
+
+GREEN phase (paired with REFACTOR 37.47): Once the contradictory query-directly language is removed from saltwaterAgentSystemPrompt per REFACTOR 37.47, this test passes.
+
+
+
+## REFACTOR 37.47 — Remove obsolete species-narrowing and query-directly language from saltwaterAgentSystemPrompt
+
+- What changes: The saltwaterAgentSystemPrompt constant in src/lib/saltwaterAgent.ts is edited to remove the two sentences that describe the obsolete design:
+
+The sentence beginning "For open-ended species questions where more than 40 species would match, narrow the answer to..."
+The sentence beginning "When the user names a specific species, query that named species directly..."
+
+After the edit, the prompt contains only the redirect-based species instructions from RED 37.44 and the unchanged date-confirmation, data-source declaration, out-of-scope-decline, honest-data, and tool-failure-handling instructions.
+
+- Why this refactor is needed: Per REFACTOR 37.45 and REFACTOR 37.46, the two species-narrowing sentences contradict the redirect instructions added by RED 37.44. OpenAI follows the first matching instruction in the prompt, which is the obsolete narrow-and-query language, so it dispatches OBIS regardless of the redirect instruction that follows. The contradiction must be resolved at the source — the obsolete language is removed entirely.
+Tests that must still pass after this change:
+
+REFACTOR 37.45's new assertion (no narrow-to-list language)
+REFACTOR 37.46's new assertion (no query-directly language)
+RED 37.44 (redirect to Sighting-rate search and Explore tab — language stays)
+RED 37.1 (date confirmation — language stays)
+RED 37.2 (six APIs declared — language stays)
+RED 37.3 (decline out-of-scope and suggest external source — language stays)
+RED 37.33 (honest-data rule and tool-failure handling — language stays)
+
+RED phase: No test code change in this refactor. The RED state is created by REFACTOR 37.45 and REFACTOR 37.46 — both of those tests fail until this refactor's prompt edit lands.
+
+GREEN phase: saltwaterAgentSystemPrompt is edited to remove the two obsolete sentences. The test runs after this edit confirm 37.45 and 37.46 pass and all listed RED tests still pass.
+
+---
+
 ### Reference system prompt (GREEN-time starting point)
 
 This is reference wording for Codex to use as a starting point. The tests above assert the SHAPE of the prompt via regex, not these exact sentences. Codex may tune the wording at GREEN as long as the regex shape continues to match.

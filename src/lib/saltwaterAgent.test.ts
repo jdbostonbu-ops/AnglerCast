@@ -75,25 +75,27 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
     expect(systemMessage?.content).toMatch(/Google Maps|external source/i);
   });
 
-  it('instructs the model to narrow open-ended species queries to the common-fished saltwater list when more than 40 species would match', async () => {
-    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+  it('REFACTOR 37.45 — redirects open-ended species questions to the Sighting-rate search instead of narrowing to a list', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        choices: [{ message: { content: 'ok' } }],
+        choices: [{ message: { role: 'assistant', content: 'ok' } }],
       }),
     } as Response);
     vi.stubGlobal('fetch', fetchMock);
 
-    await runSaltwaterAgent({ question: 'Where should I fish?' });
+    await runSaltwaterAgent({ question: 'What fish can I find in Boston?' });
 
-    const requestInit = fetchMock.mock.calls[0]?.[1];
-    const requestBody = JSON.parse(requestInit?.body as string) as {
-      messages: { role: string; content: string }[];
+    const requestBody = JSON.parse(fetchMock.mock.calls[0]?.[1]?.body as string) as {
+      messages: Array<{ role: string; content: string | null }>;
     };
-    const systemMessage = requestBody.messages.find((m) => m.role === 'system');
-    expect(systemMessage).toBeDefined();
-    expect(systemMessage?.content).toMatch(/40/);
-    expect(systemMessage?.content).toMatch(/common[- ]?fished|commonly fished/i);
+    const systemContent = requestBody.messages
+      .filter((m) => m.role === 'system')
+      .map((m) => m.content ?? '')
+      .join(' ');
+
+    expect(systemContent).toMatch(/sighting.?rate|sighting search/i);
+    expect(systemContent).not.toMatch(/narrow.{0,80}(species|list)/i);
   });
 
   it('instructs the model to query a specific named species directly without filtering', async () => {
