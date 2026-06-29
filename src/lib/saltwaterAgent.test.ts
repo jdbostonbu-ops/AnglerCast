@@ -98,26 +98,29 @@ it('declares exactly the six APIs in the system prompt as the only data sources'
     expect(systemContent).not.toMatch(/narrow.{0,80}(species|list)/i);
   });
 
-  it('instructs the model to query a specific named species directly without filtering', async () => {
-    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+  it('REFACTOR 37.46 — redirects specific-species questions to the Explore tab instead of querying OBIS or GBIF directly', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        choices: [{ message: { content: 'ok' } }],
+        choices: [{ message: { role: 'assistant', content: 'ok' } }],
       }),
     } as Response);
     vi.stubGlobal('fetch', fetchMock);
 
-    await runSaltwaterAgent({ question: 'Where should I fish?' });
+    await runSaltwaterAgent({ question: 'Tell me about Bluefish.' });
 
-    const requestInit = fetchMock.mock.calls[0]?.[1];
-    const requestBody = JSON.parse(requestInit?.body as string) as {
-      messages: { role: string; content: string }[];
+    const requestBody = JSON.parse(fetchMock.mock.calls[0]?.[1]?.body as string) as {
+      messages: Array<{ role: string; content: string | null }>;
     };
-    const systemMessage = requestBody.messages.find((m) => m.role === 'system');
-    expect(systemMessage).toBeDefined();
-    expect(systemMessage?.content).toMatch(/specific species|named species|named by the user/i);
-  });
+    const systemContent = requestBody.messages
+      .filter((m) => m.role === 'system')
+      .map((m) => m.content ?? '')
+      .join(' ');
 
+    expect(systemContent).toMatch(/explore tab|FAQ/i);
+    expect(systemContent).not.toMatch(/query.{0,80}(species|named|directly)/i);
+  });
+  
   it('returns the clarifying question text and invokes no tools when OpenAI returns text only', async () => {
     const clarification = 'Did you mean Saturday, June 28?';
     const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
