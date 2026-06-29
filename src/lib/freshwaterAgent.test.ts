@@ -198,4 +198,27 @@ describe('runFreshwaterAgent', () => {
     expect(Array.isArray(requestBody.tools)).toBe(true);
     expect(requestBody.tools).toHaveLength(2);
   });
+
+  it('RED 38.15 — returns the clarifying question text and invokes no tools when OpenAI returns text only', async () => {
+    const toolsModule = await import('@/lib/freshwaterAgentTools');
+    const runFreshwaterToolSpy = vi
+      .spyOn(toolsModule, 'runFreshwaterTool')
+      .mockResolvedValue({ ok: true });
+
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { role: 'assistant', content: 'Did you mean Saturday, June 28?' } }],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await runFreshwaterAgent({ question: 'Where should I fish this weekend?' }) as { response: string };
+
+    expect(result.response).toBe('Did you mean Saturday, June 28?');
+    expect(runFreshwaterToolSpy).not.toHaveBeenCalled();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+
+    runFreshwaterToolSpy.mockRestore();
+  });
 });
