@@ -1211,6 +1211,25 @@ RED 37.43 — runSaltwaterAgent processes all tool_calls in a single assistant m
 
 ---
 
+RED 37.44 — runSaltwaterAgent redirects species questions to in-app components instead of calling OBIS or GBIF
+
+- What it checks: When runSaltwaterAgent is called with an open-ended species question (e.g. "What fish can I find in Boston?") OR a specific-species information question (e.g. "Tell me about Bluefish"), the agent does not dispatch any OBIS or GBIF tool calls. The system prompt sent to OpenAI now contains explicit instructions to redirect species questions, including:
+
+The reason: OBIS contains over 34 million records and queries are too large to fit in the model's context window.
+That AnglerCast curated 40 commonly fished saltwater species (the list is already injected via RED 37.42).
+
+For "what fish in [location]" questions: redirect the user to the Sighting-rate search below on the same /saltwater page, where they can click a species, pick a month, and interact with the map.
+
+For "tell me about [species]" questions: redirect the user to the Explore tab and its FAQ agent.
+
+The test mocks runSaltwaterTool via vi.spyOn and asserts it is NOT called when the species question comes in. The test also asserts the system prompt content includes references to OBIS/GBIF, the Sighting-rate search, and the Explore tab, plus language instructing the agent not to call those tools.
+
+- Why it fails first; expected behavior: the current system prompt has no instruction to redirect species questions. OpenAI sees OBIS and GBIF as available tools and dispatches them. OBIS returns up to 300 historical occurrence records for the location, which serializes to ~193,000 tokens — larger than gpt-4o-mini's 128,000-token context window. The follow-up OpenAI call fails with context_length_exceeded. The fix is not to make OBIS/GBIF responses smaller (the Sighting-rate search already solves that elsewhere in the app with statistical sampling); the fix is to never dispatch them from this agent and explain to the user where the species data lives instead.
+
+Note: OBIS and GBIF remain registered in SALTWATER_AGENT_TOOLS as a deliberate choice — the system prompt redirects, but the dispatcher still works if OpenAI ever calls them anyway. Whether to remove them from the registry is a separate decision after we see the redirect behavior in dev.
+
+---
+
 ### Reference system prompt (GREEN-time starting point)
 
 This is reference wording for Codex to use as a starting point. The tests above assert the SHAPE of the prompt via regex, not these exact sentences. Codex may tune the wording at GREEN as long as the regex shape continues to match.
