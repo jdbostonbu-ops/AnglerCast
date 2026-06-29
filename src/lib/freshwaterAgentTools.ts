@@ -81,6 +81,17 @@ type FetchFreshwaterForecastInput = {
   targetDate: string;
 };
 
+type FreshwaterForecastResponse = {
+  latitude?: number;
+  longitude?: number;
+  hourly?: {
+    time?: string[];
+    temperature_2m?: number[];
+    wind_speed_10m?: number[];
+    precipitation?: number[];
+  };
+};
+
 type FetchFreshwaterUsgsInput = {
   siteId: string;
 };
@@ -91,17 +102,24 @@ const readNumberArg = (args: Record<string, unknown>, key: string): number =>
 const readStringArg = (args: Record<string, unknown>, key: string): string =>
   typeof args[key] === 'string' ? args[key] : '';
 
-export const fetchFreshwaterForecast = async (
-  _input: FetchFreshwaterForecastInput,
-): Promise<unknown> => {
+export const fetchFreshwaterForecast = async ({
+  latitude,
+  longitude,
+  targetDate,
+}: FetchFreshwaterForecastInput): Promise<FreshwaterForecastResponse> => {
   const url = new URL('https://api.open-meteo.com/v1/forecast');
+  url.searchParams.set('latitude', String(latitude));
+  url.searchParams.set('longitude', String(longitude));
+  url.searchParams.set('start_date', targetDate);
+  url.searchParams.set('end_date', targetDate);
+  url.searchParams.set('hourly', 'temperature_2m,wind_speed_10m,precipitation');
   url.searchParams.set('temperature_unit', 'fahrenheit');
   url.searchParams.set('wind_speed_unit', 'mph');
   url.searchParams.set('precipitation_unit', 'inch');
 
   const response = await fetch(url.toString());
 
-  return response.json();
+  return (await response.json()) as FreshwaterForecastResponse;
 };
 
 export const fetchFreshwaterUsgs = async (
