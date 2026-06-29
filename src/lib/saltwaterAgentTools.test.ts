@@ -314,14 +314,10 @@ describe('fetchSaltwaterNoaa', () => {
     const validArgumentsByToolName: Record<string, Record<string, unknown>> = {
       forecast: { latitude: 41.4, longitude: -71.3, targetDate: '2026-07-04' },
       marine: { latitude: 41.4, longitude: -71.3, targetDate: '2026-07-04' },
-      obis: { latitude: 41.4, longitude: -71.3 },
-      gbif: { latitude: 41.4, longitude: -71.3 },
       usgs: { siteId: '01184000' },
       noaa: { stationId: '8454000', targetDate: '2026-07-04' },
       fetchSaltwaterForecast: { latitude: 41.4, longitude: -71.3, targetDate: '2026-07-04' },
       fetchSaltwaterMarine: { latitude: 41.4, longitude: -71.3, targetDate: '2026-07-04' },
-      fetchSaltwaterObis: { latitude: 41.4, longitude: -71.3 },
-      fetchSaltwaterGbif: { latitude: 41.4, longitude: -71.3 },
       fetchSaltwaterUsgs: { siteId: '01184000' },
       fetchSaltwaterNoaa: { stationId: '8454000', targetDate: '2026-07-04' },
     };
