@@ -57,4 +57,25 @@ describe('POST /api/freshwater-chat', () => {
 
     expect(response.status).toBe(500);
   });
+
+  it('RED 38.26 — forwards body.history to runFreshwaterAgent so the agent can use prior turns', async () => {
+    mockRunFreshwaterAgent.mockResolvedValue({ response: 'mocked answer' });
+
+    const priorHistory = [
+      { role: 'user' as const, content: 'where can I fish in Connecticut?' },
+      { role: 'assistant' as const, content: 'What date are you fishing?' },
+    ];
+
+    const request = buildRequest({
+      question: 'July 4 2026',
+      history: priorHistory,
+    });
+
+    await POST(request);
+
+    expect(mockRunFreshwaterAgent).toHaveBeenCalledWith({
+      question: 'July 4 2026',
+      history: priorHistory,
+    });
+  });
 });
