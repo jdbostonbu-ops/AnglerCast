@@ -390,4 +390,53 @@ describe('runFreshwaterAgent', () => {
 
     runFreshwaterToolSpy.mockRestore();
   });
+
+  it('RED 38.19 — recovers when a tool returns null or an error shape and continues to a final answer', async () => {
+    const toolsModule = await import('@/lib/freshwaterAgentTools');
+    const runFreshwaterToolSpy = vi
+      .spyOn(toolsModule, 'runFreshwaterTool')
+      .mockResolvedValue(null);
+
+    const fetchMock = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{
+            message: {
+              role: 'assistant',
+              content: null,
+              tool_calls: [{
+                id: 'call_u',
+                type: 'function',
+                function: {
+                  name: 'usgs',
+                  arguments: JSON.stringify({ siteId: '00000000' }),
+                },
+              }],
+            },
+          }],
+        }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: { role: 'assistant', content: 'I could not retrieve USGS data for that site.' } }],
+        }),
+      } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await runFreshwaterAgent({ question: 'What is the river height at site 00000000?' }) as { response: string };
+
+    expect(result.response).toBe('I could not retrieve USGS data for that site.');
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+
+    const secondCallBody = JSON.parse(fetchMock.mock.calls[1]?.[1]?.body as string) as {
+      messages: Array<{ role: string; content?: string; tool_call_id?: string }>;
+    };
+    const toolMessage = secondCallBody.messages.find((m) => m.role === 'tool');
+    expect(toolMessage).toBeDefined();
+    expect(toolMessage?.content).toBeDefined();
+
+    runFreshwaterToolSpy.mockRestore();
+  });
 });
