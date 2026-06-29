@@ -38,4 +38,15 @@ describe('POST /api/freshwater-chat', () => {
     );
     expect(data.response).toBe(agentResponse);
   });
+
+  it('RED 38.24 — returns 400 with no agent call when question is missing, empty, or whitespace only', async () => {
+    const responseMissing = await POST(buildRequest({}));
+    const responseEmpty = await POST(buildRequest({ question: '' }));
+    const responseWhitespace = await POST(buildRequest({ question: '   \n  ' }));
+
+    expect(responseMissing.status).toBe(400);
+    expect(responseEmpty.status).toBe(400);
+    expect(responseWhitespace.status).toBe(400);
+    expect(mockRunFreshwaterAgent).not.toHaveBeenCalled();
+  });
 });
