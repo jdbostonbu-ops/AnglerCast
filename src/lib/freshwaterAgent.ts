@@ -1,3 +1,5 @@
+import { FRESHWATER_AGENT_TOOLS } from '@/lib/freshwaterAgentTools';
+
 type RunFreshwaterAgentInput = {
   question: string;
 };
@@ -44,6 +46,7 @@ export const runFreshwaterAgent = async ({
     },
     body: JSON.stringify({
       model: 'gpt-4o-mini',
+      tools: FRESHWATER_AGENT_TOOLS,
       messages,
     }),
   });
