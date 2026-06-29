@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { FRESHWATER_AGENT_TOOLS } from '@/lib/freshwaterAgentTools';
 
 type ToolEntry = {
@@ -38,5 +38,33 @@ describe('FRESHWATER_AGENT_TOOLS', () => {
       expect(tool.function.parameters.properties).toBeDefined();
       expect(Array.isArray(tool.function.parameters.required)).toBe(true);
     });
+  });
+
+  it('RED 38.9 — runFreshwaterTool dispatches both registered tool names to a real tool function and returns unknown_tool for unregistered names', async () => {
+    const { runFreshwaterTool } = await import('@/lib/freshwaterAgentTools');
+
+    const fetchMock = vi.fn().mockImplementation(async () =>
+      new Response(JSON.stringify({}), { status: 200 }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const validArgumentsByToolName: Record<string, Record<string, unknown>> = {
+      forecast: { latitude: 41.4, longitude: -71.3, targetDate: '2026-07-04' },
+      usgs: { siteId: '01184000' },
+    };
+
+    for (const tool of FRESHWATER_AGENT_TOOLS) {
+      const toolName = tool.function.name;
+      const validArguments = validArgumentsByToolName[toolName] ?? {};
+
+      const result = await runFreshwaterTool(toolName, validArguments);
+
+      expect(result).not.toEqual({ error: 'unknown_tool' });
+    }
+
+    const unknownResult = await runFreshwaterTool('not_a_real_tool', {});
+    expect(unknownResult).toEqual({ error: 'unknown_tool' });
+
+    vi.unstubAllGlobals();
   });
 });
