@@ -281,4 +281,79 @@ describe('runFreshwaterAgent', () => {
 
     runFreshwaterToolSpy.mockRestore();
   });
+
+  it('RED 38.17 — processes all tool_calls in a single assistant message before requesting the next OpenAI completion', async () => {
+    const toolsModule = await import('@/lib/freshwaterAgentTools');
+    const runFreshwaterToolSpy = vi
+      .spyOn(toolsModule, 'runFreshwaterTool')
+      .mockImplementation(async (name: string) => {
+        if (name === 'forecast') {
+          return { source: 'forecast', hourly: { temperature_2m: [70] } };
+        }
+        if (name === 'usgs') {
+          return { source: 'usgs', parameters: [] };
+        }
+        return { error: 'unknown_tool' };
+      });
+
+    const fetchMock = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{
+            message: {
+              role: 'assistant',
+              content: null,
+              tool_calls: [
+                {
+                  id: 'call_forecast_1',
+                  type: 'function',
+                  function: {
+                    name: 'forecast',
+                    arguments: JSON.stringify({ latitude: 41.7659, longitude: -72.6709, targetDate: '2026-06-28' }),
+                  },
+                },
+                {
+                  id: 'call_usgs_1',
+                  type: 'function',
+                  function: {
+                    name: 'usgs',
+                    arguments: JSON.stringify({ siteId: '01184000' }),
+                  },
+                },
+              ],
+            },
+          }],
+        }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: { role: 'assistant', content: 'Conditions look good with mild temperatures and stable river levels.' } }],
+        }),
+      } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await runFreshwaterAgent({ question: 'What are the weather and river conditions today at site 01184000?' }) as { response: string };
+
+    expect(runFreshwaterToolSpy).toHaveBeenCalledTimes(2);
+    const dispatchedNames = runFreshwaterToolSpy.mock.calls.map((c) => c[0]);
+    expect(dispatchedNames).toContain('forecast');
+    expect(dispatchedNames).toContain('usgs');
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+
+    const secondRequestBody = JSON.parse(fetchMock.mock.calls[1]?.[1]?.body as string) as {
+      messages: Array<{ role: string; content: string | null; tool_call_id?: string }>;
+    };
+    const toolMessages = secondRequestBody.messages.filter((m) => m.role === 'tool');
+    expect(toolMessages.length).toBe(2);
+    const toolCallIds = toolMessages.map((m) => m.tool_call_id);
+    expect(toolCallIds).toContain('call_forecast_1');
+    expect(toolCallIds).toContain('call_usgs_1');
+
+    expect(result.response).toBe('Conditions look good with mild temperatures and stable river levels.');
+
+    runFreshwaterToolSpy.mockRestore();
+  });
 });
