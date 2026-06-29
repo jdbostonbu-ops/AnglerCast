@@ -96,6 +96,48 @@ type FetchFreshwaterUsgsInput = {
   siteId: string;
 };
 
+type FreshwaterUsgsTimeSeries = {
+  sourceInfo?: {
+    siteName?: string;
+    geoLocation?: {
+      geogLocation?: {
+        latitude?: number;
+        longitude?: number;
+      };
+    };
+  };
+  variable?: {
+    variableName?: string;
+    unit?: {
+      unitCode?: string;
+    };
+  };
+  values?: {
+    value?: {
+      value?: string;
+      dateTime?: string;
+    }[];
+  }[];
+};
+
+type FreshwaterUsgsApiResponse = {
+  value?: {
+    timeSeries?: FreshwaterUsgsTimeSeries[];
+  };
+};
+
+type FreshwaterUsgsResponse = {
+  siteName: string;
+  latitude: number | null;
+  longitude: number | null;
+  parameters: {
+    variableName: string;
+    unit: string;
+    latestValue: string;
+    latestTime: string;
+  }[];
+};
+
 const readNumberArg = (args: Record<string, unknown>, key: string): number =>
   typeof args[key] === 'number' ? args[key] : 0;
 
@@ -122,12 +164,33 @@ export const fetchFreshwaterForecast = async ({
   return (await response.json()) as FreshwaterForecastResponse;
 };
 
-export const fetchFreshwaterUsgs = async (
-  _input: FetchFreshwaterUsgsInput,
-): Promise<unknown> => {
-  const response = await fetch('https://waterservices.usgs.gov/nwis/iv/');
+export const fetchFreshwaterUsgs = async ({
+  siteId,
+}: FetchFreshwaterUsgsInput): Promise<FreshwaterUsgsResponse> => {
+  const url = new URL('https://waterservices.usgs.gov/nwis/iv/');
+  url.searchParams.set('format', 'json');
+  url.searchParams.set('sites', siteId);
 
-  return response.json();
+  const response = await fetch(url.toString());
+  const usgs = (await response.json()) as FreshwaterUsgsApiResponse;
+  const timeSeries = usgs.value?.timeSeries ?? [];
+  const firstSeries = timeSeries[0];
+
+  return {
+    siteName: firstSeries?.sourceInfo?.siteName ?? '',
+    latitude: firstSeries?.sourceInfo?.geoLocation?.geogLocation?.latitude ?? null,
+    longitude: firstSeries?.sourceInfo?.geoLocation?.geogLocation?.longitude ?? null,
+    parameters: timeSeries.map((series) => {
+      const latest = series.values?.[0]?.value?.[0];
+
+      return {
+        variableName: series.variable?.variableName ?? '',
+        unit: series.variable?.unit?.unitCode ?? '',
+        latestValue: latest?.value ?? '',
+        latestTime: latest?.dateTime ?? '',
+      };
+    }),
+  };
 };
 
 export const runFreshwaterTool = async (
