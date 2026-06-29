@@ -503,4 +503,30 @@ describe('runFreshwaterAgent', () => {
     expect(result).toBeDefined();
     expect(typeof result).toBe('object');
   });
+
+  it('RED 38.22 — injects the freshwater common-fished species list into the OpenAI request context', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { role: 'assistant', content: 'ok' } }],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await runFreshwaterAgent({ question: 'What fish can I find in the Connecticut River?' });
+
+    const fetchCall = fetchMock.mock.calls[0];
+    const requestInit = fetchCall?.[1] as RequestInit;
+    const requestBody = JSON.parse(requestInit.body as string) as {
+      messages: Array<{ role: string; content: string | null }>;
+    };
+
+    const allMessageContent = requestBody.messages
+      .map((m) => m.content ?? '')
+      .join(' ');
+
+    expect(allMessageContent).toContain('Brook Trout');
+    expect(allMessageContent).toContain('Largemouth Bass');
+    expect(allMessageContent).toContain('Bluegill');
+  });
 });
