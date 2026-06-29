@@ -1,24 +1,28 @@
 # Test Run & Git Summary Report
-**Generated on:** 6/28/2026, 9:11:43 PM
+**Generated on:** 6/28/2026, 9:25:59 PM
 
 ## 🕒 Recent Git Commit Log
-* **cb5012f** - Jacqueline Delgado, 2 minutes ago : REFACTOR 37.53 — agent tool-forwarding test expects four tools after OBIS/GBIF removal
-* **be92417** - Jacqueline Delgado, 5 minutes ago : GREEN 37.52 — remove OBIS and GBIF from agentic RAG registry and dispatcher
-* **095cfd6** - Jacqueline Delgado, 6 minutes ago : RED 37.48 — registry-shape test expects four tools and excludes OBIS and GBIF
-* **208eec1** - Jacqueline Delgado, 10 minutes ago : added Section 37.7  to refactor agentic rag
-* **7d730b4** - Jacqueline Delgado, 16 minutes ago : GREEN 37.47 — remove obsolete narrow-to-list and query-directly language from saltwaterAgentSystemPrompt
-* **3733acb** - Jacqueline Delgado, 18 minutes ago : RED 37.46 — replace query-directly test with Explore-tab redirect test
-* **638e65e** - Jacqueline Delgado, 20 minutes ago : RED 37.45 — replace narrow-to-list test with Sighting-rate redirect test
-* **b79041e** - Jacqueline Delgado, 33 minutes ago : GREEN 37.44 — agent redirects species questions to Sighting-rate search and Explore tab
-* **f8be58e** - Jacqueline Delgado, 37 minutes ago : RED 37.44 — runSaltwaterAgent redirects species questions to in-app components
-* **ef39d91** - Jacqueline Delgado, 38 minutes ago : added a test in testing md 37.44 to coach ai to direct user to other pages not fetch OBIS or GBIF data is too large, it uses too many tokens
-* **19e58e9** - Jacqueline Delgado, 68 minutes ago : GREEN 37.43 — agent processes all tool_calls in a single assistant message
-* **18b3cfd** - Jacqueline Delgado, 69 minutes ago : RED 37.43 — runSaltwaterAgent processes all tool_calls in a single assistant message
-* **19441d9** - Jacqueline Delgado, 70 minutes ago : added 37.43 test in testing md to increase tool calls from 0 to 8
-* **c0f599d** - Jacqueline Delgado, 72 minutes ago : added 37.43 RED test to increase tool calls to 8 from 0
-* **12a2b96** - Jacqueline Delgado, 77 minutes ago : GREEN 37.42 — saltwater species list injected into OpenAI request context
-* **f6cee5f** - Jacqueline Delgado, 78 minutes ago : RED 37.42 — runSaltwaterAgent injects the saltwater common-fished species list into the OpenAI request context
-* **30854d3** - Jacqueline Delgado, 82 minutes ago : added 37.42 red test for agentics RAG to select from the common species list of 40
+* **78966bf** - Jacqueline Delgado, 8 minutes ago : REFACTOR 37.51 — RED 37.43 uses forecast+marine instead of obis+gbif as parallel-call pair
+* **39febcc** - Jacqueline Delgado, 10 minutes ago : REFACTOR 37.50 — drop OBIS and GBIF entries from RED 37.32's required-parameters map
+* **9b150fd** - Jacqueline Delgado, 13 minutes ago : updated testing md and added refactor test plan 37.51-37.53
+* **9439689** - Jacqueline Delgado, 14 minutes ago : REFACTOR 37.49 — drop OBIS and GBIF entries from RED 37.31's argument map
+* **cb5012f** - Jacqueline Delgado, 16 minutes ago : REFACTOR 37.53 — agent tool-forwarding test expects four tools after OBIS/GBIF removal
+* **be92417** - Jacqueline Delgado, 19 minutes ago : GREEN 37.52 — remove OBIS and GBIF from agentic RAG registry and dispatcher
+* **095cfd6** - Jacqueline Delgado, 21 minutes ago : RED 37.48 — registry-shape test expects four tools and excludes OBIS and GBIF
+* **208eec1** - Jacqueline Delgado, 24 minutes ago : added Section 37.7  to refactor agentic rag
+* **7d730b4** - Jacqueline Delgado, 31 minutes ago : GREEN 37.47 — remove obsolete narrow-to-list and query-directly language from saltwaterAgentSystemPrompt
+* **3733acb** - Jacqueline Delgado, 32 minutes ago : RED 37.46 — replace query-directly test with Explore-tab redirect test
+* **638e65e** - Jacqueline Delgado, 34 minutes ago : RED 37.45 — replace narrow-to-list test with Sighting-rate redirect test
+* **b79041e** - Jacqueline Delgado, 48 minutes ago : GREEN 37.44 — agent redirects species questions to Sighting-rate search and Explore tab
+* **f8be58e** - Jacqueline Delgado, 51 minutes ago : RED 37.44 — runSaltwaterAgent redirects species questions to in-app components
+* **ef39d91** - Jacqueline Delgado, 52 minutes ago : added a test in testing md 37.44 to coach ai to direct user to other pages not fetch OBIS or GBIF data is too large, it uses too many tokens
+* **19e58e9** - Jacqueline Delgado, 82 minutes ago : GREEN 37.43 — agent processes all tool_calls in a single assistant message
+* **18b3cfd** - Jacqueline Delgado, 84 minutes ago : RED 37.43 — runSaltwaterAgent processes all tool_calls in a single assistant message
+* **19441d9** - Jacqueline Delgado, 85 minutes ago : added 37.43 test in testing md to increase tool calls from 0 to 8
+* **c0f599d** - Jacqueline Delgado, 86 minutes ago : added 37.43 RED test to increase tool calls to 8 from 0
+* **12a2b96** - Jacqueline Delgado, 2 hours ago : GREEN 37.42 — saltwater species list injected into OpenAI request context
+* **f6cee5f** - Jacqueline Delgado, 2 hours ago : RED 37.42 — runSaltwaterAgent injects the saltwater common-fished species list into the OpenAI request context
+* **30854d3** - Jacqueline Delgado, 2 hours ago : added 37.42 red test for agentics RAG to select from the common species list of 40
 * **d9c2475** - Jacqueline Delgado, 2 hours ago : GREEN 37.41 — defensive access to completion.choices prevents crash
 * **f9e9eed** - Jacqueline Delgado, 2 hours ago : RED 37.41 — does not crash when OpenAI response has no choices field
 * **3574a3a** - Jacqueline Delgado, 2 hours ago : added 37.41 test in testing md for agentics rag
@@ -31,7 +35,7 @@
 * **0e77a6d** - Jacqueline Delgado, 2 hours ago : GREEN 37.36 — single tool_call test uses runSaltwaterTool seam
 * **0daa65a** - Jacqueline Delgado, 2 hours ago : GREEN 37.35 — recovers when tool returns error uses runSaltwaterTool seam
 * **df17d89** - Jacqueline Delgado, 2 hours ago : updated testing report md and saltwater agent ts file
-* **bfeb512** - Jacqueline Delgado, 2 hours ago : RED 37.35–37.39 — orchestration tests fail after GREEN 37.34; documented in Section 37.5
+* **bfeb512** - Jacqueline Delgado, 3 hours ago : RED 37.35–37.39 — orchestration tests fail after GREEN 37.34; documented in Section 37.5
 * **da45611** - Jacqueline Delgado, 3 hours ago : RED 37.34 — runSaltwaterAgent dispatches tool_calls through shared runSaltwaterTool
 * **eadfdd8** - Jacqueline Delgado, 3 hours ago : updated testing md and added more tests for agentic rag
 * **b63021f** - Jacqueline Delgado, 3 hours ago : GREEN 37.33 — system prompt forbids inventing data when a tool fails
@@ -51,38 +55,38 @@
 * **7f4431b** - Jacqueline Delgado, 5 hours ago : RED 37.27: SaltwaterChat sends prior conversation history with each follow-up request
 * **9fa311c** - Jacqueline Delgado, 5 hours ago : GREEN 37.26: SaltwaterChat shows a spinner and disables the button while the request is in flight
 * **2835b7b** - Jacqueline Delgado, 5 hours ago : RED 37.26: SaltwaterChat shows a spinner and disables the button while the request is in flight
-* **30a4f78** - Jacqueline Delgado, 5 hours ago : GREEN 37.25: SaltwaterChat displays the agent's response after a successful submission
-* **b8e3fb7** - Jacqueline Delgado, 5 hours ago : RED 37.25: SaltwaterChat displays the agent's response after a successful submission
-* **0d0bc99** - Jacqueline Delgado, 5 hours ago : GREEN 37.24: SaltwaterChat renders a labeled question input and a submit button
-* **a2120c4** - Jacqueline Delgado, 5 hours ago : RED 37.24: SaltwaterChat renders a labeled question input and a submit button
-* **cbdfaa9** - Jacqueline Delgado, 5 hours ago : GREEN 37.23: POST /api/saltwater-chat returns 500 when runSaltwaterAgent throws
-* **2b30353** - Jacqueline Delgado, 5 hours ago : RED 37.23: POST /api/saltwater-chat returns 500 when runSaltwaterAgent throws
-* **7c98088** - Jacqueline Delgado, 5 hours ago : GREEN 37.22: POST /api/saltwater-chat returns 400 for missing or empty question
+* **30a4f78** - Jacqueline Delgado, 6 hours ago : GREEN 37.25: SaltwaterChat displays the agent's response after a successful submission
+* **b8e3fb7** - Jacqueline Delgado, 6 hours ago : RED 37.25: SaltwaterChat displays the agent's response after a successful submission
+* **0d0bc99** - Jacqueline Delgado, 6 hours ago : GREEN 37.24: SaltwaterChat renders a labeled question input and a submit button
+* **a2120c4** - Jacqueline Delgado, 6 hours ago : RED 37.24: SaltwaterChat renders a labeled question input and a submit button
+* **cbdfaa9** - Jacqueline Delgado, 6 hours ago : GREEN 37.23: POST /api/saltwater-chat returns 500 when runSaltwaterAgent throws
+* **2b30353** - Jacqueline Delgado, 6 hours ago : RED 37.23: POST /api/saltwater-chat returns 500 when runSaltwaterAgent throws
+* **7c98088** - Jacqueline Delgado, 6 hours ago : GREEN 37.22: POST /api/saltwater-chat returns 400 for missing or empty question
 * **ca51eb3** - Jacqueline Delgado, 6 hours ago : RED 37.22: POST /api/saltwater-chat returns 400 for missing or empty question
 * **3654d7a** - Jacqueline Delgado, 6 hours ago : GREEN 37.21: POST /api/saltwater-chat surfaces runSaltwaterAgent's response
 * **549fb1c** - Jacqueline Delgado, 6 hours ago : RED 37.21: POST /api/saltwater-chat surfaces runSaltwaterAgent's response
 * **0ab45e5** - Jacqueline Delgado, 6 hours ago : Fix: align User test fixtures with current Prisma schema (profileName, profileImageUrl)
-* **04e3009** - Jacqueline Delgado, 6 hours ago : GUARD 37.20: saltwater agent recovers when a tool function returns null or an error shape
-* **f2a2c84** - Jacqueline Delgado, 6 hours ago : GUARD 37.5: saltwater agent returns the honest decline and invokes no tools
-* **ccadef9** - Jacqueline Delgado, 6 hours ago : updated TESTING.md for a new agentics RAG for saltwater and freshwater pages
-* **a6bf0d6** - Jacqueline Delgado, 6 hours ago : GUARD 37.2: saltwater agent returns clarifying text and invokes no tools
+* **04e3009** - Jacqueline Delgado, 7 hours ago : GUARD 37.20: saltwater agent recovers when a tool function returns null or an error shape
+* **f2a2c84** - Jacqueline Delgado, 7 hours ago : GUARD 37.5: saltwater agent returns the honest decline and invokes no tools
+* **ccadef9** - Jacqueline Delgado, 7 hours ago : updated TESTING.md for a new agentics RAG for saltwater and freshwater pages
+* **a6bf0d6** - Jacqueline Delgado, 7 hours ago : GUARD 37.2: saltwater agent returns clarifying text and invokes no tools
 * **bd92121** - Jacqueline Delgado, 7 hours ago : GREEN 37.19: saltwater agent stops after max iterations to prevent infinite loops
 * **84d9a68** - Jacqueline Delgado, 7 hours ago : RED 37.19: saltwater agent stops after max iterations to prevent infinite loops
 * **038a8b8** - Jacqueline Delgado, 7 hours ago : GREEN 37.18: saltwater agent chains multiple tool_calls and returns the final synthesis
 * **b968154** - Jacqueline Delgado, 7 hours ago : RED 37.18: saltwater agent chains multiple tool_calls and returns the final synthesis
 * **8412c09** - Jacqueline Delgado, 7 hours ago : GREEN 37.17: saltwater agent dispatches a single tool_call and feeds the result back to OpenAI
 * **1d9f7fd** - Jacqueline Delgado, 7 hours ago : RED 37.17: saltwater agent dispatches a single tool_call and feeds the result back to OpenAI
-* **998ea4f** - Jacqueline Delgado, 7 hours ago : GREEN 37.16: saltwater agent sends user question and tool registry to OpenAI
-* **c3e6c36** - Jacqueline Delgado, 7 hours ago : RED 37.16: saltwater agent sends user question and tool registry to OpenAI
-* **1e2390a** - Jacqueline Delgado, 7 hours ago : GREEN 37.15: fetchSaltwaterNoaa queries NOAA CO-OPS for tide predictions
-* **09b63d3** - Jacqueline Delgado, 7 hours ago : RED 37.15: fetchSaltwaterNoaa queries NOAA CO-OPS for tide predictions
-* **5ae441f** - Jacqueline Delgado, 7 hours ago : GREEN 37.14: fetchSaltwaterUsgs queries USGS NWIS by site ID and parses time series
-* **829672e** - Jacqueline Delgado, 7 hours ago : RED 37.14: fetchSaltwaterUsgs queries USGS NWIS by site ID and parses time series
-* **2fa6555** - Jacqueline Delgado, 7 hours ago : GREEN 37.13: fetchSaltwaterGbif queries GBIF with lat/lng range, species, and limit
-* **b692ef5** - Jacqueline Delgado, 7 hours ago : RED 37.13: fetchSaltwaterGbif queries GBIF with lat/lng range, species, and limit
-* **784ca93** - Jacqueline Delgado, 7 hours ago : GREEN 37.12: fetchSaltwaterObis queries OBIS with geometry, species, and size
-* **5088987** - Jacqueline Delgado, 7 hours ago : RED 37.12: fetchSaltwaterObis queries OBIS with geometry, species, and size
-* **fbb7865** - Jacqueline Delgado, 7 hours ago : GREEN 37.11: fetchSaltwaterMarine builds Open-Meteo Marine URL and parses response
+* **998ea4f** - Jacqueline Delgado, 8 hours ago : GREEN 37.16: saltwater agent sends user question and tool registry to OpenAI
+* **c3e6c36** - Jacqueline Delgado, 8 hours ago : RED 37.16: saltwater agent sends user question and tool registry to OpenAI
+* **1e2390a** - Jacqueline Delgado, 8 hours ago : GREEN 37.15: fetchSaltwaterNoaa queries NOAA CO-OPS for tide predictions
+* **09b63d3** - Jacqueline Delgado, 8 hours ago : RED 37.15: fetchSaltwaterNoaa queries NOAA CO-OPS for tide predictions
+* **5ae441f** - Jacqueline Delgado, 8 hours ago : GREEN 37.14: fetchSaltwaterUsgs queries USGS NWIS by site ID and parses time series
+* **829672e** - Jacqueline Delgado, 8 hours ago : RED 37.14: fetchSaltwaterUsgs queries USGS NWIS by site ID and parses time series
+* **2fa6555** - Jacqueline Delgado, 8 hours ago : GREEN 37.13: fetchSaltwaterGbif queries GBIF with lat/lng range, species, and limit
+* **b692ef5** - Jacqueline Delgado, 8 hours ago : RED 37.13: fetchSaltwaterGbif queries GBIF with lat/lng range, species, and limit
+* **784ca93** - Jacqueline Delgado, 8 hours ago : GREEN 37.12: fetchSaltwaterObis queries OBIS with geometry, species, and size
+* **5088987** - Jacqueline Delgado, 8 hours ago : RED 37.12: fetchSaltwaterObis queries OBIS with geometry, species, and size
+* **fbb7865** - Jacqueline Delgado, 8 hours ago : GREEN 37.11: fetchSaltwaterMarine builds Open-Meteo Marine URL and parses response
 * **23f1949** - Jacqueline Delgado, 8 hours ago : RED 37.11: fetchSaltwaterMarine builds Open-Meteo Marine URL and parses response
 * **0bd645c** - Jacqueline Delgado, 8 hours ago : GREEN 37.10: fetchSaltwaterForecast builds Open-Meteo URL and parses response
 * **966cd86** - Jacqueline Delgado, 8 hours ago : RED 37.10: fetchSaltwaterForecast builds Open-Meteo URL and parses response
@@ -99,7 +103,7 @@
 * **36bfc14** - Jacqueline Delgado, 8 hours ago : GREEN 37.3: saltwater agent system prompt declares the six APIs
 * **fa96a9f** - Jacqueline Delgado, 8 hours ago : RED 37.3: saltwater agent system prompt declares the six APIs
 * **bcebfb6** - Jacqueline Delgado, 8 hours ago : GREEN 37.1: saltwater agent system prompt instructs date confirmation
-* **ece7f06** - Jacqueline Delgado, 8 hours ago : RED 37.1: saltwater agent system prompt instructs date confirmation
+* **ece7f06** - Jacqueline Delgado, 9 hours ago : RED 37.1: saltwater agent system prompt instructs date confirmation
 * **8e9109a** - Jacqueline Delgado, 28 hours ago : updated test-report md file
 * **ab6627e** - Jacqueline Delgado, 28 hours ago : Fix: whitelist /reset-request in route guard (forgot password flow)
 * **801cbb8** - Jacqueline Delgado, 2 days ago : updated faq with new data qa md files
@@ -176,9 +180,9 @@
 * **4c5a4f6** - Jacqueline Delgado, 3 days ago : feat: implement formatRelativeTime helper
 * **d05557a** - Jacqueline Delgado, 3 days ago : test: add RED for formatRelativeTime helper
 * **017f607** - Jacqueline Delgado, 3 days ago : fix: add id and name to composer and edit textareas for accessibility
-* **eab0e2c** - Jacqueline Delgado, 3 days ago : feat: disable delete/save buttons while in progress to prevent double-action
-* **eee79de** - Jacqueline Delgado, 3 days ago : test: add RED for CatchPost double-delete and double-save prevention
-* **558db64** - Jacqueline Delgado, 3 days ago : fix: full-width composer textarea and spacing between catch posts
+* **eab0e2c** - Jacqueline Delgado, 4 days ago : feat: disable delete/save buttons while in progress to prevent double-action
+* **eee79de** - Jacqueline Delgado, 4 days ago : test: add RED for CatchPost double-delete and double-save prevention
+* **558db64** - Jacqueline Delgado, 4 days ago : fix: full-width composer textarea and spacing between catch posts
 * **0c00993** - Jacqueline Delgado, 4 days ago : feat: wire CatchFeed edit/delete to PATCH/DELETE routes on saltwater page
 * **ca931f9** - Jacqueline Delgado, 4 days ago : feat: CatchFeed renders posts as CatchPost with edit/delete for 2c, fix test flush
 * **ae822d3** - Jacqueline Delgado, 4 days ago : test: add RED for CatchFeed rendering posts as CatchPost with edit/delete
@@ -346,7 +350,7 @@
 * **3842eac** - Jacqueline Delgado, 10 days ago : updated read me and editted
 * **1b5d11e** - Jacqueline Delgado, 10 days ago : updated README and added the Test-first provable paragraph
 * **c464220** - Jacqueline Delgado, 10 days ago : updated Readme test files and test count on badge and on rules that kept it honest
-* **755e703** - Jacqueline Delgado, 10 days ago : updated saltwater page, edited a typo
+* **755e703** - Jacqueline Delgado, 11 days ago : updated saltwater page, edited a typo
 * **2667b86** - Jacqueline Delgado, 11 days ago : updated images on the pages
 * **128d291** - Jacqueline Delgado, 11 days ago : updated the home page paragraph to state both GBIF and OBIS verified all apis using curl commands
 * **fde3c73** - Jacqueline Delgado, 11 days ago : updated Travel-time tool paragraph on explore page
@@ -443,19 +447,134 @@
 * **c35aeb8** - Jacqueline Delgado, 13 days ago : Initial commit: TDD on emailVerification.test.ts
 
 ## 📊 Test Metrics Summary
-* **Total Tests:** 8
-* **Passed:** 😄 8
+* **Total Tests:** 123
+* **Passed:** 😄 123
 * **Failed:** 😡 0
 
 ## 📝 Detailed Test Breakdown
 
 | File | Test Case | Status | Duration |
 | :--- | :--- | :--- | :--- |
-| src/lib/saltwaterAgentTools.test.ts | SALTWATER_AGENT_TOOLS | ✅ Pass | 1.384457999999995ms |
-| src/lib/saltwaterAgentTools.test.ts | runSaltwaterTool | ✅ Pass | 0.2769590000000335ms |
-| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterForecast | ✅ Pass | 1.3532500000000027ms |
-| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterMarine | ✅ Pass | 0.5563339999999926ms |
-| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterObis | ✅ Pass | 0.4329579999999851ms |
-| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterGbif | ✅ Pass | 0.4023329999999987ms |
-| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterUsgs | ✅ Pass | 0.30962500000003956ms |
-| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterNoaa | ✅ Pass | 2.640541999999982ms |
+| src/app/page.test.tsx | HomePage | ✅ Pass | 77.59533299999998ms |
+| src/components/CatchComposer.test.tsx | CatchComposer when the user has a profile name | ✅ Pass | 185.62145800000008ms |
+| src/components/CatchComposer.test.tsx | CatchComposer when the user has no profile name | ✅ Pass | 25.36770899999999ms |
+| src/components/CatchComposer.test.tsx | CatchComposer prevents double submitting | ✅ Pass | 10.185790999999995ms |
+| src/components/CatchComposer.test.tsx | CatchComposer clears after a successful post | ✅ Pass | 417.481583ms |
+| src/components/CatchFeed.test.tsx | CatchFeed polling | ✅ Pass | 15.092750000000024ms |
+| src/components/CatchFeed.test.tsx | CatchFeed renders new posts | ✅ Pass | 29.337709000000018ms |
+| src/components/CatchFeed.test.tsx | CatchFeed stops polling on unmount | ✅ Pass | 2.2622089999999844ms |
+| src/components/CatchFeed.test.tsx | CatchFeed renders posts as CatchPost with edit and delete | ✅ Pass | 26.12683400000003ms |
+| src/components/CatchFeed.test.tsx | CatchFeed refreshes immediately when the refresh key changes | ✅ Pass | 3.137292000000002ms |
+| src/components/CatchPost.test.tsx | CatchPost edit button visibility | ✅ Pass | 61.951917000000094ms |
+| src/components/CatchPost.test.tsx | CatchPost edit mode | ✅ Pass | 22.32320799999991ms |
+| src/components/CatchPost.test.tsx | CatchPost save | ✅ Pass | 37.38629100000003ms |
+| src/components/CatchPost.test.tsx | CatchPost delete confirmation | ✅ Pass | 17.652500000000032ms |
+| src/components/CatchPost.test.tsx | CatchPost delete cancel | ✅ Pass | 10.32995900000003ms |
+| src/components/CatchPost.test.tsx | CatchPost prevents double delete | ✅ Pass | 22.724458000000027ms |
+| src/components/CatchPost.test.tsx | CatchPost prevents double save | ✅ Pass | 13.599583000000052ms |
+| src/components/CatchPost.test.tsx | CatchPost timestamp | ✅ Pass | 1.8919159999999238ms |
+| src/components/CatchPost.test.tsx | CatchPost closes the editor after saving | ✅ Pass | 427.0735840000001ms |
+| src/components/ConfirmDialog.test.tsx | ConfirmDialog | ✅ Pass | 116.04750000000001ms |
+| src/components/DeleteConfirmationDialog.test.tsx | DeleteConfirmationDialog | ✅ Pass | 112.69229199999995ms |
+| src/components/EmptyRecordsNotice.test.tsx | EmptyRecordsNotice | ✅ Pass | 21.95799999999997ms |
+| src/components/ExploreFaqChat.test.tsx | ExploreFaqChat | ✅ Pass | 514.600958ms |
+| src/components/HomeButtons.test.tsx | HomeButtons | ✅ Pass | 27.436874999999986ms |
+| src/components/LatestBlogPost.test.tsx | LatestBlogPost | ✅ Pass | 58.23891600000002ms |
+| src/components/MapHint.test.tsx | MapHint | ✅ Pass | 10.309834000000023ms |
+| src/components/NavBar.test.tsx | NavBar | ✅ Pass | 96.46254199999998ms |
+| src/components/PasswordField.test.tsx | PasswordField | ✅ Pass | 74.99324999999999ms |
+| src/components/PasswordField.test.tsx | toggles the button label between Show password and Hide password | ✅ Pass | 16.343250000000012ms |
+| src/components/PostButton.test.tsx | PostButton | ✅ Pass | 48.90575000000001ms |
+| src/components/ProfileForm.test.tsx | ProfileForm rendering | ✅ Pass | 46.95524999999998ms |
+| src/components/ProfileForm.test.tsx | ProfileForm image upload | ✅ Pass | 6.138374999999996ms |
+| src/components/ProfileForm.test.tsx | ProfileForm submit | ✅ Pass | 19.133207999999968ms |
+| src/components/ProfileForm.test.tsx | ProfileForm empty name validation | ✅ Pass | 19.121208000000024ms |
+| src/components/ProfileForm.test.tsx | ProfileForm image preview | ✅ Pass | 10.000999999999976ms |
+| src/components/SaltwaterChat.test.tsx | SaltwaterChat | ✅ Pass | 730.768167ms |
+| src/components/SightingRateSearch.test.tsx | SightingRateSearch | ✅ Pass | 542.726208ms |
+| src/components/SightingRateSearch.test.tsx | SightingRateSearch species dropdown | ✅ Pass | 189.2955840000002ms |
+| src/lib/bestMonth.test.ts | findBestMonth | ✅ Pass | 1.0672089999999343ms |
+| src/lib/blogLoader.test.ts | loadBlogPosts | ✅ Pass | 13.847250000000031ms |
+| src/lib/blogLoader.test.ts | getLatestBlogPost — Apps Script JSON endpoint (Section 36) | ✅ Pass | 1.9367090000000644ms |
+| src/lib/catchReport.test.ts | createCatchReport | ✅ Pass | 2.8973330000000033ms |
+| src/lib/catchReport.test.ts | getCatchReports water type filtering | ✅ Pass | 1.8818750000000364ms |
+| src/lib/catchReport.test.ts | getCatchReports ordering | ✅ Pass | 0.14654200000006767ms |
+| src/lib/catchReport.test.ts | getCatchReports author info | ✅ Pass | 0.22366699999997763ms |
+| src/lib/catchReport.test.ts | updateCatchReport ownership | ✅ Pass | 0.19991600000003018ms |
+| src/lib/catchReport.test.ts | updateCatchReport rejects non-owner | ✅ Pass | 0.14929099999994833ms |
+| src/lib/catchReport.test.ts | deleteCatchReport ownership | ✅ Pass | 0.1616669999999658ms |
+| src/lib/catchReport.test.ts | deleteCatchReport rejects non-owner | ✅ Pass | 0.10820799999999053ms |
+| src/lib/clearSession.test.ts | clearSession | ✅ Pass | 1.8419159999999692ms |
+| src/lib/coordinates.test.ts | parseCoordinate | ✅ Pass | 1.5034580000000233ms |
+| src/lib/distance.test.ts | computeDistance | ✅ Pass | 0.9099169999999503ms |
+| src/lib/email.test.ts | sendVerificationEmail | ✅ Pass | 9.760833999999988ms |
+| src/lib/email.test.ts | sendPasswordResetEmail | ✅ Pass | 0.9146660000000111ms |
+| src/lib/emailVerification.test.ts | createEmailVerificationCode | ✅ Pass | 959.1499580000001ms |
+| src/lib/eta.test.ts | checkEtaIsReasonable | ✅ Pass | 1.369291999999973ms |
+| src/lib/forecastConditions.test.ts | fetchForecastConditions | ✅ Pass | 7.370791999999938ms |
+| src/lib/formatRelativeTime.test.ts | formatRelativeTime | ✅ Pass | 6.50141700000006ms |
+| src/lib/homeHighlights.test.ts | getHomeHighlights | ✅ Pass | 7.823582999999985ms |
+| src/lib/locationSpecies.test.ts | fetchSpeciesAtLocation | ✅ Pass | 3.9112089999999853ms |
+| src/lib/login.test.ts | checkLoginCredentials | ✅ Pass | 1.9877919999998994ms |
+| src/lib/marineConditions.test.ts | fetchMarineConditions | ✅ Pass | 6.000209000000041ms |
+| src/lib/markerStyle.test.ts | getMarkerStyle | ✅ Pass | 2.1377500000000964ms |
+| src/lib/obisFetch.test.ts | fetchObisOccurrences | ✅ Pass | 7.295166999999992ms |
+| src/lib/occurrenceFetch.test.ts | fetchOccurrenceRecords | ✅ Pass | 11.15787499999999ms |
+| src/lib/occurrenceRecords.test.ts | prepareOccurrenceRecordsForMap | ✅ Pass | 1.392415999999912ms |
+| src/lib/passwordReset.test.ts | createPasswordResetCode | ✅ Pass | 252.55495800000006ms |
+| src/lib/passwordReset.test.ts | verifyPasswordResetCode | ✅ Pass | 380.6627920000001ms |
+| src/lib/passwordReset.test.ts | requestPasswordReset | ✅ Pass | 65.41149999999993ms |
+| src/lib/passwordReset.test.ts | resetPasswordWithCode | ✅ Pass | 686.1308330000002ms |
+| src/lib/profile.test.ts | saveProfileName | ✅ Pass | 1.7175419999999804ms |
+| src/lib/profile.test.ts | saveProfileImage | ✅ Pass | 0.25845800000001873ms |
+| src/lib/profile.test.ts | getDisplayAvatar | ✅ Pass | 0.14345800000000963ms |
+| src/lib/profile.test.ts | getDisplayAvatar fallback | ✅ Pass | 0.10437500000000455ms |
+| src/lib/profile.test.ts | canPostCatch | ✅ Pass | 0.23983400000008714ms |
+| src/lib/rag.test.ts | cosineSimilarity | ✅ Pass | 1.0274160000000165ms |
+| src/lib/rag.test.ts | chunkMarkdownContent | ✅ Pass | 1.2898749999999382ms |
+| src/lib/rag.test.ts | retrieveTopChunks | ✅ Pass | 2.3856660000000147ms |
+| src/lib/rag.test.ts | chunkMarkdownContent — heading context | ✅ Pass | 1.0243749999999636ms |
+| src/lib/recommendation.test.ts | createRecommendation | ✅ Pass | 3.2568750000000364ms |
+| src/lib/routeGuard.test.ts | shouldRedirectToLogin | ✅ Pass | 2.512833999999998ms |
+| src/lib/saltwaterAgent.test.ts | runSaltwaterAgent | ✅ Pass | 12.590165999999954ms |
+| src/lib/saltwaterAgentTools.test.ts | SALTWATER_AGENT_TOOLS | ✅ Pass | 2.8837080000000697ms |
+| src/lib/saltwaterAgentTools.test.ts | runSaltwaterTool | ✅ Pass | 0.44925000000000637ms |
+| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterForecast | ✅ Pass | 2.5669579999999996ms |
+| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterMarine | ✅ Pass | 1.022958000000017ms |
+| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterObis | ✅ Pass | 0.6485409999999092ms |
+| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterGbif | ✅ Pass | 1.1642500000000382ms |
+| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterUsgs | ✅ Pass | 0.8286669999999958ms |
+| src/lib/saltwaterAgentTools.test.ts | fetchSaltwaterNoaa | ✅ Pass | 3.1694170000000668ms |
+| src/lib/savedSpot.test.ts | SavedSpot data access | ✅ Pass | 4.081457999999998ms |
+| src/lib/session.test.ts | session | ✅ Pass | 3.4970409999999674ms |
+| src/lib/sightingRate.test.ts | computeSightingRate | ✅ Pass | 1.969665999999961ms |
+| src/lib/sightingRateExplanation.test.ts | explainSightingRate | ✅ Pass | 4.098833000000013ms |
+| src/lib/species.test.ts | getSpeciesForWaterType | ✅ Pass | 2.768000000000029ms |
+| src/lib/species.test.ts | getCommonName | ✅ Pass | 0.3005829999999605ms |
+| src/lib/tideConditions.test.ts | fetchTidePredictions | ✅ Pass | 2.5254580000000715ms |
+| src/lib/travelEta.test.ts | explainTravelEta | ✅ Pass | 2.8658750000000737ms |
+| src/lib/userSpots.test.ts | User SavedSpot relationship | ✅ Pass | 4.045916000000034ms |
+| src/lib/usgsWaterConditions.test.ts | fetchUsgsWaterConditions | ✅ Pass | 6.639583000000016ms |
+| src/lib/verifyMessages.test.ts | messageForVerifyReason | ✅ Pass | 2.510041000000001ms |
+| src/app/login/page.test.tsx | LoginPage | ✅ Pass | 31.17450000000008ms |
+| src/app/reset-request/page.test.tsx | ResetRequestPage | ✅ Pass | 98.09529199999997ms |
+| src/app/reset-confirm/page.test.tsx | ResetConfirmPage | ✅ Pass | 149.1134169999999ms |
+| src/app/api/catch-reports/route.test.ts | GET /api/catch-reports | ✅ Pass | 4.963542000000018ms |
+| src/app/api/catch-reports/route.test.ts | POST /api/catch-reports | ✅ Pass | 1.8458749999999782ms |
+| src/app/api/catch-reports/route.test.ts | DELETE /api/catch-reports | ✅ Pass | 0.7064169999999876ms |
+| src/app/api/catch-reports/route.test.ts | PATCH /api/catch-reports | ✅ Pass | 0.5174590000000308ms |
+| src/app/api/eta/route.test.ts | POST /api/eta | ✅ Pass | 7.311249999999973ms |
+| src/app/api/explore-chat/route.test.ts | POST /api/explore-chat | ✅ Pass | 9.502374999999972ms |
+| src/app/api/saltwater-chat/route.test.ts | POST /api/saltwater-chat | ✅ Pass | 13.995167000000038ms |
+| src/app/api/profile/route.test.ts | POST /api/profile | ✅ Pass | 14.556708000000071ms |
+| src/app/api/profile/route.test.ts | GET /api/profile | ✅ Pass | 8.258249999999975ms |
+| src/app/api/search/route.test.ts | POST /api/search | ✅ Pass | 6.789582999999993ms |
+| src/app/api/spots/route.test.ts | /api/spots route handlers | ✅ Pass | 7.110708000000045ms |
+| src/app/api/auth/login/route.test.ts | POST /api/auth/login | ✅ Pass | 6.1159999999999854ms |
+| src/app/api/auth/logout/route.test.ts | /api/auth/logout route handler | ✅ Pass | 2.72524999999996ms |
+| src/app/api/auth/reset-confirm/route.test.ts | POST /api/auth/reset-confirm | ✅ Pass | 7.711208000000056ms |
+| src/app/api/auth/me/route.test.ts | /api/auth/me route handler | ✅ Pass | 4.941874999999982ms |
+| src/app/api/auth/reset-request/route.test.ts | POST /api/auth/reset-request | ✅ Pass | 8.603124999999977ms |
+| src/app/api/auth/signup/route.test.ts | POST /api/auth/signup | ✅ Pass | 7.227916999999934ms |
+| src/app/api/profile/image/route.test.ts | POST /api/profile/image | ✅ Pass | 6.017665999999963ms |
+| src/app/api/auth/verify/route.test.ts | POST /api/auth/verify | ✅ Pass | 7.683791999999926ms |

@@ -1342,6 +1342,102 @@ GREEN phase: Update the assertion to toHaveLength(4).
 
 ---
 
+## System prompt RED tests (mirrors Section 37 RED 37.1 – RED 37.5 with freshwater scope)
+
+RED 38.1 — runFreshwaterAgent instructs the model to confirm the user date before calling any tools.
+
+The system prompt sent to OpenAI contains language matching /confirm.{0,40}date|propose.{0,40}date/i and instructs the model to wait for user confirmation before dispatching tools. Test calls the agent with a question containing a relative date, mocks OpenAI to return text only, and asserts no tools are dispatched and the response contains a clarifying question.
+RED 38.2 — runFreshwaterAgent declares exactly two data sources in the system prompt.
+
+The system prompt sent to OpenAI explicitly names Open-Meteo Forecast and USGS as the only data sources for freshwater conditions. The prompt does NOT mention Open-Meteo Marine, OBIS, GBIF, or NOAA CO-OPS as data sources for this agent.
+RED 38.3 — runFreshwaterAgent instructs the model to decline out-of-scope requests and suggest an external source.
+
+- When the user asks for data outside the two declared sources (e.g. restaurants, gear shops), the agent's prompt instructs OpenAI to honestly decline, name the sources it does have, and suggest an external source (e.g. Google Maps) without dispatching a tool.
+RED 38.4 — runFreshwaterAgent redirects open-ended species questions to the Sighting-rate search on the freshwater page.
+
+The system prompt contains language matching /sighting.?rate|sighting search/i and explicitly tells the agent NOT to call any species-related tools (mirrors saltwater RED 37.44, scoped to the freshwater page). Test asserts no tool dispatch on a representative open-ended species question and the prompt mentions the redirect.
+RED 38.5 — runFreshwaterAgent redirects specific-species questions to the Explore tab's FAQ agent.
+
+The system prompt contains language matching /explore tab|FAQ/i for "tell me about [species]" questions and explicitly tells the agent NOT to dispatch a tool for these (mirrors saltwater REFACTOR 37.46's redirect rule).
+RED 38.6 — runFreshwaterAgent redirects "what's common at [destination]" questions to the Destination component on the Explore page.
+
+The system prompt contains language pointing to the Destination component on the Explore page for destination-based species commonality questions, matching /destination/i and /explore page/i, and instructs the agent NOT to dispatch a tool for these.
+RED 38.7 — runFreshwaterAgent enforces the honest data rule and tool failure handling.
+
+The system prompt contains language matching /never invent|do not fabricate|do not guess|cannot use training data|honest data/i for the honesty rule, and /(tool|forecast|data|api).{0,80}(fail|error|null|empty|missing|cannot|unable)/i for tool failure handling (mirrors saltwater RED 37.33).
+Tool registry RED tests (mirrors Section 37 RED 37.8, 37.31, 37.32, 37.40)
+RED 38.8 — FRESHWATER_AGENT_TOOLS exposes exactly two OpenAI-shaped function tools with unique names and valid JSON Schema parameters.
+
+The registry contains exactly two entries named forecast and usgs. Each tool has a non-empty description, valid parameters.type: 'object' schema, defined properties, and a required array.
+RED 38.9 — runFreshwaterTool dispatches both registered tool names to their underlying fetch functions.
+
+For each tool in FRESHWATER_AGENT_TOOLS, calling runFreshwaterTool(tool.function.name, validArguments) returns something other than { error: 'unknown_tool' }. For any unregistered name, it returns the unknown-tool error shape (mirrors saltwater RED 37.31).
+RED 38.10 — every freshwater tool schema declares the parameters its function actually needs.
+
+The schema for forecast declares latitude, longitude, and targetDate as required with non-empty descriptions. The schema for usgs declares siteId as required with a non-empty description (mirrors saltwater RED 37.32).
+RED 38.11 — fetchFreshwaterForecast requests imperial units from Open-Meteo.
+
+The URL built includes temperature_unit=fahrenheit, wind_speed_unit=mph, and precipitation_unit=inch query parameters (mirrors saltwater RED 37.40, scoped to freshwater forecast only — USGS units come back from its own native parameter codes).
+Tool function RED tests (mirrors Section 37 RED 37.10 and RED 37.14)
+RED 38.12 — fetchFreshwaterForecast builds the Open-Meteo Forecast URL with lat/lng/targetDate and parses the response.
+
+Mocks fetch and asserts the URL hostname is api.open-meteo.com, the latitude, longitude, start_date, end_date, and hourly parameters match the input, and the parsed response includes hourly temperature/wind/precipitation arrays.
+RED 38.13 — fetchFreshwaterUsgs queries USGS NWIS with the site ID and parses the time series response.
+
+Mocks fetch and asserts the URL is https://waterservices.usgs.gov/nwis/iv/, the sites parameter equals the input site ID, the response parses into siteName, latitude, longitude, and a parameters array of { variableName, unit, latestValue, latestTime }.
+Orchestration RED tests (mirrors Section 37 RED 37.16 – RED 37.20, RED 37.30, RED 37.41, RED 37.43)
+RED 38.14 — runFreshwaterAgent sends the user question and the tool registry to OpenAI.
+
+The OpenAI request body contains a user message with the input question and a tools array of length 2.
+RED 38.15 — runFreshwaterAgent returns the clarifying question text and invokes no tools when OpenAI returns text only.
+
+- When OpenAI returns an assistant message with content and no tool_calls, the agent returns that content unchanged as response and does not call runFreshwaterTool.
+RED 38.16 — runFreshwaterAgent runs a single tool_call, feeds the result back to OpenAI, and returns the final answer.
+
+- When OpenAI returns one tool_call, the agent dispatches via runFreshwaterTool, pushes the assistant message and one tool message back, and returns the synthesis from the next OpenAI call. Test asserts runFreshwaterTool called once with the right name and parsed arguments, and the tool message in the second request has the matching tool_call_id.
+RED 38.17 — runFreshwaterAgent processes all tool_calls in a single assistant message before requesting the next OpenAI completion.
+
+- When OpenAI returns an assistant message with multiple tool_calls (e.g. forecast and usgs in parallel), the agent dispatches each, pushes the single assistant message followed by N tool messages, and only then requests the next completion (mirrors saltwater RED 37.43).
+RED 38.18 — runFreshwaterAgent stops after max iterations when OpenAI never returns a final answer.
+
+Returns { ok: false, reason: 'max_iterations_exceeded' } when the loop hits the configured cap.
+RED 38.19 — runFreshwaterAgent recovers when a tool returns null or an error shape and continues to a final answer.
+
+Mocks runFreshwaterTool to return { error: ... } or null, asserts the agent serializes the error/null into the tool message content, continues the loop, and returns OpenAI's next answer.
+RED 38.20 — runFreshwaterAgent passes prior history into the OpenAI messages array before the new question.
+
+- When called with { question, history }, the prior user and assistant turns appear in the OpenAI messages array before the new question (mirrors saltwater RED 37.30).
+RED 38.21 — runFreshwaterAgent does not crash when the OpenAI response has no choices field.
+
+- When OpenAI returns an error payload like { error: { message: 'rate limit exceeded' } }, the agent returns a defined result object without throwing (mirrors saltwater RED 37.41).
+RED 38.22 — runFreshwaterAgent injects the freshwater common-fished species list into the OpenAI request context.
+
+The OpenAI messages array contains at least three recognizable freshwater species names from getSpeciesForWaterType('freshwater') (e.g. "Brook Trout", "Largemouth Bass", "Bluegill") in the system context (mirrors saltwater RED 37.42).
+Route RED tests (mirrors Section 37 RED 37.21 – RED 37.23, RED 37.29)
+RED 38.23 — POST /api/freshwater-chat calls runFreshwaterAgent with the question and returns its response.
+
+Asserts status 200, the agent mock is called with { question, history }, and the response JSON contains { response }.
+RED 38.24 — POST /api/freshwater-chat returns 400 with no agent call when question is missing, empty, or whitespace only.
+
+Three cases: missing key, empty string, whitespace-only. All return 400 and never call the agent.
+RED 38.25 — POST /api/freshwater-chat returns 500 when runFreshwaterAgent throws an unexpected error.
+
+Mocks the agent to reject. Asserts status 500.
+RED 38.26 — POST /api/freshwater-chat forwards body.history to runFreshwaterAgent.
+
+## Same as saltwater RED 37.29 — passes prior conversation history through.
+Component RED tests (mirrors Section 37 RED 37.24 – RED 37.28)
+
+RED 38.27 — FreshwaterChat renders a labeled text input and a submit button on initial render.
+RED 38.28 — FreshwaterChat displays the agent response after a successful submission.
+RED 38.29 — FreshwaterChat shows a spinner and disables the submit button while the fetch is in flight, then hides them after the response renders.
+RED 38.30 — FreshwaterChat sends prior conversation history with each follow-up request.
+RED 38.31 — FreshwaterChat displays an error message and clears the spinner when the API call fails.
+Page wiring RED test (mirrors Section 37 RED 37.28's page test)
+RED 38.32 — The freshwater page renders the FreshwaterChat component.
+
+---
+
 ### Reference system prompt (GREEN-time starting point)
 
 This is reference wording for Codex to use as a starting point. The tests above assert the SHAPE of the prompt via regex, not these exact sentences. Codex may tune the wording at GREEN as long as the regex shape continues to match.
