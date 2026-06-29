@@ -7,9 +7,15 @@ type FreshwaterChatResponse = {
   response?: string;
 };
 
+type ChatHistoryMessage = {
+  role: 'user' | 'assistant';
+  content: string;
+};
+
 export const FreshwaterChat = () => {
   const [question, setQuestion] = useState('');
   const [responseText, setResponseText] = useState('');
+  const [history, setHistory] = useState<ChatHistoryMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -21,11 +27,17 @@ export const FreshwaterChat = () => {
       const response = await fetch('/api/freshwater-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({ question, history }),
       });
       const data = (await response.json()) as FreshwaterChatResponse;
+      const nextResponseText = data.response ?? '';
 
-      setResponseText(data.response ?? '');
+      setResponseText(nextResponseText);
+      setHistory((currentHistory) => [
+        ...currentHistory,
+        { role: 'user', content: question },
+        { role: 'assistant', content: nextResponseText },
+      ]);
     } finally {
       setIsLoading(false);
     }
