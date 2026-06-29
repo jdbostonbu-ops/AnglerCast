@@ -56,4 +56,27 @@ describe('runFreshwaterAgent', () => {
     expect(systemContent).not.toMatch(/\bGBIF\b/);
     expect(systemContent).not.toMatch(/NOAA.{0,20}CO-OPS/i);
   });
+
+  it('RED 38.3 — instructs the model to decline out-of-scope requests and suggest an external source', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { role: 'assistant', content: 'ok' } }],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await runFreshwaterAgent({ question: 'What sources do you use?' });
+
+    const requestBody = JSON.parse(fetchMock.mock.calls[0]?.[1]?.body as string) as {
+      messages: Array<{ role: string; content: string | null }>;
+    };
+    const systemContent = requestBody.messages
+      .filter((m) => m.role === 'system')
+      .map((m) => m.content ?? '')
+      .join(' ');
+
+    expect(systemContent).toMatch(/do not have|don't have|outside.{0,40}sources/i);
+    expect(systemContent).toMatch(/google maps|external source/i);
+  });
 });
