@@ -121,7 +121,6 @@ export const runSaltwaterAgent = async ({
   ];
 
   let completion = await requestOpenAI(messages);
-  console.log('[diagnostic] first completion:', JSON.stringify(completion, null, 2));
   let message = completion.choices?.[0]?.message;
   let toolCalls = message?.tool_calls ?? [];
   let toolIterations = 0;
@@ -159,7 +158,6 @@ export const runSaltwaterAgent = async ({
     );
 
     completion = await requestOpenAI(messages);
-    console.log('[diagnostic] follow-up completion:', JSON.stringify(completion, null, 2));
     message = completion.choices?.[0]?.message;
     toolCalls = message?.tool_calls ?? [];
   }

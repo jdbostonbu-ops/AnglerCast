@@ -19,8 +19,7 @@ export async function POST(request: Request): Promise<Response> {
     const result = await runSaltwaterAgent({ question, history });
 
     return Response.json(result, { status: 200 });
-    } catch (error) {
-    console.error('Saltwater agent error:', error);
+    } catch {
     return Response.json({ error: 'Saltwater agent failed.' }, { status: 500 });
   }
 }
