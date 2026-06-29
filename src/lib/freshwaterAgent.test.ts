@@ -221,4 +221,64 @@ describe('runFreshwaterAgent', () => {
 
     runFreshwaterToolSpy.mockRestore();
   });
+
+  it('RED 38.16 — runs a single tool_call, feeds the result back to OpenAI, and returns the final answer', async () => {
+    const toolsModule = await import('@/lib/freshwaterAgentTools');
+    const runFreshwaterToolSpy = vi
+      .spyOn(toolsModule, 'runFreshwaterTool')
+      .mockResolvedValue({
+        siteName: 'CONNECTICUT RIVER AT HARTFORD, CT',
+        latitude: 41.7659,
+        longitude: -72.6709,
+        parameters: [
+          { variableName: 'Gage height, feet', unit: 'ft', latestValue: '3.42', latestTime: '2026-06-28T12:00:00.000-04:00' },
+        ],
+      });
+
+    const fetchMock = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{
+            message: {
+              role: 'assistant',
+              content: null,
+              tool_calls: [{
+                id: 'call_1',
+                type: 'function',
+                function: {
+                  name: 'usgs',
+                  arguments: JSON.stringify({ siteId: '01184000' }),
+                },
+              }],
+            },
+          }],
+        }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: { role: 'assistant', content: 'The Connecticut River at Hartford is currently at 3.42 ft.' } }],
+        }),
+      } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await runFreshwaterAgent({ question: 'What is the river height at site 01184000?' }) as { response: string };
+
+    expect(runFreshwaterToolSpy).toHaveBeenCalledTimes(1);
+    expect(runFreshwaterToolSpy).toHaveBeenCalledWith('usgs', { siteId: '01184000' });
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+
+    const secondCallBody = JSON.parse(fetchMock.mock.calls[1]?.[1]?.body as string) as {
+      messages: Array<{ role: string; content?: string; tool_call_id?: string }>;
+    };
+    const toolMessage = secondCallBody.messages.find((m) => m.role === 'tool');
+    expect(toolMessage).toBeDefined();
+    expect(toolMessage?.tool_call_id).toBe('call_1');
+
+    expect(result.response).toBe('The Connecticut River at Hartford is currently at 3.42 ft.');
+
+    runFreshwaterToolSpy.mockRestore();
+  });
 });
