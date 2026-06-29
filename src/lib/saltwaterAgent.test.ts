@@ -613,4 +613,79 @@ it('stops after max iterations when OpenAI never returns a final answer', async 
     expect(allMessageContent).toContain('Bluefish');
     expect(allMessageContent).toContain('Atlantic Cod');
   });
+
+  it('RED 37.43 — processes all tool_calls in a single assistant message before requesting the next OpenAI completion', async () => {
+    const toolsModule = await import('@/lib/saltwaterAgentTools');
+    const runSaltwaterToolSpy = vi
+      .spyOn(toolsModule, 'runSaltwaterTool')
+      .mockImplementation(async (name: string) => {
+        if (name === 'obis') {
+          return { source: 'obis', records: [] };
+        }
+        if (name === 'gbif') {
+          return { source: 'gbif', records: [] };
+        }
+        return { error: 'unknown_tool' };
+      });
+
+    const fetchMock = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{
+            message: {
+              role: 'assistant',
+              content: null,
+              tool_calls: [
+                {
+                  id: 'call_obis_1',
+                  type: 'function',
+                  function: {
+                    name: 'obis',
+                    arguments: JSON.stringify({ latitude: 42.3601, longitude: -71.0589 }),
+                  },
+                },
+                {
+                  id: 'call_gbif_1',
+                  type: 'function',
+                  function: {
+                    name: 'gbif',
+                    arguments: JSON.stringify({ latitude: 42.3601, longitude: -71.0589 }),
+                  },
+                },
+              ],
+            },
+          }],
+        }),
+      } as Response)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: { role: 'assistant', content: 'Common species observed near Boston include Striped Bass and Bluefish.' } }],
+        }),
+      } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await runSaltwaterAgent({ question: 'What fish can I find in Boston?' }) as { response: string };
+
+    expect(runSaltwaterToolSpy).toHaveBeenCalledTimes(2);
+    const dispatchedNames = runSaltwaterToolSpy.mock.calls.map((c) => c[0]);
+    expect(dispatchedNames).toContain('obis');
+    expect(dispatchedNames).toContain('gbif');
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+
+    const secondRequestBody = JSON.parse(fetchMock.mock.calls[1]?.[1]?.body as string) as {
+      messages: Array<{ role: string; content: string | null; tool_call_id?: string }>;
+    };
+    const toolMessages = secondRequestBody.messages.filter((m) => m.role === 'tool');
+    expect(toolMessages.length).toBe(2);
+    const toolCallIds = toolMessages.map((m) => m.tool_call_id);
+    expect(toolCallIds).toContain('call_obis_1');
+    expect(toolCallIds).toContain('call_gbif_1');
+
+    expect(result.response).toBe('Common species observed near Boston include Striped Bass and Bluefish.');
+
+    runSaltwaterToolSpy.mockRestore();
+  });
 });
