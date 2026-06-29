@@ -149,4 +149,27 @@ describe('runFreshwaterAgent', () => {
     expect(systemContent).toMatch(/destination/i);
     expect(systemContent).toMatch(/explore page/i);
   });
+
+  it('RED 38.7 — system prompt enforces the honest data rule and tool failure handling', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { role: 'assistant', content: 'ok' } }],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await runFreshwaterAgent({ question: 'What sources do you use?' });
+
+    const requestBody = JSON.parse(fetchMock.mock.calls[0]?.[1]?.body as string) as {
+      messages: Array<{ role: string; content: string | null }>;
+    };
+    const systemContent = requestBody.messages
+      .filter((m) => m.role === 'system')
+      .map((m) => m.content ?? '')
+      .join(' ');
+
+    expect(systemContent).toMatch(/never invent|do not fabricate|do not (make up|invent)|cannot use training data|honest data|do not guess/i);
+    expect(systemContent).toMatch(/(tool|forecast|data|api).{0,80}(fail|error|null|empty|missing|cannot|unable)/i);
+  });
 });
