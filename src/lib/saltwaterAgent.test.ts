@@ -688,4 +688,46 @@ it('stops after max iterations when OpenAI never returns a final answer', async 
 
     runSaltwaterToolSpy.mockRestore();
   });
+
+  it('RED 37.44 — redirects species questions to in-app components instead of dispatching OBIS or GBIF', async () => {
+    const toolsModule = await import('@/lib/saltwaterAgentTools');
+    const runSaltwaterToolSpy = vi
+      .spyOn(toolsModule, 'runSaltwaterTool')
+      .mockResolvedValue({ records: [] });
+
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        choices: [{
+          message: {
+            role: 'assistant',
+            content: 'OBIS has tens of millions of records, so AnglerCast curated 40 commonly fished saltwater species. To see species in this area, use the Sighting-rate search below — click a fish on the list, pick a month, and interact with the map. For information about a specific species, click the Explore tab at the top and ask our FAQ agent.',
+          },
+        }],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await runSaltwaterAgent({ question: 'What fish can I find in Boston, MA on July 4 2026?' }) as { response: string };
+
+    expect(runSaltwaterToolSpy).not.toHaveBeenCalled();
+
+    const firstRequestBody = JSON.parse(fetchMock.mock.calls[0]?.[1]?.body as string) as {
+      messages: Array<{ role: string; content: string | null }>;
+    };
+    const systemContent = firstRequestBody.messages
+      .filter((m) => m.role === 'system')
+      .map((m) => m.content ?? '')
+      .join(' ');
+
+    expect(systemContent).toMatch(/OBIS|GBIF/i);
+    expect(systemContent).toMatch(/sighting.?rate|sighting search/i);
+    expect(systemContent).toMatch(/explore tab|FAQ/i);
+    expect(systemContent).toMatch(/do not call|never call|don't call|redirect/i);
+
+    expect(result.response).toContain('Sighting');
+    expect(result.response).toContain('Explore');
+
+    runSaltwaterToolSpy.mockRestore();
+  });
 });
