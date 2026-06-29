@@ -485,4 +485,22 @@ describe('runFreshwaterAgent', () => {
     expect(firstAssistantIndex).toBeGreaterThan(firstUserIndex);
     expect(newQuestionIndex).toBeGreaterThan(firstAssistantIndex);
   });
+
+  it('RED 38.21 — does not crash when the OpenAI response has no choices field', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        error: {
+          message: 'rate limit exceeded',
+          type: 'rate_limit_error',
+        },
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await runFreshwaterAgent({ question: 'What is the river height at site 01184000?' });
+
+    expect(result).toBeDefined();
+    expect(typeof result).toBe('object');
+  });
 });
