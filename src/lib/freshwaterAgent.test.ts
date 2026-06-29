@@ -126,4 +126,27 @@ describe('runFreshwaterAgent', () => {
     expect(systemContent).toMatch(/explore tab|FAQ/i);
     expect(systemContent).not.toMatch(/query.{0,80}(species|named|directly)/i);
   });
+
+  it('RED 38.6 — redirects destination-based species commonality questions to the Destination component on the Explore page instead of dispatching a tool', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { role: 'assistant', content: 'Use the Destination component on the Explore page.' } }],
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await runFreshwaterAgent({ question: 'What fish are common at Lake Champlain?' });
+
+    const requestBody = JSON.parse(fetchMock.mock.calls[0]?.[1]?.body as string) as {
+      messages: Array<{ role: string; content: string | null }>;
+    };
+    const systemContent = requestBody.messages
+      .filter((m) => m.role === 'system')
+      .map((m) => m.content ?? '')
+      .join(' ');
+
+    expect(systemContent).toMatch(/destination/i);
+    expect(systemContent).toMatch(/explore page/i);
+  });
 });
