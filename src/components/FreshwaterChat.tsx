@@ -17,11 +17,13 @@ export const FreshwaterChat = () => {
   const [responseText, setResponseText] = useState('');
   const [history, setHistory] = useState<ChatHistoryMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setIsLoading(true);
+    setErrorMessage('');
 
     try {
       const response = await fetch('/api/freshwater-chat', {
@@ -29,6 +31,12 @@ export const FreshwaterChat = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question, history }),
       });
+
+      if (!response.ok) {
+        setErrorMessage('Something went wrong. Please try again.');
+        return;
+      }
+
       const data = (await response.json()) as FreshwaterChatResponse;
       const nextResponseText = data.response ?? '';
 
@@ -38,6 +46,8 @@ export const FreshwaterChat = () => {
         { role: 'user', content: question },
         { role: 'assistant', content: nextResponseText },
       ]);
+    } catch {
+      setErrorMessage('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -60,6 +70,7 @@ export const FreshwaterChat = () => {
         </span>
       ) : null}
       {responseText !== '' ? <p>{responseText}</p> : null}
+      {errorMessage !== '' ? <p>{errorMessage}</p> : null}
     </form>
   );
 };
