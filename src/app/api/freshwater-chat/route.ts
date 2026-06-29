@@ -12,7 +12,11 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ error: 'Question is required.' }, { status: 400 });
   }
 
-  const result = await runFreshwaterAgent({ question });
+  try {
+    const result = await runFreshwaterAgent({ question });
 
-  return Response.json(result, { status: 200 });
+    return Response.json(result, { status: 200 });
+  } catch {
+    return Response.json({ error: 'Freshwater agent failed.' }, { status: 500 });
+  }
 }
