@@ -336,8 +336,6 @@ describe('fetchSaltwaterNoaa', () => {
     const requiredParametersByToolName: Record<string, string[]> = {
       forecast: ['latitude', 'longitude', 'targetDate'],
       marine: ['latitude', 'longitude', 'targetDate'],
-      obis: ['latitude', 'longitude'],
-      gbif: ['latitude', 'longitude'],
       usgs: ['siteId'],
       noaa: ['stationId', 'targetDate'],
     };
