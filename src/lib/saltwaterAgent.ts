@@ -123,10 +123,10 @@ export const runSaltwaterAgent = async ({
   let completion = await requestOpenAI(messages);
   console.log('[diagnostic] first completion:', JSON.stringify(completion, null, 2));
   let message = completion.choices?.[0]?.message;
-  let toolCall = message?.tool_calls?.[0];
+  let toolCalls = message?.tool_calls ?? [];
   let toolIterations = 0;
 
-  while (message !== undefined && toolCall !== undefined) {
+  while (message !== undefined && toolCalls.length > 0) {
     if (toolIterations >= maxToolIterations) {
       return {
         ok: false,
@@ -134,8 +134,19 @@ export const runSaltwaterAgent = async ({
       };
     }
 
-    const parsedArguments = JSON.parse(toolCall.function.arguments) as Record<string, unknown>;
-    const toolResult = await runSaltwaterTool(toolCall.function.name, parsedArguments);
+    const toolMessages: SaltwaterAgentMessage[] = [];
+
+    for (const toolCall of toolCalls) {
+      const parsedArguments = JSON.parse(toolCall.function.arguments) as Record<string, unknown>;
+      const toolResult = await runSaltwaterTool(toolCall.function.name, parsedArguments);
+
+      toolMessages.push({
+        role: 'tool',
+        tool_call_id: toolCall.id,
+        content: JSON.stringify(toolResult),
+      });
+    }
+
     toolIterations += 1;
 
     messages.push(
@@ -144,17 +155,13 @@ export const runSaltwaterAgent = async ({
         content: message.content,
         tool_calls: message.tool_calls,
       },
-      {
-        role: 'tool',
-        tool_call_id: toolCall.id,
-        content: JSON.stringify(toolResult),
-      },
+      ...toolMessages,
     );
 
     completion = await requestOpenAI(messages);
     console.log('[diagnostic] follow-up completion:', JSON.stringify(completion, null, 2));
     message = completion.choices?.[0]?.message;
-    toolCall = message?.tool_calls?.[0];
+    toolCalls = message?.tool_calls ?? [];
   }
 
   return {
