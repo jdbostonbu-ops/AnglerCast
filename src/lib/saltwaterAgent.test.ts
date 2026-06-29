@@ -624,11 +624,11 @@ it('stops after max iterations when OpenAI never returns a final answer', async 
     const runSaltwaterToolSpy = vi
       .spyOn(toolsModule, 'runSaltwaterTool')
       .mockImplementation(async (name: string) => {
-        if (name === 'obis') {
-          return { source: 'obis', records: [] };
+        if (name === 'forecast') {
+          return { source: 'forecast', hourly: { temperature_2m: [70] } };
         }
-        if (name === 'gbif') {
-          return { source: 'gbif', records: [] };
+        if (name === 'marine') {
+          return { source: 'marine', hourly: { wave_height: [0.5] } };
         }
         return { error: 'unknown_tool' };
       });
@@ -643,19 +643,19 @@ it('stops after max iterations when OpenAI never returns a final answer', async 
               content: null,
               tool_calls: [
                 {
-                  id: 'call_obis_1',
+                  id: 'call_forecast_1',
                   type: 'function',
                   function: {
-                    name: 'obis',
-                    arguments: JSON.stringify({ latitude: 42.3601, longitude: -71.0589 }),
+                    name: 'forecast',
+                    arguments: JSON.stringify({ latitude: 42.3601, longitude: -71.0589, targetDate: '2026-07-04' }),
                   },
                 },
                 {
-                  id: 'call_gbif_1',
+                  id: 'call_marine_1',
                   type: 'function',
                   function: {
-                    name: 'gbif',
-                    arguments: JSON.stringify({ latitude: 42.3601, longitude: -71.0589 }),
+                    name: 'marine',
+                    arguments: JSON.stringify({ latitude: 42.3601, longitude: -71.0589, targetDate: '2026-07-04' }),
                   },
                 },
               ],
@@ -666,17 +666,17 @@ it('stops after max iterations when OpenAI never returns a final answer', async 
       .mockResolvedValueOnce({
         ok: true,
         json: async () => ({
-          choices: [{ message: { role: 'assistant', content: 'Common species observed near Boston include Striped Bass and Bluefish.' } }],
+          choices: [{ message: { role: 'assistant', content: 'Conditions on July 4 look calm with light wind.' } }],
         }),
       } as Response);
     vi.stubGlobal('fetch', fetchMock);
 
-    const result = await runSaltwaterAgent({ question: 'What fish can I find in Boston?' }) as { response: string };
+    const result = await runSaltwaterAgent({ question: 'What is the weather and marine forecast on July 4, 2026 in Boston?' }) as { response: string };
 
     expect(runSaltwaterToolSpy).toHaveBeenCalledTimes(2);
     const dispatchedNames = runSaltwaterToolSpy.mock.calls.map((c) => c[0]);
-    expect(dispatchedNames).toContain('obis');
-    expect(dispatchedNames).toContain('gbif');
+    expect(dispatchedNames).toContain('forecast');
+    expect(dispatchedNames).toContain('marine');
 
     expect(fetchMock).toHaveBeenCalledTimes(2);
 
@@ -686,10 +686,10 @@ it('stops after max iterations when OpenAI never returns a final answer', async 
     const toolMessages = secondRequestBody.messages.filter((m) => m.role === 'tool');
     expect(toolMessages.length).toBe(2);
     const toolCallIds = toolMessages.map((m) => m.tool_call_id);
-    expect(toolCallIds).toContain('call_obis_1');
-    expect(toolCallIds).toContain('call_gbif_1');
+    expect(toolCallIds).toContain('call_forecast_1');
+    expect(toolCallIds).toContain('call_marine_1');
 
-    expect(result.response).toBe('Common species observed near Boston include Striped Bass and Bluefish.');
+    expect(result.response).toBe('Conditions on July 4 look calm with light wind.');
 
     runSaltwaterToolSpy.mockRestore();
   });
