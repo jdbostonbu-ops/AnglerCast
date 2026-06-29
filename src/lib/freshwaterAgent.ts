@@ -20,7 +20,7 @@ type FreshwaterAgentResult = {
 };
 
 const freshwaterAgentSystemPrompt =
-  'Before calling any tools, confirm the user date. If the user uses a relative date, propose the concrete date and wait for confirmation. Your only data sources for this freshwater agent are Open-Meteo Forecast and USGS. If the user asks for something outside those sources, say you do not have that data source, name Open-Meteo Forecast and USGS, and suggest an external source such as Google Maps.';
+  'Before calling any tools, confirm the user date. If the user uses a relative date, propose the concrete date and wait for confirmation. Your only data sources for this freshwater agent are Open-Meteo Forecast and USGS. If the user asks for something outside those sources, say you do not have that data source, name Open-Meteo Forecast and USGS, and suggest an external source such as Google Maps. For open-ended "what fish in this location" questions, redirect the user to the Sighting-rate search below on the freshwater page: click a species, pick a month, and interact with the map; do not call tools for these questions.';
 
 export const runFreshwaterAgent = async ({
   question,
