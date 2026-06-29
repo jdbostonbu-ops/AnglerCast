@@ -143,4 +143,45 @@ describe('fetchFreshwaterForecast', () => {
     expect(url.searchParams.get('wind_speed_unit')).toBe('mph');
     expect(url.searchParams.get('precipitation_unit')).toBe('inch');
   });
+
+  it('RED 38.12 — builds the Open-Meteo Forecast URL with lat/lng/targetDate and parses the response', async () => {
+    const { fetchFreshwaterForecast } = await import('@/lib/freshwaterAgentTools');
+
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        latitude: 41.4901,
+        longitude: -71.3128,
+        hourly: {
+          time: ['2026-06-28T00:00'],
+          temperature_2m: [70],
+          wind_speed_10m: [5],
+          precipitation: [0],
+        },
+      }),
+    } as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+   const result = await fetchFreshwaterForecast({
+      latitude: 41.4901,
+      longitude: -71.3128,
+      targetDate: '2026-06-28',
+    }) as { latitude?: number };
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const urlCalled = fetchMock.mock.calls[0]?.[0];
+    expect(typeof urlCalled).toBe('string');
+    const url = new URL(urlCalled as string);
+    expect(url.hostname).toBe('api.open-meteo.com');
+    expect(url.searchParams.get('latitude')).toBe('41.4901');
+    expect(url.searchParams.get('longitude')).toBe('-71.3128');
+    expect(url.searchParams.get('start_date')).toBe('2026-06-28');
+    expect(url.searchParams.get('end_date')).toBe('2026-06-28');
+    expect(url.searchParams.get('hourly')).toContain('temperature_2m');
+    expect(url.searchParams.get('hourly')).toContain('wind_speed_10m');
+    expect(url.searchParams.get('hourly')).toContain('precipitation');
+
+    expect(result).not.toBeNull();
+    expect(result.latitude).toBe(41.4901);
+  });
 });
